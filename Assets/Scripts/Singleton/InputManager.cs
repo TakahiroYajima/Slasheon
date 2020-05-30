@@ -4,8 +4,13 @@ using UnityEngine;
 
 public class InputManager : SingletonMonoBehaviour<InputManager> {
 
-	// Use this for initialization
-	void Start () {
+    protected override void Awake()
+    {
+        DontDestroyOnLoad(this);
+        base.Awake();
+    }
+    // Use this for initialization
+    void Start () {
 		
 	}
 	
