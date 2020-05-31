@@ -11,3 +11,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/GameScene.unity
     guid: 42659ca7612e7a3438715a30cecd58d9
+  - enabled: 1
+    path: Assets/MissionScene.unity
+    guid: 677e25386632779449baea8f28d08f37

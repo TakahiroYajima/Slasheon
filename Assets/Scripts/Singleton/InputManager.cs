@@ -112,4 +112,22 @@ public class InputManager : SingletonMonoBehaviour<InputManager> {
 #endif
         }
     }
+
+    public Vector3 GetTouchPosition(int touchID)
+    {
+#if UNITY_EDITOR
+            return Input.mousePosition;
+#elif UNITY_IOS || UNITY_ANDROID
+            for(int i = 0; i < Input.touches.Length; i++)
+            {
+                if(Input.touches[i].fingerId == touchID)
+                {
+                    return Input.touches[i].position;
+                }
+            }
+        return Vector3.zero;
+#else
+        return false;
+#endif
+    }
 }

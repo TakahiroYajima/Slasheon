@@ -6,6 +6,9 @@ using UnityEngine.UI;
 
 public class SceneControllManager : SingletonMonoBehaviour<SceneControllManager> {
 
+    private bool isDebugSceneLoadInitializeAction = false;//デバッグ時、ブートシーンをロードせずに他のシーンから開始した場合、ブートシーンに戻ってからそのシーンに戻るためのフラグ
+    public bool IsDebugSceneLoadInitializeAction { get { return isDebugSceneLoadInitializeAction; } }
+
     [SerializeField] private GameObject darkScreenCanvas = null;//フェード、ローディングの親Canvas
     [SerializeField] private GameObject loadingObject = null;//Loadingの親Object
     [SerializeField] private Image fadePanelImage = null;//フェード用パネル
@@ -123,6 +126,25 @@ public class SceneControllManager : SingletonMonoBehaviour<SceneControllManager>
             }
         }
     }
+
+#if Develop
+    /// <summary>
+    /// 開発用、ブートシーン以外から開始した際、ブートシーンをロードしてから戻るアクション
+    /// </summary>
+    /// <param name="backSceneName"></param>
+    public void LoadBootSceneAndBackScene(string backSceneName)
+    {
+        isDebugSceneLoadInitializeAction = true;
+        SceneManager.LoadScene("BootScene");
+        StartCoroutine(BootAction(backSceneName));
+    }
+    private IEnumerator BootAction(string backSceneName)
+    {
+        yield return null;
+        BootSceneManager.Instance.BootSceneInitAndBackScene(backSceneName);
+        isDebugSceneLoadInitializeAction = false;
+    }
+#endif
 }
 
 enum FadeMode
