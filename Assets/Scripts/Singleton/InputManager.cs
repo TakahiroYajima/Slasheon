@@ -4,6 +4,13 @@ using UnityEngine;
 
 public class InputManager : SingletonMonoBehaviour<InputManager> {
 
+    private int doubleTouchID = -1;
+    private float doubleTouchJudgeTime = 0.2f;//ダブルタッチと判定するタイム
+
+    private Vector2 prevFrameMousePos;
+    private float prevMovePosResetTime = 0.3f;
+    private float movePosResetTimeProgress = 0f;
+
     protected override void Awake()
     {
         DontDestroyOnLoad(this);
@@ -11,13 +18,25 @@ public class InputManager : SingletonMonoBehaviour<InputManager> {
     }
     // Use this for initialization
     void Start () {
-		
-	}
+        prevFrameMousePos = Vector2.zero;
+    }
 	
 	// Update is called once per frame
 	void Update () {
-		
-	}
+
+    }
+    private void LateUpdate()
+    {
+        if (movePosResetTimeProgress >= prevMovePosResetTime)
+        {
+            prevFrameMousePos = Input.mousePosition;
+            movePosResetTimeProgress = 0f;
+        }
+        else
+        {
+            movePosResetTimeProgress += Time.deltaTime;
+        }
+    }
 
     /// <summary>
     /// タッチ開始時かを返す
@@ -62,13 +81,32 @@ public class InputManager : SingletonMonoBehaviour<InputManager> {
         {
             if(Input.touches[i].fingerId == touchID)
             {
-                isTouch = Input.touches[i].phase == TouchPhase.Moved || Input.touches[i].phase == TouchPhase.Stationary;
+                isTouch = Input.touches[i].phase == TouchPhase.Stationary;
                 break;
             }
         }
         return isTouch;
 #else
         return false;
+#endif
+    }
+    public bool IsTouchMove(int touchID = -1)
+    {
+#if UNITY_EDITOR
+        return Input.GetMouseButton(0) && Vector2.Distance(Input.mousePosition, prevFrameMousePos) >= 0.03f;
+#elif UNITY_IOS || UNITY_ANDROID
+        if(touchID == -1) { return false; }
+
+        bool isTouch = false;
+        for (int i = 0; i < Input.touches.Length; i++)
+        {
+            if (Input.touches[i].fingerId == touchID)
+            {
+                isTouch = Input.touches[i].phase == TouchPhase.Moved;
+                break;
+            }
+        }
+        return isTouch;
 #endif
     }
     /// <summary>
