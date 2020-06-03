@@ -15,6 +15,11 @@ public class MeshSlashEffect : MonoBehaviour {
     private List<Vector2> reversPoints = new List<Vector2>();
     private const int reverceJudgeCount = 4;//反転の判定に必要なpointsの要素数
     private const int slashBeginJudgePointsCount = 3;//スラッシュした方向を判定するのに必要なpointsの要素数
+    private bool isPrevActionTouchMoving = false;//直前にドラッグしていたかを保持
+
+    private const float initSlashBeginAngle = 999f;
+    private float slashBeginAngle = initSlashBeginAngle;//-360～360を想定しているため、初期値は999
+    private Vector2 slashBeginVector = Vector2.zero;
 
     private struct section
     {
@@ -35,9 +40,6 @@ public class MeshSlashEffect : MonoBehaviour {
     //[SerializeField] MeshCollider mc = null;
     private bool isLaserEndAction = false;
 
-    private const float initSlashBeginAngle = 999f;
-    private float slashBeginAngle = initSlashBeginAngle;//-360～360を想定しているため、初期値は999
-
     [SerializeField] private AudioSource slashAudio = null;
     [SerializeField] private AudioClip slashClip = null;
 
@@ -53,20 +55,28 @@ public class MeshSlashEffect : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (InputManager.Instance.IsTouch(0))
+        if (InputManager.Instance.IsTouchMove(0))
+        {
+            isPrevActionTouchMoving = true;
+        }
+        if (InputManager.Instance.IsTouchMove(0) || InputManager.Instance.IsTouchDown(0))
         {
             setPoints();
             setVectors();
             createMesh();
         }
-        else if (InputManager.Instance.IsTouchEnd(0))
+        else if (InputManager.Instance.IsTouchEnd(0) && points.Count >= 1)
         {
             isLaserEndAction = true;
         }
-        else if (InputManager.Instance.IsTouch(0))
+        //ドラッグした後に止まった時はTouchEndと同じ処理をする
+        else if (!InputManager.Instance.IsTouchMove(0))
         {
-            isLaserEndAction = false;
-            laserWidth = initLaserWidth;
+            if (isPrevActionTouchMoving && sections != null && points.Count >= reverceJudgeCount)
+            {
+                isLaserEndAction = true;
+                isPrevActionTouchMoving = false;
+            }
         }
 
         //タッチを離した時、メッシュがだんだん細くなって消えるアニメーション
@@ -79,7 +89,6 @@ public class MeshSlashEffect : MonoBehaviour {
                 Vector2 leftLength = sections[i].left - points[i];
                 Vector2 rightLength = sections[i].right - points[i];
 
-                //float vecMinus = minusWidth * 0.5f;
                 leftLength = leftLength.normalized;
                 rightLength = rightLength.normalized;
                 leftLength = new Vector2(leftLength.x * minusWidth, leftLength.y * minusWidth);
@@ -105,9 +114,6 @@ public class MeshSlashEffect : MonoBehaviour {
     /// </summary>
     void OnValidate()
     {
-        //setPoints();
-        //setVectors();
-        //createMesh();
         appendSqrDistance = Mathf.Pow(appendDistance, 2);
     }
     /// <summary>
@@ -116,7 +122,7 @@ public class MeshSlashEffect : MonoBehaviour {
     void setPoints()
     {
         // マウス押下中のみ処理を行う.
-        if (!InputManager.Instance.IsTouch(0))
+        if (!InputManager.Instance.IsTouchMove(0) && points.Count >= reverceJudgeCount)
         {
             points.Clear();
             InitSlashBeginAngle();
@@ -178,7 +184,6 @@ public class MeshSlashEffect : MonoBehaviour {
         //斬撃開始時、効果音を鳴らす
         if (IsSlashBegin())
         {
-            Debug.Log("BeginShot");
             slashAudio.PlayOneShot(slashClip);
         }
         SetSlashBeginAngle();
@@ -260,7 +265,7 @@ public class MeshSlashEffect : MonoBehaviour {
     /// </summary>
     void createMesh()
     {
-        if (points == null || points.Count <= 1) return;
+        if (points == null || points.Count <= 1 || sections == null) return;
 
         //MeshFilter mf = GetComponent<MeshFilter>();
         //Mesh mesh = mf.mesh = new Mesh();
@@ -323,6 +328,11 @@ public class MeshSlashEffect : MonoBehaviour {
             float dy = points[2].y - points[0].y;
             slashBeginAngle = Mathf.Atan2(dy, dx) * Mathf.Rad2Deg;
             Debug.Log("slashBeginAngle :: " + slashBeginAngle);
+
+            //内積での判定用
+            float retDX = points[2].x - points[0].x;
+            float retDY = points[2].y - points[0].y;
+            slashBeginVector = new Vector2(retDX, retDY);
         }
     }
     /// <summary>
@@ -331,6 +341,7 @@ public class MeshSlashEffect : MonoBehaviour {
     private void InitSlashBeginAngle()
     {
         slashBeginAngle = initSlashBeginAngle;
+        slashBeginVector = Vector2.zero;
     }
     /// <summary>
     /// 斬撃開始時（なぞってから方向を決定するタイミング）であるかを返す
@@ -346,12 +357,48 @@ public class MeshSlashEffect : MonoBehaviour {
     /// <returns></returns>
     private bool IsSlashRevercing()
     {
+        //if (points.Count < reverceJudgeCount) return false;
+        //float retDX = points[points.Count - 1].x - points[points.Count - (reverceJudgeCount - 1)].x;
+        //float retDY = points[points.Count - 1].y - points[points.Count - (reverceJudgeCount - 1)].y;
+        //float retAngle = Mathf.Atan2(retDY, retDX) * Mathf.Rad2Deg;
+
+        //float angleDir = retAngle - slashBeginAngle;
+
+        //float absRetAngle = Mathf.Abs(retAngle);
+        //float absBeginAngle = Mathf.Abs(slashBeginAngle);
+        //if(absRetAngle > absBeginAngle)
+        //{
+        //    if(absRetAngle - absBeginAngle >= 90)
+        //    {
+        //        angleDir = 100;
+        //    }
+        //    else
+        //    {
+        //        angleDir = 0f;
+        //    }
+        //}else if (absBeginAngle > absRetAngle)
+        //{
+        //    if (absBeginAngle - absRetAngle >= 90)
+        //    {
+        //        angleDir = 100;
+        //    }
+        //    else
+        //    {
+        //        angleDir = 0f;
+        //    }
+        //}
+        
+        //return Mathf.Abs(angleDir) >= 90;
+
+        //ベクトルの内積での判定
         if (points.Count < reverceJudgeCount) return false;
         float retDX = points[points.Count - 1].x - points[points.Count - (reverceJudgeCount - 1)].x;
         float retDY = points[points.Count - 1].y - points[points.Count - (reverceJudgeCount - 1)].y;
-        float retAngle = Mathf.Atan2(retDY, retDX) * Mathf.Rad2Deg;
-        float angleDir = retAngle - slashBeginAngle;
-        Debug.Log("revercingAngle :: " + retAngle + " : beginAngle : " + slashBeginAngle + " : angleDir :: " + angleDir);
-        return Mathf.Abs(angleDir) >= 90;
+        Vector2 retDir = new Vector2(retDX, retDY);
+
+        //開始時の単位ベクトル、現在の単位ベクトルの内積を求める
+        float dot = Vector2.Dot(slashBeginVector.normalized, retDir.normalized);
+        //内積が0に近ければ直行しているので角度90度折り返しとみなす
+        return dot < 0.1f;
     }
 }
