@@ -2,30 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MissionSceneEncountState : MissionSceneStateBase
-{
+public abstract class MissionEnemyStateBase {
+
+    protected MissionEnemyController enemyController = null;
+    public virtual void Initialize(MissionEnemyController enemy)
+    {
+        enemyController = enemy;
+    }
 
     /// <summary>
     /// このステートになった瞬間のアクション
     /// </summary>
-    public override void StateBeginAction()
-    {
-
-    }
+    public abstract void StateBeginAction();
 
     /// <summary>
     /// ステート切り替え時、切り替わる前のステートの終了アクション
     /// </summary>
-	public override void StateEndAction()
-    {
-
-    }
+	public abstract void StateEndAction();
 
     /// <summary>
     /// このステートでの毎フレーム更新処理
     /// </summary>
-    public override void StateUpdateAction()
-    {
-        MissionSceneManager.Instance.PlayerUpdate();
-    }
+    public abstract void StateUpdateAction();
 }

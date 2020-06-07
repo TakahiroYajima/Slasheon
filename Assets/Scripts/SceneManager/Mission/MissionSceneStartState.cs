@@ -25,6 +25,6 @@ public class MissionSceneStartState : MissionSceneStateBase {
     /// </summary>
     public override void StateUpdateAction()
     {
-        MissionSceneManager.Instance.StartAction();
+        MissionSceneManager.Instance.ChangeMissionState(MissionState.Expedition); ;
     }
 }

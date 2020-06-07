@@ -54,7 +54,8 @@ public class MeshSlashEffect : MonoBehaviour {
     }
 	
 	// Update is called once per frame
-	void Update () {
+	public void UpdateAction () {
+        Debug.Log("slash");
         if (InputManager.Instance.IsTouchMove(0))
         {
             isPrevActionTouchMoving = true;
@@ -154,7 +155,8 @@ public class MeshSlashEffect : MonoBehaviour {
         }
 
         // マウスの位置をスクリーン座標からワールド座標に変換.
-        var screenMousePos = Input.mousePosition;
+        //var screenMousePos = Input.mousePosition;
+        var screenMousePos = InputManager.Instance.GetTouchPosition(0);
         screenMousePos.z = -Camera.main.transform.position.z;
         var curPoint = Camera.main.ScreenToWorldPoint(screenMousePos);
 

@@ -14,6 +14,11 @@ public class MissionSceneManager : SingletonMonoBehaviour<MissionSceneManager> {
     [SerializeField] private SceneControllManager sceneControllManager = null;
 
     [SerializeField] private PlayerController player = null;
+    public PlayerController Player { get { return player; } }
+    public Vector3 playerPosition { get { return player.transform.position; } }
+
+    //バトルに使用する変数
+    private List<MissionEnemyController> encountEnemyList = new List<MissionEnemyController>();
 
     // Use this for initialization
     void Start () {
@@ -65,13 +70,27 @@ public class MissionSceneManager : SingletonMonoBehaviour<MissionSceneManager> {
         nowActionState.StateBeginAction();
     }
 
-    public void StartAction()
-    {
-        ChangeMissionState(MissionState.Expedition);
-    }
-
-    public void ExpeditionAction()
+    public void PlayerUpdate()
     {
         player.playerUpdate();
+    }
+
+    public void SetEncountEnemy(MissionEnemyController enemy)
+    {
+        encountEnemyList.Add(enemy);
+        if(nowMissionState == MissionState.Expedition)
+        {
+            ChangeMissionState(MissionState.Encount);
+            player.ToEncount();
+        }
+    }
+
+    public MissionEnemyController GetFirstEncountEnemy()
+    {
+        if (encountEnemyList.Count > 0)
+        {
+            return encountEnemyList[0];
+        }
+        else { return null; }
     }
 }

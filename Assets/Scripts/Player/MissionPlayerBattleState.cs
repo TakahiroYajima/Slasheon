@@ -6,7 +6,7 @@ public class MissionPlayerBattleState : MissionPlayerStateBase {
 
     public override void StateBeginAction()
     {
-
+        
     }
 
     public override void StateEndAction()
@@ -16,6 +16,6 @@ public class MissionPlayerBattleState : MissionPlayerStateBase {
 
     public override void StateActionUpdate()
     {
-
+        _playerController.SlashEffect.UpdateAction();
     }
 }

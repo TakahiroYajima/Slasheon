@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MissionSceneEncountState : MissionSceneStateBase
+public class MissionEnemyEncountState : MissionEnemyStateBase
 {
 
     /// <summary>
@@ -10,7 +10,8 @@ public class MissionSceneEncountState : MissionSceneStateBase
     /// </summary>
     public override void StateBeginAction()
     {
-
+        MissionSceneManager.Instance.SetEncountEnemy(enemyController);
+        enemyController.ChangeState(EnemyState.Battle);
     }
 
     /// <summary>
@@ -26,6 +27,6 @@ public class MissionSceneEncountState : MissionSceneStateBase
     /// </summary>
     public override void StateUpdateAction()
     {
-        MissionSceneManager.Instance.PlayerUpdate();
+
     }
 }

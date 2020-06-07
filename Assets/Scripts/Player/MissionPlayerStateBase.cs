@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MissionPlayerStateBase {
+public abstract class MissionPlayerStateBase {
 
     protected PlayerController _playerController = null;
 
@@ -14,24 +14,15 @@ public class MissionPlayerStateBase {
     /// <summary>
     /// このステートになった瞬間のアクション
     /// </summary>
-    public virtual void StateBeginAction()
-    {
-
-    }
+    public abstract void StateBeginAction();
 
     /// <summary>
     /// ステート切り替え時、切り替わる前のステートの終了アクション
     /// </summary>
-	public virtual void StateEndAction()
-    {
-
-    }
+	public abstract void StateEndAction();
 
     /// <summary>
     /// このステートでの毎フレーム更新処理
     /// </summary>
-    public virtual void StateActionUpdate()
-    {
-
-    }
+    public abstract void StateActionUpdate();
 }

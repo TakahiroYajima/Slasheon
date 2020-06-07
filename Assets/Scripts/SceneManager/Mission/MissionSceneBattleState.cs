@@ -26,6 +26,6 @@ public class MissionSceneBattleState : MissionSceneStateBase
     /// </summary>
     public override void StateUpdateAction()
     {
-
+        MissionSceneManager.Instance.PlayerUpdate();
     }
 }

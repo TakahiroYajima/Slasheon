@@ -4,15 +4,28 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
 
+    [SerializeField] private MeshSlashEffect slashEffect = null;
+    public MeshSlashEffect SlashEffect { get { return slashEffect; } }
+
     private Dictionary<string, MissionPlayerStateBase> playerStatus = null;
     private MissionPlayerStateBase nowPlayerState = null;
 
     private float raycastDistance = 30f;
-    private Vector3 moveBeginPosition = Vector3.zero;//移動開始時の場所を保持
-    private Vector3 moveTargetPos = Vector3.zero;//タッチした場所を保持
+    public Vector3 moveBeginPosition { get; set; }//移動開始時の場所を保持
+    public Vector3 moveTargetPos { get; set; }//タッチした場所を保持
     private float moveSpeed = 7f;
     private float rotateSpeed = 1f;
-    private bool isMoving = false;
+    public bool isMoving { get; set; }
+
+    //public struct Data
+    //{
+    //    public float raycastDistance;
+    //    public Vector3 moveBeginPosition;//移動開始時の場所を保持
+    //    public Vector3 moveTargetPos;//タッチした場所を保持
+    //    public float moveSpeed;
+    //    public float rotateSpeed;
+    //    public bool isMoving;
+    //}
 
     // Use this for initialization
     void Start () {
@@ -33,12 +46,14 @@ public class PlayerController : MonoBehaviour {
 
         moveBeginPosition = transform.position;
         moveTargetPos = transform.position;
+        isMoving = false;
 	}
 
     /// <summary>
     /// MissionSceneManagerより毎フレーム更新処理として呼び出される
     /// </summary>
     public void playerUpdate () {
+        Debug.Log(nowPlayerState);
         //現在のステートの更新処理
         nowPlayerState.StateActionUpdate();
 	}
@@ -56,60 +71,35 @@ public class PlayerController : MonoBehaviour {
         nowPlayerState = nextState;
         nowPlayerState.StateBeginAction();//現在のステートの開始処理
     }
-
     /// <summary>
-    /// 探索モード時のアクション
+    /// MissionSceneManagerより、強制でエンカウント状態にする
     /// </summary>
-    public void ExpeditionAction()
+    public void ToEncount()
     {
-        Vector3 targetPos = TouchActionOnField();
-        if (targetPos != Vector3.zero)
-        {
-            moveTargetPos = targetPos;
-        }
-        if (isMoving)
-        {
-            MoveOnField(moveTargetPos);
-        }
+        ChangeState(playerStatus["Encount"]);
     }
     /// <summary>
-    /// 敵とエンカウントした時のアクション
+    /// エンカウントアニメーション終了
     /// </summary>
-    public void EncountBeginAction()
+    public void EncountRotationEnd()
     {
+        ChangeState(playerStatus["Battle"]);
+    }
+    /// <summary>
+    /// 移動をストップ
+    /// </summary>
+    public void MovePropertyReset()
+    {
+        moveBeginPosition = transform.position;
+        moveTargetPos = transform.position;
         isMoving = false;
     }
-    /// <summary>
-    /// エンカウントステータス時のアクション
-    /// </summary>
-    public void EncountAction()
-    {
-        //徐々に敵の方を向く
-    }
 
-    public Vector3 TouchActionOnField()
-    {
-        if (InputManager.Instance.IsTouchEnd())
-        {
-            Ray ray = Camera.main.ScreenPointToRay(InputManager.Instance.GetTouchPosition(1));
-            RaycastHit hit = new RaycastHit();
-            if(Physics.Raycast(ray, out hit, raycastDistance))
-            {
-                if (SlasheonUtility.IsLayerNameMatch(hit.collider.gameObject, "Field"))
-                {
-                    moveBeginPosition = transform.position;
-                    isMoving = true;
-                    return hit.point;
-                }
-            }
-        }
-        return Vector3.zero;
-    }
     /// <summary>
     /// 指定した場所まで移動
     /// </summary>
     /// <param name="targetPosition"></param>
-    public void MoveOnField(Vector3 targetPosition)
+    public void MoveOnField(Vector3 targetPosition, float quickMoveSpeed = 1f)
     {
         targetPosition = new Vector3(targetPosition.x, transform.position.y, targetPosition.z);
         float fromBeginDistance = Vector3.Distance(transform.position, moveBeginPosition);
@@ -117,7 +107,7 @@ public class PlayerController : MonoBehaviour {
         float moveX = targetPosition.x - moveBeginPosition.x;
         float moveZ = targetPosition.z - moveBeginPosition.z;
         Vector3 movingPos = new Vector3(moveX, 0f, moveZ).normalized;
-        transform.position += movingPos * moveSpeed * Time.deltaTime;
+        transform.position += movingPos * moveSpeed * quickMoveSpeed * Time.deltaTime;
         RotationToMoveTarget(targetPosition);
 
         //開始時の位置からターゲットの位置までの距離に達したら終了
@@ -134,10 +124,48 @@ public class PlayerController : MonoBehaviour {
     /// 指定した地点の方向に徐々に向きを変える
     /// </summary>
     /// <param name="targetPosition"></param>
-    public void RotationToMoveTarget(Vector3 targetPosition)
+    public void RotationToMoveTarget(Vector3 targetPosition, float quickRotateSpeed = 1f)
     {
         Vector3 targetDir = new Vector3(targetPosition.x, transform.position.y, targetPosition.z) - transform.position;
-        Vector3 newDir = Vector3.RotateTowards(transform.forward, targetDir, rotateSpeed * Time.deltaTime, 0f);
+        Vector3 newDir = Vector3.RotateTowards(transform.forward, targetDir, rotateSpeed * quickRotateSpeed * Time.deltaTime, 0f);
         transform.rotation = Quaternion.LookRotation(newDir);
+    }
+
+    /// <summary>
+    /// 指定した秒数でターゲットの方を向くコルーチン
+    /// </summary>
+    /// <param name="targetPosition"></param>
+    /// <param name="rotationTime"></param>
+    /// <returns></returns>
+    public IEnumerator RotationToTargetInTime(Vector3 targetPosition, float rotationTime, UnityEngine.Events.UnityAction callback = null)
+    {
+        Vector3 targetDir = new Vector3(targetPosition.x, transform.position.y, targetPosition.z) - transform.position;
+        Vector3 axis = Vector3.Cross(transform.forward, targetDir);
+        float targetAngle = Vector3.Angle(transform.forward, targetDir) * (axis.y < 0 ? -1 : 1);
+        float firstRotation = transform.rotation.y;
+
+        float variation = targetAngle / rotationTime;
+        float rotationTotal = 0f;
+        float elapsedTime = 0;
+        while(Mathf.Abs(rotationTotal) < Mathf.Abs(targetAngle))
+        {
+            float rotateY = Mathf.SmoothStep(firstRotation, targetAngle, elapsedTime * rotationTime);
+            rotationTotal += rotateY;
+            if (Mathf.Abs(rotationTotal) + Mathf.Abs(rotateY) >= Mathf.Abs(targetAngle))
+            {
+
+            }
+            else
+            {
+                transform.Rotate(0, rotateY, 0);
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+        }
+        transform.LookAt(new Vector3(targetPosition.x, transform.position.y, targetPosition.z));
+        if(callback != null)
+        {
+            callback();
+        }
     }
 }
