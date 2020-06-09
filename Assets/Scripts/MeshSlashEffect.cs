@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MeshSlashEffect : MonoBehaviour {
 
-    [SerializeField] List<Vector2> points = new List<Vector2>();
+    [SerializeField] List<Vector3> points = new List<Vector3>();
     [SerializeField] float appendDistance = 0.5f;
     private float appendSqrDistance = 1f;
     [SerializeField] int maxPointCount = 20;//画面に存在できるポイントの最大数
@@ -12,7 +12,7 @@ public class MeshSlashEffect : MonoBehaviour {
     private float laserMinusTime = 0.3f;//終了時、メッシュが細くなって消えるまでの時間
 
     //斬撃の方向反転時、pointsを削除するので退避用にとっておく
-    private List<Vector2> reversPoints = new List<Vector2>();
+    private List<Vector3> reversPoints = new List<Vector3>();
     private const int reverceJudgeCount = 4;//反転の判定に必要なpointsの要素数
     private const int slashBeginJudgePointsCount = 3;//スラッシュした方向を判定するのに必要なpointsの要素数
     private bool isPrevActionTouchMoving = false;//直前にドラッグしていたかを保持
@@ -23,15 +23,15 @@ public class MeshSlashEffect : MonoBehaviour {
 
     private struct section
     {
-        public Vector2 direction;   // 方向ベクトル.
+        public Vector3 direction;   // 方向ベクトル.
 
-        public Vector2 left;        // セクションの左端.
-        public Vector2 right;       // セクションの右側.
+        public Vector3 left;        // セクションの左端.
+        public Vector3 right;       // セクションの右側.
     }
 
     private section[] sections;
 
-    [SerializeField] float laserWidth = 1;
+    private float laserWidth = 0.3f;
     private float initLaserWidth = 0f;
 
     [SerializeField] Material laserMat = null;
@@ -87,13 +87,13 @@ public class MeshSlashEffect : MonoBehaviour {
             laserWidth -= minusWidth;
             for (int i = 0; i < sections.Length; i++)
             {
-                Vector2 leftLength = sections[i].left - points[i];
-                Vector2 rightLength = sections[i].right - points[i];
+                Vector3 leftLength = sections[i].left - points[i];
+                Vector3 rightLength = sections[i].right - points[i];
 
                 leftLength = leftLength.normalized;
                 rightLength = rightLength.normalized;
-                leftLength = new Vector2(leftLength.x * minusWidth, leftLength.y * minusWidth);
-                rightLength = new Vector2(rightLength.x * minusWidth, rightLength.y * minusWidth);
+                leftLength = new Vector3(leftLength.x * minusWidth, leftLength.y * minusWidth);
+                rightLength = new Vector3(rightLength.x * minusWidth, rightLength.y * minusWidth);
                 sections[i].left -= leftLength;
                 sections[i].right -= rightLength;
             }
@@ -157,15 +157,16 @@ public class MeshSlashEffect : MonoBehaviour {
         // マウスの位置をスクリーン座標からワールド座標に変換.
         //var screenMousePos = Input.mousePosition;
         var screenMousePos = InputManager.Instance.GetTouchPosition(0);
-        screenMousePos.z = -Camera.main.transform.position.z;
+        //screenMousePos.z = -Camera.main.transform.position.z;
+        screenMousePos.z = 3f;
         var curPoint = Camera.main.ScreenToWorldPoint(screenMousePos);
 
         if (points == null)
         {
-            points = new List<Vector2>();
+            points = new List<Vector3>();
             points.Add(curPoint);
         }
-        Vector2 curPointVec2 = new Vector2(curPoint.x, curPoint.y);
+        Vector3 curPointVec2 = new Vector3(curPoint.x, curPoint.y, curPoint.z);
         // 前回のポイントとの比較を行う.
         if (points.Count >= 2)
         {
@@ -190,7 +191,7 @@ public class MeshSlashEffect : MonoBehaviour {
         }
         SetSlashBeginAngle();
     }
-    void addPoint(Vector2 curPoint)
+    void addPoint(Vector3 curPoint)
     {
         //生成したメッシュの長さを一定にする
         if (keepPointLength)
@@ -254,7 +255,7 @@ public class MeshSlashEffect : MonoBehaviour {
             sections[i].direction.Normalize();
 
             // ----- 方向ベクトルに直交するベクトルの計算 -----
-            Vector2 side = Quaternion.AngleAxis(90f, -Vector3.forward) * sections[i].direction;
+            Vector3 side = Quaternion.AngleAxis(90f, -Vector3.forward) * sections[i].direction;
             side.Normalize();
 
             sections[i].left = points[i] - side * laserWidth / 2f;
