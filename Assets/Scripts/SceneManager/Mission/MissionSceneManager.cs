@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class MissionSceneManager : SingletonMonoBehaviour<MissionSceneManager> {
 
@@ -17,8 +19,15 @@ public class MissionSceneManager : SingletonMonoBehaviour<MissionSceneManager> {
     public PlayerController Player { get { return player; } }
     public Vector3 playerPosition { get { return player.transform.position; } }
 
+    [SerializeField] private MissionUIController missionUIController = null;
+    public MissionUIController MissionUIController { get { return missionUIController; } }
+
     //バトルに使用する変数
     private List<MissionEnemyController> encountEnemyList = new List<MissionEnemyController>();
+
+    //コールバック
+    public delegate void StateChangeCallback(MissionState state);
+    private StateChangeCallback stateChangeCallback = (state) => { };
 
     // Use this for initialization
     void Start () {
@@ -68,13 +77,22 @@ public class MissionSceneManager : SingletonMonoBehaviour<MissionSceneManager> {
         }
         nowActionState = missionStatus[key];
         nowActionState.StateBeginAction();
+        stateChangeCallback(state);
+    }
+
+    public void SetStateChangeCallback(StateChangeCallback action)
+    {
+        stateChangeCallback += action;
     }
 
     public void PlayerUpdate()
     {
         player.playerUpdate();
     }
-
+    /// <summary>
+    /// プレイヤーとエンカウントした敵を追加
+    /// </summary>
+    /// <param name="enemy"></param>
     public void SetEncountEnemy(MissionEnemyController enemy)
     {
         encountEnemyList.Add(enemy);
@@ -84,7 +102,10 @@ public class MissionSceneManager : SingletonMonoBehaviour<MissionSceneManager> {
             player.ToEncount();
         }
     }
-
+    /// <summary>
+    /// 最初にエンカウントした敵情報を返す
+    /// </summary>
+    /// <returns></returns>
     public MissionEnemyController GetFirstEncountEnemy()
     {
         if (encountEnemyList.Count > 0)

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class InputManager : SingletonMonoBehaviour<InputManager> {
 
@@ -11,6 +12,8 @@ public class InputManager : SingletonMonoBehaviour<InputManager> {
     private float prevMovePosResetTime = 0.3f;
     private float movePosResetTimeProgress = 0f;
 
+    private TouchPhase[] touchPhases;
+
     protected override void Awake()
     {
         DontDestroyOnLoad(this);
@@ -19,6 +22,11 @@ public class InputManager : SingletonMonoBehaviour<InputManager> {
     // Use this for initialization
     void Start () {
         prevFrameMousePos = Vector2.zero;
+        touchPhases = new TouchPhase[Input.touches.Length];
+        for(int i = 0; i < touchPhases.Length; i++)
+        {
+            touchPhases[i] = Input.touches[i].phase;
+        }
     }
 	
 	// Update is called once per frame
@@ -36,6 +44,31 @@ public class InputManager : SingletonMonoBehaviour<InputManager> {
         {
             movePosResetTimeProgress += Time.deltaTime;
         }
+        //全てのタッチ情報を更新
+        for (int i = 0; i < touchPhases.Length; i++)
+        {
+            touchPhases[i] = Input.touches[i].phase;
+        }
+    }
+
+    public int GetAnyTouchBeginID()
+    {
+#if UNITY_IOS || UNITY_ANDROID
+        for (int i = 0; i < touchPhases.Length; i++)
+        {
+            if(touchPhases[i] != Input.touches[i].phase && touchPhases[i] == TouchPhase.Began)
+            {
+                return Input.touches[i].fingerId;
+            }
+        }
+        return -1;
+#else
+        if (Input.GetMouseButtonDown(0))
+        {
+            return 0;
+        }
+        return -1;
+#endif
     }
 
     /// <summary>
@@ -166,6 +199,121 @@ public class InputManager : SingletonMonoBehaviour<InputManager> {
         return Vector3.zero;
 #else
         return false;
+#endif
+    }
+    /// <summary>
+    /// UIをタッチしているかを返す
+    /// </summary>
+    /// <param name="touchID"></param>
+    /// <returns></returns>
+    public bool IsUITouch(int touchID)
+    {
+        PointerEventData pointer = new PointerEventData(EventSystem.current);
+#if UNITY_IOS || UNITY_ANDROID
+        Touch touch = new Touch();
+        for (int i = 0; i < Input.touches.Length; i++)
+        {
+            if (Input.touches[i].fingerId == touchID)
+            {
+                touch = Input.touches[i];
+                pointer.position = touch.position;
+                List<RaycastResult> result = new List<RaycastResult>();
+                EventSystem.current.RaycastAll(pointer, result);
+
+                //レイヤーでUIかを判定して整理する
+                for (int j = 0; j < result.Count; j++)
+                {
+                    if (!SlasheonUtility.IsAnyLayerNameMatch(result[j].gameObject, "PlayerUI", "Button"))
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
+#else
+        pointer.position = Input.mousePosition;
+        List<RaycastResult> result = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(pointer, result);
+
+        //レイヤーでUIかを判定して整理する
+        for (int i = 0; i < result.Count; i++)
+        {
+            //一致していなければリストから除く
+            if (!SlasheonUtility.IsAnyLayerNameMatch(result[i].gameObject, "PlayerUI", "Button"))
+            {
+                return true;
+            }
+        }
+        return false;
+#endif
+    }
+
+    /// <summary>
+    /// Raycastで取得したUIを返す
+    /// </summary>
+    /// <returns></returns>
+    public RaycastResult GetRaycastResult(int touchID)
+    {
+        PointerEventData pointer = new PointerEventData(EventSystem.current);
+#if UNITY_IOS || UNITY_ANDROID
+        Touch touch = new Touch();
+        for (int i = 0; i < Input.touches.Length; i++)
+        {
+            if (Input.touches[i].fingerId == touchID)
+            {
+                touch = Input.touches[i];
+                pointer.position = touch.position;
+                List<RaycastResult> result = new List<RaycastResult>();
+                EventSystem.current.RaycastAll(pointer, result);
+
+                List<int> removeNums = new List<int>();
+                //レイヤーでUIかを判定して整理する
+                for (int j = 0; j < result.Count; j++)
+                {
+                    //一致していなければリストから除く
+                    if (!SlasheonUtility.IsAnyLayerNameMatch(result[j].gameObject, "PlayerUI", "Button"))
+                    {
+                        removeNums.Add(i);
+                    }
+                }
+                for (int k = removeNums.Count - 1; k > 0; k--)
+                {
+                    result.RemoveAt(k);
+                }
+
+                if (result.Count > 0)
+                    return result[0];
+                else
+                    return new RaycastResult();
+            }
+        }
+        return new RaycastResult();
+#else
+        pointer.position = Input.mousePosition;
+        List<RaycastResult> result = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(pointer, result);
+
+        List<int> removeNums = new List<int>();
+        //レイヤーでUIかを判定して整理する
+        for (int i = 0; i < result.Count; i++)
+        {
+            //一致していなければリストから除く
+            if (!SlasheonUtility.IsAnyLayerNameMatch(result[i].gameObject, "PlayerUI", "Button"))
+            {
+                removeNums.Add(i);
+            }
+        }
+        for (int i = removeNums.Count - 1; i > 0; i--)
+        {
+            //Debug.Log("取り除きます " + i);
+            result.RemoveAt(i);
+        }
+
+        if (result.Count > 0)
+            return result[0];
+        else
+            return new RaycastResult();
 #endif
     }
 }

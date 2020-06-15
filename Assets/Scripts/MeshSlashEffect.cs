@@ -42,6 +42,7 @@ public class MeshSlashEffect : MonoBehaviour {
 
     [SerializeField] private AudioSource slashAudio = null;
     [SerializeField] private AudioClip slashClip = null;
+    [SerializeField] private Camera cameraObj = null;
 
     void Awake()
     {
@@ -81,6 +82,39 @@ public class MeshSlashEffect : MonoBehaviour {
         }
 
         //タッチを離した時、メッシュがだんだん細くなって消えるアニメーション
+        //if (isLaserEndAction)
+        //{
+        //    float minusWidth = ((Time.deltaTime / laserMinusTime) * initLaserWidth);
+        //    laserWidth -= minusWidth;
+        //    for (int i = 0; i < sections.Length; i++)
+        //    {
+        //        Vector3 leftLength = sections[i].left - points[i];
+        //        Vector3 rightLength = sections[i].right - points[i];
+
+        //        leftLength = leftLength.normalized;
+        //        rightLength = rightLength.normalized;
+        //        leftLength = new Vector3(leftLength.x * minusWidth, leftLength.y * minusWidth);
+        //        rightLength = new Vector3(rightLength.x * minusWidth, rightLength.y * minusWidth);
+        //        sections[i].left -= leftLength;
+        //        sections[i].right -= rightLength;
+        //    }
+        //    createMesh();
+        //    if (laserWidth <= 0.07f)
+        //    {
+        //        isLaserEndAction = false;
+        //        laserWidth = initLaserWidth;
+        //        //mesh.vertices = null;
+        //        mesh.uv = null;
+        //        mesh.triangles = null;
+        //        points.Clear();
+        //        InitSlashBeginAngle();
+        //    }
+        //}
+    }
+
+    private void Update()
+    {
+        //タッチを離した時、メッシュがだんだん細くなって消えるアニメーション
         if (isLaserEndAction)
         {
             float minusWidth = ((Time.deltaTime / laserMinusTime) * initLaserWidth);
@@ -98,7 +132,7 @@ public class MeshSlashEffect : MonoBehaviour {
                 sections[i].right -= rightLength;
             }
             createMesh();
-            if (laserWidth <= 0.3f)
+            if (laserWidth <= 0.07f)
             {
                 isLaserEndAction = false;
                 laserWidth = initLaserWidth;
@@ -110,6 +144,7 @@ public class MeshSlashEffect : MonoBehaviour {
             }
         }
     }
+
     /// <summary>
     /// スクリプトロード時かインスペクターの値変更時に呼び出される
     /// </summary>
@@ -130,10 +165,7 @@ public class MeshSlashEffect : MonoBehaviour {
             isLaserEndAction = true;
             return;
         }
-        else if (InputManager.Instance.IsTouchDown(0))
-        {
 
-        }
         //斬撃の方向反転時、ポイントとメッシュを強制削除し、反転開始時から現在の位置までのポイントを追加してメッシュ生成
         if (IsSlashRevercing())
         {
@@ -159,7 +191,7 @@ public class MeshSlashEffect : MonoBehaviour {
         var screenMousePos = InputManager.Instance.GetTouchPosition(0);
         //screenMousePos.z = -Camera.main.transform.position.z;
         screenMousePos.z = 3f;
-        var curPoint = Camera.main.ScreenToWorldPoint(screenMousePos);
+        var curPoint = cameraObj.ScreenToWorldPoint(screenMousePos);
 
         if (points == null)
         {
