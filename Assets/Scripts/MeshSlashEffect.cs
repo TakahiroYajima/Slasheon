@@ -44,6 +44,9 @@ public class MeshSlashEffect : MonoBehaviour {
     [SerializeField] private AudioClip slashClip = null;
     [SerializeField] private Camera cameraObj = null;
 
+    public delegate void ReturnSlashCallback();
+    private ReturnSlashCallback returnSlashCallback;
+
     void Awake()
     {
         appendSqrDistance = Mathf.Pow(appendDistance, 2);
@@ -52,6 +55,11 @@ public class MeshSlashEffect : MonoBehaviour {
     // Use this for initialization
     void Start () {
         mesh = mf.mesh = new Mesh();
+    }
+
+    public void SetReturnSlashCallback(ReturnSlashCallback callback)
+    {
+        returnSlashCallback = callback;
     }
 	
 	// Update is called once per frame
@@ -145,6 +153,12 @@ public class MeshSlashEffect : MonoBehaviour {
         }
     }
 
+    public void EndSlashEffect()
+    {
+        Debug.Log("endslash");
+        isLaserEndAction = true;
+    }
+
     /// <summary>
     /// スクリプトロード時かインスペクターの値変更時に呼び出される
     /// </summary>
@@ -183,6 +197,8 @@ public class MeshSlashEffect : MonoBehaviour {
             //反転した位置から現在の位置までを追加
             points.AddRange(reversPoints);
             isLaserEndAction = false;
+            //コールバック
+            returnSlashCallback();
             return;
         }
 

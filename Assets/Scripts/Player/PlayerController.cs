@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour {
+public class PlayerController : MissionActor {
 
     [SerializeField] private MeshSlashEffect slashEffect = null;
     public MeshSlashEffect SlashEffect { get { return slashEffect; } }
 
     private Dictionary<string, MissionPlayerStateBase> playerStatus = null;
     private MissionPlayerStateBase nowPlayerState = null;
+
+    public ActorState PlayerActorState { get { return actorState; } }
 
     private float raycastDistance = 30f;
     public Vector3 moveBeginPosition { get; set; }//移動開始時の場所を保持
@@ -29,6 +31,8 @@ public class PlayerController : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+        MissionSceneManager.Instance.SetStateChangeCallback(ChangeMissionState);
+
         playerStatus = new Dictionary<string, MissionPlayerStateBase>
         {
             {"Expedition", new MissionPlayerExpeditionState() },
@@ -42,7 +46,7 @@ public class PlayerController : MonoBehaviour {
         {
             state.Value.Initialize(this);
         }
-        ChangeState(playerStatus["Expedition"]);
+        ChangeMissionState(MissionState.Expedition);
 
         moveBeginPosition = transform.position;
         moveTargetPos = transform.position;
@@ -71,20 +75,26 @@ public class PlayerController : MonoBehaviour {
         nowPlayerState = nextState;
         nowPlayerState.StateBeginAction();//現在のステートの開始処理
     }
-    /// <summary>
-    /// MissionSceneManagerより、強制でエンカウント状態にする
-    /// </summary>
-    public void ToEncount()
+
+    public void ChangeMissionState(MissionState nextState)
     {
-        ChangeState(playerStatus["Encount"]);
+        if (nowPlayerState != null)
+        {
+            nowPlayerState.StateEndAction();//前のステートの終了処理
+        }
+        nowPlayerState = playerStatus[nextState.ToString()];
+        nowPlayerState.StateBeginAction();//現在のステートの開始処理
     }
-    /// <summary>
-    /// エンカウントアニメーション終了
-    /// </summary>
-    public void EncountRotationEnd()
+
+    public override void Damage(int damage)
     {
-        ChangeState(playerStatus["Battle"]);
+        base.Damage(damage);
     }
+    public override void Death()
+    {
+        MissionSceneManager.Instance.ChangeMissionState(MissionState.GameOver);
+    }
+
     /// <summary>
     /// 移動をストップ
     /// </summary>

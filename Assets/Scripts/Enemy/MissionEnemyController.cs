@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MissionEnemyController : MonoBehaviour {
+public class MissionEnemyController : MissionActor {
 
     //protected EnemyState nowEnemyState = EnemyState.Expedition;
     private Dictionary<string, MissionEnemyStateBase> enemyStatus = null;
@@ -40,6 +40,20 @@ public class MissionEnemyController : MonoBehaviour {
         }
         nowActionState = enemyStatus[state.ToString()];
         nowActionState.StateBeginAction();
+    }
+
+    public override void Damage(int damage)
+    {
+        base.Damage(damage);
+    }
+    public override void Death()
+    {
+        MissionSceneManager.Instance.DeleteDeathEnemy(this);
+        ChangeState(EnemyState.Death);
+    }
+    public void DestroyEnemy()
+    {
+        Destroy(this.gameObject);
     }
 
     public virtual void BattleAction()

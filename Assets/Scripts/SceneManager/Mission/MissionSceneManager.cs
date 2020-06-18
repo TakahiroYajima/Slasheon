@@ -23,7 +23,9 @@ public class MissionSceneManager : SingletonMonoBehaviour<MissionSceneManager> {
     public MissionUIController MissionUIController { get { return missionUIController; } }
 
     //バトルに使用する変数
-    private List<MissionEnemyController> encountEnemyList = new List<MissionEnemyController>();
+    private List<MissionEnemyController> encountEnemyList = new List<MissionEnemyController>();//エンカウントした敵
+    private MissionEnemyController lastEnemy = null;//最後の敵の死亡アクション終了待ち用
+    public MissionEnemyController LastEnemy { get { return lastEnemy; } }
 
     //コールバック
     public delegate void StateChangeCallback(MissionState state);
@@ -99,7 +101,22 @@ public class MissionSceneManager : SingletonMonoBehaviour<MissionSceneManager> {
         if(nowMissionState == MissionState.Expedition)
         {
             ChangeMissionState(MissionState.Encount);
-            player.ToEncount();
+        }
+    }
+
+    public void DeleteDeathEnemy(MissionEnemyController deathEnemy)
+    {
+        for(int i = 0; i < encountEnemyList.Count; i++)
+        {
+            if(encountEnemyList[i] == deathEnemy)
+            {
+                encountEnemyList.RemoveAt(i);
+            }
+        }
+        if(encountEnemyList.Count == 0)
+        {
+            lastEnemy = deathEnemy;
+            ChangeMissionState(MissionState.Result);
         }
     }
     /// <summary>

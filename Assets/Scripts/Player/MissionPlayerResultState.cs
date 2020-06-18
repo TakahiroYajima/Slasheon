@@ -6,7 +6,7 @@ public class MissionPlayerResultState : MissionPlayerStateBase {
 
     public override void StateBeginAction()
     {
-
+        _playerController.SlashEffect.EndSlashEffect();
     }
 
     public override void StateEndAction()

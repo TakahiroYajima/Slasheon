@@ -66,17 +66,19 @@ public class MissionUIController : MonoBehaviour {
         Vector2 beginPosition = weaponButtonBase.rectTransform.anchoredPosition;
         float moveDistance = weaponButtonBase.rectTransform.sizeDelta.x;
         float moveSpeed = 2000f;
-        while(Mathf.Abs(Mathf.Abs(beginPosition.x) - Mathf.Abs(weaponButtonBase.rectTransform.anchoredPosition.x)) < moveDistance)
+        float nowMoveDistance = 0f;
+        while (nowMoveDistance < moveDistance)
         {
-            if (weaponButtonBase.rectTransform.anchoredPosition.x + Time.deltaTime * moveSpeed > moveDistance)
+            if (nowMoveDistance + Time.deltaTime * moveSpeed >= moveDistance)
             {
                 weaponButtonBase.rectTransform.anchoredPosition = new Vector2(beginPosition.x + moveDistance, beginPosition.y);
             }
             else
             {
-                weaponButtonBase.rectTransform.anchoredPosition += new Vector2(Time.deltaTime * moveSpeed, 0f);
+                weaponButtonBase.rectTransform.anchoredPosition = new Vector2(beginPosition.x + nowMoveDistance, weaponButtonBase.rectTransform.anchoredPosition.y);
                 yield return null;
             }
+            nowMoveDistance += Time.deltaTime * moveSpeed;
         }
         weaponButtonBase.gameObject.SetActive(false);
     }
@@ -100,10 +102,10 @@ public class MissionUIController : MonoBehaviour {
             }
             else
             {
-                nowMoveDistance += Time.deltaTime * moveSpeed;
                 weaponButtonBase.rectTransform.anchoredPosition = new Vector2(beginPosition.x - nowMoveDistance, weaponButtonBase.rectTransform.anchoredPosition.y);
                 yield return null;
             }
+            nowMoveDistance += Time.deltaTime * moveSpeed;
         }
     }
 }

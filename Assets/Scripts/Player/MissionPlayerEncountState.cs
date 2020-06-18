@@ -9,7 +9,7 @@ public class MissionPlayerEncountState : MissionPlayerStateBase {
     {
         _playerController.MovePropertyReset();
         //scenemanagerから最初に登録された敵の位置を取得し、yだけプレイヤーの位置にしてその方向へ一定時間で向く処理。向き終わったらコールバックで終了処理
-        _playerController.StartCoroutine(_playerController.RotationToTargetInTime(MissionSceneManager.Instance.GetFirstEncountEnemy().transform.position, 1f,_playerController.EncountRotationEnd));
+        _playerController.StartCoroutine(_playerController.RotationToTargetInTime(MissionSceneManager.Instance.GetFirstEncountEnemy().transform.position, 1f,()=> { MissionSceneManager.Instance.ChangeMissionState(MissionState.Battle); }));
     }
 
     public override void StateEndAction()

@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class MissionEnemyDeathState : MissionEnemyStateBase
 {
-
+    
     /// <summary>
     /// このステートになった瞬間のアクション
     /// </summary>
     public override void StateBeginAction()
     {
-
+        enemyController.StartCoroutine(DeathAction());
     }
 
     /// <summary>
@@ -27,5 +27,16 @@ public class MissionEnemyDeathState : MissionEnemyStateBase
     public override void StateUpdateAction()
     {
 
+    }
+
+    private IEnumerator DeathAction()
+    {
+        float elapsedTime = 0f;
+        while (elapsedTime < 1f)
+        {
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        enemyController.DestroyEnemy();
     }
 }
