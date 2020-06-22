@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class MissionPlayerBattleState : MissionPlayerStateBase {
@@ -10,7 +11,8 @@ public class MissionPlayerBattleState : MissionPlayerStateBase {
 
     public override void StateBeginAction()
     {
-        _playerController.SlashEffect.SetReturnSlashCallback(() =>
+        slashHitEnemyList.Clear();
+        _playerController.SlashEffect.SetSlashEndCallback(() =>
         {
             slashHitEnemyList.Clear();
         });
@@ -18,7 +20,7 @@ public class MissionPlayerBattleState : MissionPlayerStateBase {
 
     public override void StateEndAction()
     {
-
+        slashHitEnemyList.Clear();
     }
 
     public override void StateActionUpdate()
@@ -42,16 +44,25 @@ public class MissionPlayerBattleState : MissionPlayerStateBase {
                 if (SlasheonUtility.IsLayerNameMatch(hit.collider.gameObject, "Enemy"))
                 {
                     MissionActor hitActor = hit.collider.gameObject.GetComponent<MissionActor>();
+                    //一度の斬撃で複数回ダメージ判定しないように調整(linq適用前)
+                    //bool cantDamage = false;
+                    //for (int i = 0; i < slashHitEnemyList.Count; i++)
+                    //{
+                    //    if(slashHitEnemyList[i].transform.GetInstanceID() == hitActor.transform.GetInstanceID())
+                    //    {
+                    //        cantDamage = true;
+                    //        break;
+                    //    }
+                    //}
+                    //if (!cantDamage)
+                    //{
+                    //    hitActor.Damage(_playerController.PlayerActorState.attack);
+                    //    slashHitEnemyList.Add(hitActor);
+                    //}
+
                     //一度の斬撃で複数回ダメージ判定しないように調整
-                    bool isHited = false;
-                    for (int i = 0; i < slashHitEnemyList.Count; i++)
-                    {
-                        if(slashHitEnemyList[i].transform.GetInstanceID() == hitActor.transform.GetInstanceID())
-                        {
-                            isHited = true;
-                        }
-                    }
-                    if (!isHited)
+                    int hitedCount = slashHitEnemyList.Where(x => x.transform.GetInstanceID() == hitActor.transform.GetInstanceID()).Count();
+                    if(hitedCount == 0)
                     {
                         hitActor.Damage(_playerController.PlayerActorState.attack);
                         slashHitEnemyList.Add(hitActor);
