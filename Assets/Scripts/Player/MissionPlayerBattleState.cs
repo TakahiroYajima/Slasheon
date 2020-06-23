@@ -38,6 +38,7 @@ public class MissionPlayerBattleState : MissionPlayerStateBase {
             _playerController.SlashEffect.UpdateAction();
             Vector2 touchPos = InputManager.Instance.GetTouchPosition(slashTouchID);
             Ray ray = Camera.main.ScreenPointToRay(InputManager.Instance.GetTouchPosition(slashTouchID));
+            Debug.DrawRay(ray.origin, ray.direction * slashRayDistance, Color.red, 1f, false);
             RaycastHit hit = new RaycastHit();
             if (Physics.Raycast(ray, out hit, slashRayDistance))
             {
