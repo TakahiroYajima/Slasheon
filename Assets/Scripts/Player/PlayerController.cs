@@ -6,6 +6,8 @@ public class PlayerController : MissionActor {
 
     [SerializeField] private MeshSlashEffect slashEffect = null;
     public MeshSlashEffect SlashEffect { get { return slashEffect; } }
+    [SerializeField] private SlashCollider slashCollider = null;
+    public SlashCollider SlashCollider { get { return slashCollider; } }
 
     private Dictionary<string, MissionPlayerStateBase> playerStatus = null;
     private MissionPlayerStateBase nowPlayerState = null;
