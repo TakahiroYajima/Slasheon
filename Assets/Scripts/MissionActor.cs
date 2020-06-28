@@ -8,7 +8,7 @@ public abstract class MissionActor : MonoBehaviour {
 
     private void Awake()
     {
-        actorState.hp = 3;
+        actorState.hp = 30;
         actorState.attack = 1;
         actorState.defence = 0;
     }

@@ -128,7 +128,6 @@ public class MissionPlayerBattleState : MissionPlayerStateBase {
 
     public void ColliderEnterCallback(Collider collider)
     {
-        Debug.Log("Hit :: " + collider.gameObject.name);
         if ((SlasheonUtility.IsLayerNameMatch(collider.gameObject, "Enemy")))
         {
             MissionActor hitActor = collider.gameObject.GetComponent<MissionActor>();
@@ -137,6 +136,7 @@ public class MissionPlayerBattleState : MissionPlayerStateBase {
             if (hitedCount == 0)
             {
                 hitActor.Damage(_playerController.PlayerActorState.attack);
+                _playerController.InstanceSlashDamageEffect(hitActor.transform.position);
                 slashHitEnemyList.Add(hitActor);
             }
         }

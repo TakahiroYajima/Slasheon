@@ -9,6 +9,12 @@ public class PlayerController : MissionActor {
     [SerializeField] private SlashCollider slashCollider = null;
     public SlashCollider SlashCollider { get { return slashCollider; } }
 
+    [SerializeField] private Transform effectParentTransform = null;
+    public Transform EffectParentTrans { get { return effectParentTransform; } }
+    [SerializeField] private SlashDamageEffect slashDamageEffect = null;
+    public SlashDamageEffect slashDamagePref { get { return slashDamageEffect; } }
+    [SerializeField] private ParticleSystem slashDamageParticle = null;
+
     private Dictionary<string, MissionPlayerStateBase> playerStatus = null;
     private MissionPlayerStateBase nowPlayerState = null;
 
@@ -123,7 +129,7 @@ public class PlayerController : MissionActor {
         RotationToMoveTarget(targetPosition);
 
         //開始時の位置からターゲットの位置までの距離に達したら終了
-        Debug.Log("distance :: " + fromBeginDistance + " : " + toTargetDistance +" :: "+ moveBeginPosition + " : " + targetPosition);
+        //Debug.Log("distance :: " + fromBeginDistance + " : " + toTargetDistance +" :: "+ moveBeginPosition + " : " + targetPosition);
         if (fromBeginDistance >= toTargetDistance)
         {
             transform.position = targetPosition;
@@ -179,5 +185,18 @@ public class PlayerController : MissionActor {
         {
             callback();
         }
+    }
+
+    public void InstanceSlashDamageEffect(Vector3 position)
+    {
+        SlashDamageEffect effect = Instantiate(slashDamageEffect, effectParentTransform);
+        RectTransform rectTransform = slashDamageEffect.gameObject.GetComponent<RectTransform>();
+        rectTransform.anchoredPosition = new Vector2(0f, 0f);
+        //rectTransform.anchoredPosition = position;
+        //rectTransform.localRotation = Quaternion.Euler(0f, 0f, slashEffect.GetCurrentSlashAngle());
+        Debug.Log("slashEffect :: " + rectTransform.localRotation);
+        StartCoroutine(effect.StartAction(Quaternion.Euler(0f, 0f, slashEffect.GetCurrentSlashAngle())));
+        slashDamageParticle.gameObject.transform.position = position;
+        slashDamageParticle.Play();
     }
 }

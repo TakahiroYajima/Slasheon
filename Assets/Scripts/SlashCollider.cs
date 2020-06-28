@@ -6,6 +6,7 @@ public class SlashCollider : MonoBehaviour {
 
     [SerializeField] private MeshFilter meshFilter;
     [SerializeField] private MeshCollider meshCollider;
+    Mesh mesh;
 
     private Vector3[] vertices;
     int[] triangles;
@@ -25,6 +26,7 @@ public class SlashCollider : MonoBehaviour {
         triangles[0] = 0;
         triangles[1] = 1;
         triangles[2] = 2;
+        mesh = new Mesh();
     }
 
     public void SetCollisionEnterCallback(OnColliderEnterCallback callback)
@@ -53,7 +55,8 @@ public class SlashCollider : MonoBehaviour {
 
     public void CreateCollider()
     {
-        Mesh mesh = new Mesh();
+        //Mesh mesh = new Mesh();
+        mesh.name = "ColliderMesh";
         mesh.vertices = vertices;
         mesh.triangles = triangles;
 

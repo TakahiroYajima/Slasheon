@@ -32,16 +32,19 @@ public class MissionEnemyExpeditionState : MissionEnemyStateBase {
 
     private void MoveToPlayer()
     {
-        Vector3 playerPos = MissionSceneManager.Instance.playerPosition;
-        Vector3 targetPos = new Vector3(playerPos.x, enemyController.transform.position.y, playerPos.z);
-        if (Vector3.Distance(targetPos, enemyController.transform.position) > 5f)
+        if (MissionSceneManager.Instance.NowMissionState != MissionState.Result)
         {
-            enemyController.transform.LookAt(targetPos);
-            enemyController.transform.Translate((enemyController.transform.position - targetPos).normalized * moveSpeed * Time.deltaTime);
-        }
-        else
-        {
-            enemyController.ChangeState(EnemyState.Encount);
+            Vector3 playerPos = MissionSceneManager.Instance.playerPosition;
+            Vector3 targetPos = new Vector3(playerPos.x, enemyController.transform.position.y, playerPos.z);
+            if (Vector3.Distance(targetPos, enemyController.transform.position) > 5f)
+            {
+                enemyController.transform.LookAt(targetPos);
+                enemyController.transform.Translate((enemyController.transform.position - targetPos).normalized * moveSpeed * Time.deltaTime);
+            }
+            else
+            {
+                enemyController.ChangeState(EnemyState.Encount);
+            }
         }
     }
 }

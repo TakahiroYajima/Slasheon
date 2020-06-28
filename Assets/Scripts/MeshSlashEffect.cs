@@ -47,6 +47,9 @@ public class MeshSlashEffect : MonoBehaviour {
     public delegate void SlashEndCallback();
     private SlashEndCallback slashEndCallback;
 
+    private float currentSlashAngle = 0f;
+    //public float CurrentSlashAngle { get { return currentSlashAngle; } }
+
     void Awake()
     {
         appendSqrDistance = Mathf.Pow(appendDistance, 2);
@@ -88,40 +91,12 @@ public class MeshSlashEffect : MonoBehaviour {
                 isPrevActionTouchMoving = false;
             }
         }
-
-        //タッチを離した時、メッシュがだんだん細くなって消えるアニメーション
-        //if (isLaserEndAction)
-        //{
-        //    float minusWidth = ((Time.deltaTime / laserMinusTime) * initLaserWidth);
-        //    laserWidth -= minusWidth;
-        //    for (int i = 0; i < sections.Length; i++)
-        //    {
-        //        Vector3 leftLength = sections[i].left - points[i];
-        //        Vector3 rightLength = sections[i].right - points[i];
-
-        //        leftLength = leftLength.normalized;
-        //        rightLength = rightLength.normalized;
-        //        leftLength = new Vector3(leftLength.x * minusWidth, leftLength.y * minusWidth);
-        //        rightLength = new Vector3(rightLength.x * minusWidth, rightLength.y * minusWidth);
-        //        sections[i].left -= leftLength;
-        //        sections[i].right -= rightLength;
-        //    }
-        //    createMesh();
-        //    if (laserWidth <= 0.07f)
-        //    {
-        //        isLaserEndAction = false;
-        //        laserWidth = initLaserWidth;
-        //        //mesh.vertices = null;
-        //        mesh.uv = null;
-        //        mesh.triangles = null;
-        //        points.Clear();
-        //        InitSlashBeginAngle();
-        //    }
-        //}
+        
     }
 
     private void Update()
     {
+        UpdateAngle();
         //タッチを離した時、メッシュがだんだん細くなって消えるアニメーション
         if (isLaserEndAction)
         {
@@ -154,9 +129,25 @@ public class MeshSlashEffect : MonoBehaviour {
         }
     }
 
+    private void UpdateAngle()
+    {
+        //現在のスラッシュの角度を保持
+        if (points.Count >= slashBeginJudgePointsCount)
+        {
+            float retDX = points[points.Count - 1].x - points[points.Count - (slashBeginJudgePointsCount - 1)].x;
+            float retDY = points[points.Count - 1].y - points[points.Count - (slashBeginJudgePointsCount - 1)].y;
+            float retAngle = Mathf.Atan2(retDY, retDX) * Mathf.Rad2Deg;
+            currentSlashAngle = retAngle;
+        }
+    }
+    public float GetCurrentSlashAngle()
+    {
+        UpdateAngle();
+        return currentSlashAngle;
+    }
+
     public void EndSlashEffect()
     {
-        Debug.Log("endslash");
         isLaserEndAction = true;
     }
 
@@ -380,7 +371,8 @@ public class MeshSlashEffect : MonoBehaviour {
             float dx = points[2].x - points[0].x;
             float dy = points[2].y - points[0].y;
             slashBeginAngle = Mathf.Atan2(dy, dx) * Mathf.Rad2Deg;
-            Debug.Log("slashBeginAngle :: " + slashBeginAngle);
+            currentSlashAngle = slashBeginAngle;
+            //Debug.Log("slashBeginAngle :: " + slashBeginAngle);
 
             //内積での判定用
             float retDX = points[2].x - points[0].x;
@@ -395,6 +387,7 @@ public class MeshSlashEffect : MonoBehaviour {
     {
         slashBeginAngle = initSlashBeginAngle;
         slashBeginVector = Vector2.zero;
+        currentSlashAngle = 0f;
     }
     /// <summary>
     /// 斬撃開始時（なぞってから方向を決定するタイミング）であるかを返す
