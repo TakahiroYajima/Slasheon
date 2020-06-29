@@ -98,6 +98,7 @@ public class MissionSceneManager : SingletonMonoBehaviour<MissionSceneManager> {
     public void SetEncountEnemy(MissionEnemyController enemy)
     {
         encountEnemyList.Add(enemy);
+        SoundManager.Instance.PlaySE("Encount");
         if(nowMissionState == MissionState.Expedition)
         {
             ChangeMissionState(MissionState.Encount);

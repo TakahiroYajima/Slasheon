@@ -11,19 +11,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6072b2dd23c5c8c47b1ea8756c9ac1b2, type: 3}
   m_Name: SoundData
   m_EditorClassIdentifier: 
-  soundDatas:
-  - name: 1
+  bgmDatas:
+  - name: NormalBattle
     audio: {fileID: 8300000, guid: e9b00311baadaa340b1576b46f8ce4ec, type: 3}
     isLoop: 1
     loopBeginTime: 0
-    loopEndTime: 1000
-  - name: 2
+    loopEndTime: 0
+  - name: Field
+    audio: {fileID: 8300000, guid: e9b00311baadaa340b1576b46f8ce4ec, type: 3}
+    isLoop: 1
+    loopBeginTime: 0
+    loopEndTime: 0
+  seDatas:
+  - name: Encount
     audio: {fileID: 8300000, guid: 21ce9ad86a5fb3e4b955551c08a857a8, type: 3}
-    isLoop: 0
-    loopBeginTime: 0
-    loopEndTime: 0
-  - name: 3
-    audio: {fileID: 0}
-    isLoop: 0
-    loopBeginTime: 0
-    loopEndTime: 0
+    isPlayOneShot: 1
+  - name: Slash
+    audio: {fileID: 8300000, guid: ef2110104bf1a7742b029e3005f330e5, type: 3}
+    isPlayOneShot: 1

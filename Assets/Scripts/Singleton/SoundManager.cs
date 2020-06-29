@@ -1,19 +1,118 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class SoundManager : SingletonMonoBehaviour<SoundManager> {
 
     [SerializeField] private List<AudioSource> bgmAudioSourceList = new List<AudioSource>();
     [SerializeField] private AudioSource seAudioSource = null;
-    
-	// Use this for initialization
-	void Start () {
-		
+    [SerializeField] private SoundScriptable soundScriptable = null;
+
+    private bool isInitialized = false;
+
+    protected override void Awake()
+    {
+        DontDestroyOnLoad(this);
+        base.Awake();
+    }
+
+    // Use this for initialization
+    void Start () {
+        StartCoroutine(ReadAsset());
 	}
 	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+	public IEnumerator ReadAsset()
+    {
+        ResourceRequest request = Resources.LoadAsync<SoundScriptable>("EachChapterVoice");
+        while (!request.isDone)
+        {
+            yield return null;
+        }
+        if (request.asset != null)
+        {
+            soundScriptable = request.asset as SoundScriptable;
+        }
+        if (soundScriptable == null)
+        {
+            yield return StartCoroutine(ReadAsset());
+        }
+        
+        isInitialized = true;
+    }
+
+    public void PlayBGM(string soundName)
+    {
+        if (isInitialized)
+        {
+            var findData = soundScriptable.bgmDatas.Find(x => x.name == soundName);
+            if(findData != null)
+            {
+                bgmAudioSourceList[0].clip = findData.audio;
+                bgmAudioSourceList[0].Play();
+                //for(int i = 0; i < bgmAudioSourceList.Count; i++)
+                //{
+                //    if (!bgmAudioSourceList[i].isPlaying)
+                //    {
+                //        bgmAudioSourceList[i].clip = findData.audio;
+                //        bgmAudioSourceList[i].Play();
+                //        break;
+                //    }
+                //}
+            }
+        }
+        else
+        {
+            Debug.Log("初期化が完了していません");
+        }
+    }
+
+    public void PlaySE(string soundName)
+    {
+        if (isInitialized)
+        {
+            var findData = soundScriptable.seDatas.Find(x => x.name == soundName);
+            if(findData != null)
+            {
+                if (findData.isPlayOneShot)
+                {
+                    seAudioSource.PlayOneShot(findData.audio);
+                }
+                else
+                {
+                    for (int i = 0; i < bgmAudioSourceList.Count; i++)
+                    {
+                        if (!bgmAudioSourceList[i].isPlaying)
+                        {
+                            bgmAudioSourceList[i].clip = findData.audio;
+                            bgmAudioSourceList[i].Play();
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        else
+        {
+            Debug.Log("初期化が完了していません");
+        }
+    }
+}
+
+[System.Serializable]
+public class BGMData
+{
+    public string name;
+    public AudioClip audio;
+    public bool isLoop;
+    public float loopBeginTime;//ループして再生を開始する地点
+    public float loopEndTime;//ループするタイミング
+}
+
+[System.Serializable]
+public class SEData
+{
+    public string name;
+    public AudioClip audio;
+    public bool isPlayOneShot;
 }

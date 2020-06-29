@@ -10,7 +10,7 @@ public class MissionSceneBattleState : MissionSceneStateBase
     /// </summary>
     public override void StateBeginAction()
     {
-
+        SoundManager.Instance.PlayBGM("NormalBattle");
     }
 
     /// <summary>

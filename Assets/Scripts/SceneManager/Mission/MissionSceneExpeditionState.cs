@@ -10,7 +10,7 @@ public class MissionSceneExpeditionState : MissionSceneStateBase
     /// </summary>
     public override void StateBeginAction()
     {
-        
+        SoundManager.Instance.PlayBGM("Field");
     }
 
     /// <summary>
