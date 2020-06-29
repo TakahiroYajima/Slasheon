@@ -18,7 +18,7 @@ MonoBehaviour:
     loopBeginTime: 0
     loopEndTime: 0
   - name: Field
-    audio: {fileID: 8300000, guid: e9b00311baadaa340b1576b46f8ce4ec, type: 3}
+    audio: {fileID: 8300000, guid: eef03d820ac031942bf99f5e371eaa89, type: 3}
     isLoop: 1
     loopBeginTime: 0
     loopEndTime: 0
@@ -28,4 +28,7 @@ MonoBehaviour:
     isPlayOneShot: 1
   - name: Slash
     audio: {fileID: 8300000, guid: ef2110104bf1a7742b029e3005f330e5, type: 3}
+    isPlayOneShot: 1
+  - name: SlashHit
+    audio: {fileID: 8300000, guid: 8d968f05cc7a48343974e8de59dd84f2, type: 3}
     isPlayOneShot: 1

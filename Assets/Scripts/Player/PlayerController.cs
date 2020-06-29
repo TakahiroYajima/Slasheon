@@ -187,16 +187,17 @@ public class PlayerController : MissionActor {
         }
     }
 
-    public void InstanceSlashDamageEffect(Vector3 position)
+    public void InstanceSlashDamageEffect(Collider collider)
     {
         SlashDamageEffect effect = Instantiate(slashDamageEffect, effectParentTransform);
         RectTransform rectTransform = slashDamageEffect.gameObject.GetComponent<RectTransform>();
         rectTransform.anchoredPosition = new Vector2(0f, 0f);
-        //rectTransform.anchoredPosition = position;
-        //rectTransform.localRotation = Quaternion.Euler(0f, 0f, slashEffect.GetCurrentSlashAngle());
+        Vector3 hitPoint = collider.ClosestPoint(collider.transform.position);
+        //Vector2 uiPos = Camera.main.WorldToScreenPoint(hitPoint);
+        //rectTransform.anchoredPosition = uiPos;
         Debug.Log("slashEffect :: " + rectTransform.localRotation);
         StartCoroutine(effect.StartAction(Quaternion.Euler(0f, 0f, slashEffect.GetCurrentSlashAngle())));
-        slashDamageParticle.gameObject.transform.position = position;
-        slashDamageParticle.Play();
+        slashDamageParticle.gameObject.transform.position = hitPoint;
+        //slashDamageParticle.Play();
     }
 }

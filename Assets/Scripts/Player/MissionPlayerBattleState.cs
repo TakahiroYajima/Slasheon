@@ -136,7 +136,7 @@ public class MissionPlayerBattleState : MissionPlayerStateBase {
             if (hitedCount == 0)
             {
                 hitActor.Damage(_playerController.PlayerActorState.attack);
-                _playerController.InstanceSlashDamageEffect(hitActor.transform.position);
+                _playerController.InstanceSlashDamageEffect(collider);
                 slashHitEnemyList.Add(hitActor);
             }
         }

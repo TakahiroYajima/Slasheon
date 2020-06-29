@@ -6,6 +6,7 @@ using System.Linq;
 public class SoundManager : SingletonMonoBehaviour<SoundManager> {
 
     [SerializeField] private List<AudioSource> bgmAudioSourceList = new List<AudioSource>();
+    [SerializeField] private AudioSource mainBGMAudio = null;
     [SerializeField] private AudioSource seAudioSource = null;
     [SerializeField] private SoundScriptable soundScriptable = null;
 
@@ -41,7 +42,7 @@ public class SoundManager : SingletonMonoBehaviour<SoundManager> {
         isInitialized = true;
     }
 
-    public void PlayBGM(string soundName)
+    public void PlayBGM(string soundName, bool isFade = false)
     {
         if (isInitialized)
         {
@@ -64,6 +65,17 @@ public class SoundManager : SingletonMonoBehaviour<SoundManager> {
         else
         {
             Debug.Log("初期化が完了していません");
+        }
+    }
+
+    public IEnumerator PlayBGMFade(AudioSource playAudio,AudioSource backAudio, AudioClip clip,float fadeTime = 1f)
+    {
+
+        float elapsedTime = 0f;
+        while(elapsedTime < fadeTime)
+        {
+
+            yield return null;
         }
     }
 

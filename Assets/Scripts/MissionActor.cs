@@ -21,7 +21,7 @@ public abstract class MissionActor : MonoBehaviour {
             finalDamage = 1;
         }
         actorState.hp -= finalDamage;
-        Debug.Log("damage :: " + finalDamage + " : hp :: " + actorState.hp);
+        //Debug.Log("damage :: " + finalDamage + " : hp :: " + actorState.hp);
         if (actorState.hp <= 0)
         {
             Death();
