@@ -117,6 +117,14 @@ public class MissionSceneManager : SingletonMonoBehaviour<MissionSceneManager> {
         if(encountEnemyList.Count == 0)
         {
             lastEnemy = deathEnemy;
+            StartCoroutine(EnemyAllDestroyedAction());
+        }
+    }
+    private IEnumerator EnemyAllDestroyedAction()
+    {
+        yield return new WaitForSeconds(1f);
+        if (encountEnemyList.Count == 0)
+        {
             ChangeMissionState(MissionState.Result);
         }
     }

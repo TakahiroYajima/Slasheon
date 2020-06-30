@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class MissionUIController : MonoBehaviour {
 
@@ -15,6 +16,11 @@ public class MissionUIController : MonoBehaviour {
 
     [SerializeField] private Image pointOfViewRotationImage = null;
 
+    //リザルトUI
+    [SerializeField] private Image resultBaseImage = null;
+    [SerializeField] private Button resultOKButton = null;
+    [SerializeField] private GameObject resultBackground = null;
+
     private MissionState nowMissionState = MissionState.Initialize;
 
 	// Use this for initialization
@@ -27,7 +33,33 @@ public class MissionUIController : MonoBehaviour {
         weaponButtonBase.rectTransform.anchoredPosition = new Vector2(weaponFixedPosition.x + weaponButtonBase.rectTransform.sizeDelta.x, weaponFixedPosition.y);
         //weaponButtonBase.gameObject.SetActive(false);
         Debug.Log("size : " + weaponButtonBase.rectTransform.sizeDelta.x);
+
+        //リザルトのOKボタンタップ時のアクション
+        resultOKButton.onClick.RemoveAllListeners();
+        resultOKButton.onClick.AddListener(() =>
+        {
+            MissionSceneManager.Instance.ChangeMissionState(MissionState.Expedition);
+        });
 	}
+
+    /// <summary>
+    /// ボタン1のコールバック登録
+    /// </summary>
+    /// <param name="callback"></param>
+    public void SetWeapon1PushCallback(UnityAction callback)
+    {
+        weapon1Button.onClick.RemoveAllListeners();
+        weapon1Button.onClick.AddListener(callback);
+    }
+    /// <summary>
+    /// ボタン2のコールバック登録
+    /// </summary>
+    /// <param name="callback"></param>
+    public void SetWeapon2PushCallback(UnityAction callback)
+    {
+        weapon2Button.onClick.RemoveAllListeners();
+        weapon2Button.onClick.AddListener(callback);
+    }
 
     public void ChangeState(MissionState state)
     {
@@ -49,6 +81,7 @@ public class MissionUIController : MonoBehaviour {
             case MissionState.Battle:
                 break;
             case MissionState.Result:
+                StartCoroutine(ToResultAction());
                 break;
             case MissionState.GameOver:
                 break;
@@ -63,6 +96,11 @@ public class MissionUIController : MonoBehaviour {
     /// <returns></returns>
 	public IEnumerator ToExpeditionAction()
     {
+        //リザルトを非表示に
+        resultOKButton.enabled = false;
+        resultBaseImage.gameObject.SetActive(false);
+        resultBackground.SetActive(false);
+
         Vector2 beginPosition = weaponButtonBase.rectTransform.anchoredPosition;
         float moveDistance = weaponButtonBase.rectTransform.sizeDelta.x;
         float moveSpeed = 2000f;
@@ -107,5 +145,23 @@ public class MissionUIController : MonoBehaviour {
             }
             nowMoveDistance += Time.deltaTime * moveSpeed;
         }
+    }
+
+    public IEnumerator ToResultAction()
+    {
+        resultBackground.SetActive(true);
+        resultOKButton.enabled = true;
+        resultBaseImage.gameObject.SetActive(true);
+        yield return null;
+
+    }
+
+    public void SetHP(float hp, float maxHP)
+    {
+        hpGaugeImage.fillAmount = hp / maxHP;
+    }
+    public void SetStamina(float stamina, float maxStamina)
+    {
+        staminaGaugeImage.fillAmount = stamina / maxStamina;
     }
 }

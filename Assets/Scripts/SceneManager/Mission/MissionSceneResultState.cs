@@ -28,7 +28,7 @@ public class MissionSceneResultState : MissionSceneStateBase
     {
         if(MissionSceneManager.Instance.LastEnemy == null)
         {
-            MissionSceneManager.Instance.ChangeMissionState(MissionState.Expedition);//仮。本当はリザルト画面表示後に行う
+            
         }
     }
 }

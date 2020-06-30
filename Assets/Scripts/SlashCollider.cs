@@ -65,11 +65,11 @@ public class SlashCollider : MonoBehaviour {
         meshFilter.mesh = mesh;
         meshCollider.sharedMesh = mesh;
         //meshCollider.enabled = false;
-        //meshCollider.enabled = true;
+        meshCollider.enabled = true;
     }
     public void RemoveCollider()
     {
-        //meshCollider.enabled = false;
+        meshCollider.enabled = false;
         meshCollider.sharedMesh = null;
     }
 

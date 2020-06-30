@@ -44,15 +44,18 @@ public class MissionEnemyController : MissionActor {
 
     public override void Damage(int damage)
     {
-        base.Damage(damage);
+        if (nowActionState != enemyStatus[EnemyState.Death.ToString()])
+        {
+            base.Damage(damage);
+        }
     }
     public override void Death()
     {
-        MissionSceneManager.Instance.DeleteDeathEnemy(this);
         ChangeState(EnemyState.Death);
     }
     public void DestroyEnemy()
     {
+        MissionSceneManager.Instance.DeleteDeathEnemy(this);
         Destroy(this.gameObject);
     }
 

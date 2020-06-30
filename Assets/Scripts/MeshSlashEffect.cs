@@ -46,6 +46,8 @@ public class MeshSlashEffect : MonoBehaviour {
 
     public delegate void SlashEndCallback();
     private SlashEndCallback slashEndCallback;
+    public delegate void SlashBeginCallback();
+    private SlashBeginCallback slashBeginCallback;
 
     private float currentSlashAngle = 0f;
     //public float CurrentSlashAngle { get { return currentSlashAngle; } }
@@ -60,6 +62,10 @@ public class MeshSlashEffect : MonoBehaviour {
         mesh = mf.mesh = new Mesh();
     }
 
+    public void SetSlashBeginCallback(SlashBeginCallback callback)
+    {
+        slashBeginCallback = callback;
+    }
     public void SetSlashEndCallback(SlashEndCallback callback)
     {
         slashEndCallback = callback;
@@ -229,6 +235,10 @@ public class MeshSlashEffect : MonoBehaviour {
         {
             slashEndCallback();
             slashAudio.PlayOneShot(slashClip);
+            if (slashBeginCallback != null)
+            {
+                slashBeginCallback();
+            }
         }
         SetSlashBeginAngle();
     }

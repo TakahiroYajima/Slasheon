@@ -2,7 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public class PlayerState
+{
+    public float stamina = 0f;
+    public float recoverStaminaOnSecond = 5f;//1秒に回復するスタミナ量
+    public float consumptionStaminaSlash = 1f;//剣を振った時の消費スタミナ
+    public float consumptionStaminaSlashHit = 1f;//剣でダメージを与えた時の消費スタミナ
+    public float consumptionStaminaPullArrowOnSecond = 3f;//弓を引いている時の消費スタミナ（秒）
+}
+
 public class PlayerController : MissionActor {
+
+    //各クラスのインスタンスとプロパティ
+    [SerializeField] private MissionUIController uiController = null;
+    public MissionUIController UIController { get { return uiController; } }
 
     [SerializeField] private MeshSlashEffect slashEffect = null;
     public MeshSlashEffect SlashEffect { get { return slashEffect; } }
@@ -15,27 +28,25 @@ public class PlayerController : MissionActor {
     public SlashDamageEffect slashDamagePref { get { return slashDamageEffect; } }
     [SerializeField] private ParticleSystem slashDamageParticle = null;
 
+    //Stateパターン管理
     private Dictionary<string, MissionPlayerStateBase> playerStatus = null;
     private MissionPlayerStateBase nowPlayerState = null;
 
-    public ActorState PlayerActorState { get { return actorState; } }
+    //戦闘のステータス
+    private PlayerState playerState = new PlayerState();
+    private PlayerState initPlayerState = new PlayerState();
+    public ActorState ActorState { get { return actorState; } }
+    public ActorState InitActorState { get { return initActorState; } }
+    public PlayerState PlayerState { get { return playerState; } }
+    public PlayerState InitPlayerState { get { return initPlayerState; } }
 
+    //探索時の移動に使用する
     private float raycastDistance = 30f;
     public Vector3 moveBeginPosition { get; set; }//移動開始時の場所を保持
     public Vector3 moveTargetPos { get; set; }//タッチした場所を保持
     private float moveSpeed = 7f;
     private float rotateSpeed = 1f;
     public bool isMoving { get; set; }
-
-    //public struct Data
-    //{
-    //    public float raycastDistance;
-    //    public Vector3 moveBeginPosition;//移動開始時の場所を保持
-    //    public Vector3 moveTargetPos;//タッチした場所を保持
-    //    public float moveSpeed;
-    //    public float rotateSpeed;
-    //    public bool isMoving;
-    //}
 
     // Use this for initialization
     void Start () {
@@ -59,6 +70,10 @@ public class PlayerController : MissionActor {
         moveBeginPosition = transform.position;
         moveTargetPos = transform.position;
         isMoving = false;
+
+        //デバッグ
+        initPlayerState.stamina = 30;
+        playerState.stamina = 30;
 	}
 
     /// <summary>
@@ -68,6 +83,7 @@ public class PlayerController : MissionActor {
         Debug.Log(nowPlayerState);
         //現在のステートの更新処理
         nowPlayerState.StateActionUpdate();
+
 	}
 
     /// <summary>
@@ -96,7 +112,10 @@ public class PlayerController : MissionActor {
 
     public override void Damage(int damage)
     {
-        base.Damage(damage);
+        if (actorState.hp > 0)
+        {
+            base.Damage(damage);
+        }
     }
     public override void Death()
     {
@@ -187,6 +206,25 @@ public class PlayerController : MissionActor {
         }
     }
 
+    /// <summary>
+    /// 毎フレームでスタミナ回復
+    /// </summary>
+    public void RecoverStamina()
+    {
+        if (playerState.stamina == initPlayerState.stamina) return;//Max値なら回復しない
+
+        playerState.stamina += playerState.recoverStaminaOnSecond * Time.deltaTime;
+        if(playerState.stamina > initPlayerState.stamina)
+        {
+            playerState.stamina = initPlayerState.stamina;
+        }
+        uiController.SetStamina(playerState.stamina, initPlayerState.stamina);
+    }
+
+    /// <summary>
+    /// 斬撃でダメージを与えた際のエフェクト再生
+    /// </summary>
+    /// <param name="collider"></param>
     public void InstanceSlashDamageEffect(Collider collider)
     {
         SlashDamageEffect effect = Instantiate(slashDamageEffect, effectParentTransform);
@@ -198,6 +236,6 @@ public class PlayerController : MissionActor {
         Debug.Log("slashEffect :: " + rectTransform.localRotation);
         StartCoroutine(effect.StartAction(Quaternion.Euler(0f, 0f, slashEffect.GetCurrentSlashAngle())));
         slashDamageParticle.gameObject.transform.position = hitPoint;
-        //slashDamageParticle.Play();
+        slashDamageParticle.Play();
     }
 }

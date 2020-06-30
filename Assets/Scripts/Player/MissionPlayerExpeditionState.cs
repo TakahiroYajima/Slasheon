@@ -21,6 +21,8 @@ public class MissionPlayerExpeditionState : MissionPlayerStateBase {
 
     public override void StateActionUpdate()
     {
+        _playerController.RecoverStamina();
+
         Vector3 targetPos = TouchActionOnField();
         if (targetPos != Vector3.zero)
         {

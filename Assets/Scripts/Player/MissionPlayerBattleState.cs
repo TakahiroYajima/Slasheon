@@ -16,6 +16,15 @@ public class MissionPlayerBattleState : MissionPlayerStateBase {
     {
         prevVerticesSlashPosition = Camera.main.transform.position;
         slashHitEnemyList.Clear();
+
+        //剣を振った時にスタミナを減らすコールバック
+        _playerController.SlashEffect.SetSlashBeginCallback(() =>
+        {
+            if (_playerController.PlayerState.stamina > _playerController.PlayerState.consumptionStaminaSlash)
+            {
+                UpdateStamina(_playerController.PlayerState.consumptionStaminaSlash);
+            }
+        });
         _playerController.SlashEffect.SetSlashEndCallback(() =>
         {
             slashHitEnemyList.Clear();
@@ -34,6 +43,8 @@ public class MissionPlayerBattleState : MissionPlayerStateBase {
 
     public override void StateActionUpdate()
     {
+        _playerController.RecoverStamina();
+
         int touchID = InputManager.Instance.GetAnyTouchBeginID();
         if (touchID != -1)
         {
@@ -42,10 +53,19 @@ public class MissionPlayerBattleState : MissionPlayerStateBase {
                 slashTouchID = touchID;
             }
         }
+        _playerController.SlashCollider.RemoveCollider();
         if (slashTouchID != -1)
         {
-            _playerController.SlashCollider.RemoveCollider();
+            //_playerController.SlashCollider.RemoveCollider();
+            //スタミナが足りなかったら攻撃できない
+            if (_playerController.PlayerState.stamina < _playerController.PlayerState.consumptionStaminaSlash + _playerController.PlayerState.consumptionStaminaSlashHit)
+            {
+                slashTouchID = -1;
+                _playerController.SlashEffect.EndSlashEffect();
+                return;
+            }
             _playerController.SlashEffect.UpdateAction();
+
             Vector2 touchPos = InputManager.Instance.GetTouchPosition(slashTouchID);
             Vector3 touchVertices = Camera.main.ScreenToWorldPoint(InputManager.Instance.GetTouchPosition(slashTouchID) + Camera.main.transform.forward * slashRayDistance);
             if (InputManager.Instance.IsTouchDown(slashTouchID))
@@ -128,6 +148,12 @@ public class MissionPlayerBattleState : MissionPlayerStateBase {
 
     public void ColliderEnterCallback(Collider collider)
     {
+        if(_playerController.PlayerState.stamina < _playerController.PlayerState.consumptionStaminaSlashHit)
+        {
+            _playerController.SlashCollider.RemoveCollider();
+            return;
+        }
+
         if ((SlasheonUtility.IsLayerNameMatch(collider.gameObject, "Enemy")))
         {
             MissionActor hitActor = collider.gameObject.GetComponent<MissionActor>();
@@ -135,10 +161,17 @@ public class MissionPlayerBattleState : MissionPlayerStateBase {
             int hitedCount = slashHitEnemyList.Where(x => x.transform.GetInstanceID() == hitActor.transform.GetInstanceID()).Count();
             if (hitedCount == 0)
             {
-                hitActor.Damage(_playerController.PlayerActorState.attack);
+                hitActor.Damage(_playerController.ActorState.attack);
                 _playerController.InstanceSlashDamageEffect(collider);
                 slashHitEnemyList.Add(hitActor);
+                UpdateStamina(_playerController.PlayerState.consumptionStaminaSlashHit);
             }
         }
+    }
+
+    public void UpdateStamina(float minus)
+    {
+        _playerController.PlayerState.stamina -= minus;
+        _playerController.UIController.SetStamina(_playerController.PlayerState.stamina, _playerController.InitPlayerState.stamina);
     }
 }
