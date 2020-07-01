@@ -15,6 +15,8 @@ public class MissionUIController : MonoBehaviour {
     private Vector2 weaponFixedPosition = Vector2.zero;//武器アイコンの定位置
 
     [SerializeField] private Image pointOfViewRotationImage = null;
+    public float pointOfViewWidth { get { return pointOfViewRotationImage.rectTransform.sizeDelta.x; } }//視点回転UIの横幅の半分の長さ
+    public const float pointOfViewMaxRotation = 90f;//一度に視点回転できる最大値
 
     //リザルトUI
     [SerializeField] private Image resultBaseImage = null;

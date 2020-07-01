@@ -1496,6 +1496,7 @@ GameObject:
   - component: {fileID: 1341573032}
   - component: {fileID: 1341573031}
   - component: {fileID: 1341573034}
+  - component: {fileID: 1341573035}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -1563,6 +1564,18 @@ MonoBehaviour:
   slashDamageEffect: {fileID: 114128954548401606, guid: d627e5120bb410d4eb32089df50057ac,
     type: 2}
   slashDamageParticle: {fileID: 1546962609}
+--- !u!114 &1341573035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1341573030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5740331228938a4f93602714d156a92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotationUI: {fileID: 1367854696}
 --- !u!1 &1354359146
 GameObject:
   m_ObjectHideFlags: 0
@@ -1647,7 +1660,7 @@ GameObject:
   - component: {fileID: 1367854698}
   - component: {fileID: 1367854697}
   - component: {fileID: 1367854696}
-  m_Layer: 5
+  m_Layer: 14
   m_Name: CameraRotationUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5566,7 +5579,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294963199
+    m_Bits: 4294946783
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -6024,7 +6037,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 32
+    m_Bits: 16416
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0

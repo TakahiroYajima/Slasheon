@@ -223,7 +223,7 @@ public class InputManager : SingletonMonoBehaviour<InputManager> {
                 //レイヤーでUIかを判定して整理する
                 for (int j = 0; j < result.Count; j++)
                 {
-                    if (!SlasheonUtility.IsAnyLayerNameMatch(result[j].gameObject, "PlayerUI", "Button"))
+                    if (SlasheonUtility.IsAnyLayerNameMatch(result[i].gameObject, SlasheonUtility.UILayer))
                     {
                         return true;
                     }
@@ -240,7 +240,7 @@ public class InputManager : SingletonMonoBehaviour<InputManager> {
         for (int i = 0; i < result.Count; i++)
         {
             //一致していなければリストから除く
-            if (!SlasheonUtility.IsAnyLayerNameMatch(result[i].gameObject, "PlayerUI", "Button"))
+            if (SlasheonUtility.IsAnyLayerNameMatch(result[i].gameObject, SlasheonUtility.UILayer))
             {
                 return true;
             }
@@ -272,7 +272,7 @@ public class InputManager : SingletonMonoBehaviour<InputManager> {
                 for (int j = 0; j < result.Count; j++)
                 {
                     //一致していなければリストから除く
-                    if (!SlasheonUtility.IsAnyLayerNameMatch(result[j].gameObject, "PlayerUI", "Button"))
+                    if (SlasheonUtility.IsAnyLayerNameMatch(result[j].gameObject, SlasheonUtility.UILayer))
                     {
                         removeNums.Add(i);
                     }
@@ -299,7 +299,7 @@ public class InputManager : SingletonMonoBehaviour<InputManager> {
         for (int i = 0; i < result.Count; i++)
         {
             //一致していなければリストから除く
-            if (!SlasheonUtility.IsAnyLayerNameMatch(result[i].gameObject, "PlayerUI", "Button"))
+            if (SlasheonUtility.IsAnyLayerNameMatch(result[i].gameObject, SlasheonUtility.UILayer))
             {
                 removeNums.Add(i);
             }

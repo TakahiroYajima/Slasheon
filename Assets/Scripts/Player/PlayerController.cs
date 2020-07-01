@@ -22,6 +22,8 @@ public class PlayerController : MissionActor {
     [SerializeField] private SlashCollider slashCollider = null;
     public SlashCollider SlashCollider { get { return slashCollider; } }
 
+    public PlayerRotation PlayerRotation { get; private set; }
+
     [SerializeField] private Transform effectParentTransform = null;
     public Transform EffectParentTrans { get { return effectParentTransform; } }
     [SerializeField] private SlashDamageEffect slashDamageEffect = null;
@@ -50,6 +52,8 @@ public class PlayerController : MissionActor {
 
     // Use this for initialization
     void Start () {
+        PlayerRotation = GetComponent<PlayerRotation>();
+
         MissionSceneManager.Instance.SetStateChangeCallback(ChangeMissionState);
 
         playerStatus = new Dictionary<string, MissionPlayerStateBase>
@@ -203,6 +207,38 @@ public class PlayerController : MissionActor {
         if(callback != null)
         {
             callback();
+        }
+    }
+
+    /// <summary>
+    /// 視点回転
+    /// </summary>
+    public void RotationViewAction()
+    {
+        int touchID = InputManager.Instance.GetAnyTouchBeginID();
+        if (InputManager.Instance.IsTouchDown(touchID))
+        {
+            if (InputManager.Instance.IsUITouch(touchID))
+            {
+                if (!PlayerRotation.isRotationMoving)
+                {
+                    if (LayerMask.LayerToName(InputManager.Instance.GetRaycastResult(touchID).gameObject.layer) == "CameraRotationUI")
+                    {
+                        PlayerRotation.OnPointerDown(touchID);
+                    }
+                }
+            }
+        }
+        if (PlayerRotation.isRotationMoving)
+        {
+            if (InputManager.Instance.IsTouchEnd(PlayerRotation.touchID))
+            {
+                PlayerRotation.OnPointerUP();
+            }
+            else
+            {
+                PlayerRotation.OnPointerMove();
+            }
         }
     }
 

@@ -8,6 +8,7 @@ using UnityEngine;
 public class MissionPlayerExpeditionState : MissionPlayerStateBase {
 
     private float raycastDistance = 30f;
+    private int moveTouchID = -1;
 
     public override void StateBeginAction()
     {
@@ -16,7 +17,7 @@ public class MissionPlayerExpeditionState : MissionPlayerStateBase {
 
     public override void StateEndAction()
     {
-        
+        moveTouchID = -1;
     }
 
     public override void StateActionUpdate()
@@ -32,21 +33,37 @@ public class MissionPlayerExpeditionState : MissionPlayerStateBase {
         {
             _playerController.MoveOnField(_playerController.moveTargetPos);
         }
+        else
+        {
+            _playerController.RotationViewAction();
+        }
     }
 
     private Vector3 TouchActionOnField()
     {
-        if (InputManager.Instance.IsTouchEnd())
+        int touchID = InputManager.Instance.GetAnyTouchBeginID();
+        if (touchID != -1)
         {
-            Ray ray = Camera.main.ScreenPointToRay(InputManager.Instance.GetTouchPosition(1));
-            RaycastHit hit = new RaycastHit();
-            if (Physics.Raycast(ray, out hit, raycastDistance))
+            if (!InputManager.Instance.IsUITouch(touchID))
             {
-                if (SlasheonUtility.IsLayerNameMatch(hit.collider.gameObject, "Field"))
+                moveTouchID = touchID;
+            }
+        }
+        if (moveTouchID != -1)
+        {
+            if (InputManager.Instance.IsTouchEnd(moveTouchID))
+            {
+                moveTouchID = -1;
+                Ray ray = Camera.main.ScreenPointToRay(InputManager.Instance.GetTouchPosition(moveTouchID));
+                RaycastHit hit = new RaycastHit();
+                if (Physics.Raycast(ray, out hit, raycastDistance))
                 {
-                    _playerController.moveBeginPosition = _playerController.transform.position;
-                    _playerController.isMoving = true;
-                    return hit.point;
+                    if (SlasheonUtility.IsLayerNameMatch(hit.collider.gameObject, "Field"))
+                    {
+                        _playerController.moveBeginPosition = _playerController.transform.position;
+                        _playerController.isMoving = true;
+                        return hit.point;
+                    }
                 }
             }
         }

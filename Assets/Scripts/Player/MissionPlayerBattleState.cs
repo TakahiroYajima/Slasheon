@@ -44,6 +44,7 @@ public class MissionPlayerBattleState : MissionPlayerStateBase {
     public override void StateActionUpdate()
     {
         _playerController.RecoverStamina();
+        _playerController.RotationViewAction();
 
         int touchID = InputManager.Instance.GetAnyTouchBeginID();
         if (touchID != -1)
