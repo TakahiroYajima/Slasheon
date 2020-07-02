@@ -73,8 +73,13 @@ public class SlashCollider : MonoBehaviour {
         meshCollider.sharedMesh = null;
     }
 
-    private void OnTriggerEnter(Collider other)
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    colliderCallback(other);
+    //}
+    private void OnCollisionEnter(Collision collision)
     {
-        colliderCallback(other);
+        Debug.Log("CollisionHit");
+        colliderCallback(collision.collider);
     }
 }

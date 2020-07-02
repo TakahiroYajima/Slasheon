@@ -848,7 +848,7 @@ RectTransform:
   - {fileID: 1902222842}
   - {fileID: 539430511}
   m_Father: {fileID: 820494345}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
@@ -1077,10 +1077,9 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1367854698}
   - {fileID: 682356494}
   m_Father: {fileID: 1867130173}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -1114,7 +1113,7 @@ RectTransform:
   m_Children:
   - {fileID: 82468071}
   m_Father: {fileID: 1867130173}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -1342,7 +1341,7 @@ RectTransform:
   - {fileID: 706559355}
   - {fileID: 607766037}
   m_Father: {fileID: 1867130173}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -1543,6 +1542,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1754109496}
+  - {fileID: 1685991260}
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1564,6 +1564,7 @@ MonoBehaviour:
   slashDamageEffect: {fileID: 114128954548401606, guid: d627e5120bb410d4eb32089df50057ac,
     type: 2}
   slashDamageParticle: {fileID: 1546962609}
+  arrowObject: {fileID: 0}
 --- !u!114 &1341573035
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1710,7 +1711,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 820494345}
+  m_Father: {fileID: 1867130173}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -1989,7 +1990,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: -228832544
+  randomSeed: -650860906
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -5448,6 +5449,49 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1685991259
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1685991260}
+  - component: {fileID: 1685991261}
+  m_Layer: 0
+  m_Name: ArrowShooter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1685991260
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1685991259}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1341573033}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1685991261
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1685991259}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b0bc7078d7ae104382081e73d8463d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  arrowPref: {fileID: 114362229914804498, guid: 131013a67d54e3b4fb5722109c106839,
+    type: 2}
+  arrowShotPositionObj: {fileID: 1341573030}
 --- !u!1 &1728893296
 GameObject:
   m_ObjectHideFlags: 0
@@ -5718,6 +5762,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
+  - {fileID: 1367854698}
   - {fileID: 820494345}
   - {fileID: 2114749580}
   - {fileID: 864015969}
@@ -6270,7 +6315,7 @@ RectTransform:
   - {fileID: 1894120736}
   - {fileID: 398135305}
   m_Father: {fileID: 1867130173}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}

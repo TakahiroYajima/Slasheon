@@ -30,6 +30,10 @@ public class PlayerController : MissionActor {
     public SlashDamageEffect slashDamagePref { get { return slashDamageEffect; } }
     [SerializeField] private ParticleSystem slashDamageParticle = null;
 
+    //弓矢攻撃用のスクリプト
+    [SerializeField] private ArrowObject arrowObject = null;
+    public ArrowObject ArrowObject { get { return arrowObject; } }
+
     //Stateパターン管理
     private Dictionary<string, MissionPlayerStateBase> playerStatus = null;
     private MissionPlayerStateBase nowPlayerState = null;

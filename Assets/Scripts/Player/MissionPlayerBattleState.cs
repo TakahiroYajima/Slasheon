@@ -12,6 +12,8 @@ public class MissionPlayerBattleState : MissionPlayerStateBase {
     private List<Vector3> vertices = new List<Vector3>();
     private Vector3 prevVerticesSlashPosition;
 
+    public Weapon currentWeaponMode { get; private set; }
+
     public override void StateBeginAction()
     {
         prevVerticesSlashPosition = Camera.main.transform.position;
@@ -32,6 +34,19 @@ public class MissionPlayerBattleState : MissionPlayerStateBase {
             _playerController.SlashCollider.RemoveCollider();
         });
         _playerController.SlashCollider.SetCollisionEnterCallback(ColliderEnterCallback);
+
+        //各武器のボタンプッシュ時のコールバック
+        _playerController.UIController.SetWeapon1PushCallback(() =>
+        {
+            currentWeaponMode = Weapon.Blade;
+        });
+        _playerController.UIController.SetWeapon2PushCallback(() =>
+        {
+            currentWeaponMode = Weapon.Bow;
+        });
+
+        //戦闘開始時のステートにする
+        currentWeaponMode = Weapon.Blade;
     }
 
     public override void StateEndAction()
@@ -46,6 +61,18 @@ public class MissionPlayerBattleState : MissionPlayerStateBase {
         _playerController.RecoverStamina();
         _playerController.RotationViewAction();
 
+        switch (currentWeaponMode)
+        {
+            case Weapon.Blade:BladeModeAction();
+                break;
+            case Weapon.Bow:BowModeAction();
+                break;
+            default:break;
+        }
+    }
+
+    private void BladeModeAction()
+    {
         int touchID = InputManager.Instance.GetAnyTouchBeginID();
         if (touchID != -1)
         {
@@ -83,7 +110,7 @@ public class MissionPlayerBattleState : MissionPlayerStateBase {
             }
             else
             {
-                if(vertices.Count < 3)
+                if (vertices.Count < 3)
                 {
                     vertices.Clear();
                     vertices.Add(Camera.main.transform.position);
@@ -104,46 +131,34 @@ public class MissionPlayerBattleState : MissionPlayerStateBase {
                     _playerController.SlashCollider.CreateCollider();
                 }
             }
+        }
+    }
 
-            //Ray ray = Camera.main.ScreenPointToRay(InputManager.Instance.GetTouchPosition(slashTouchID));
-            //Debug.DrawRay(ray.origin, ray.direction * slashRayDistance, Color.red, 1f, false);
-            //RaycastHit hit = new RaycastHit();
-            //if (Physics.Raycast(ray, out hit, slashRayDistance))
-            //{
-            //    if (SlasheonUtility.IsLayerNameMatch(hit.collider.gameObject, "Enemy"))
-            //    {
-            //        MissionActor hitActor = hit.collider.gameObject.GetComponent<MissionActor>();
-            //        //一度の斬撃で複数回ダメージ判定しないように調整(linq適用前)
-            //        //bool cantDamage = false;
-            //        //for (int i = 0; i < slashHitEnemyList.Count; i++)
-            //        //{
-            //        //    if(slashHitEnemyList[i].transform.GetInstanceID() == hitActor.transform.GetInstanceID())
-            //        //    {
-            //        //        cantDamage = true;
-            //        //        break;
-            //        //    }
-            //        //}
-            //        //if (!cantDamage)
-            //        //{
-            //        //    hitActor.Damage(_playerController.PlayerActorState.attack);
-            //        //    slashHitEnemyList.Add(hitActor);
-            //        //}
+    private void BowModeAction()
+    {
+        Debug.Log("bow");
+        int touchID = InputManager.Instance.GetAnyTouchBeginID();
+        if (touchID != -1)
+        {
+            if (!InputManager.Instance.IsUITouch(touchID))
+            {
+                slashTouchID = touchID;
+            }
+            if (slashTouchID != -1)
+            {
+                Vector2 touchPos = InputManager.Instance.GetTouchPosition(slashTouchID);
+                //タッチ中は力をためる
+                if(InputManager.Instance.IsTouchMove(slashTouchID) || InputManager.Instance.IsTouch(slashTouchID))
+                {
 
-            //        //一度の斬撃で複数回ダメージ判定しないように調整
-            //        int hitedCount = slashHitEnemyList.Where(x => x.transform.GetInstanceID() == hitActor.transform.GetInstanceID()).Count();
-            //        if(hitedCount == 0)
-            //        {
-            //            hitActor.Damage(_playerController.PlayerActorState.attack);
-            //            slashHitEnemyList.Add(hitActor);
-            //        }
-            //    }
-            //}
-
-            //if (InputManager.Instance.IsTouchEnd(slashTouchID))
-            //{
-            //    slashTouchID = -1;
-            //    vertices.Clear();
-            //}
+                }else if (InputManager.Instance.IsTouchEnd(slashTouchID))
+                {
+                    //矢を放つ
+                    Ray ray = Camera.main.ScreenPointToRay(InputManager.Instance.GetTouchPosition(slashTouchID));
+                    Vector3 dir = ray.direction;
+                    _playerController.ArrowObject.ShotArrow(100f, dir.normalized);
+                }
+            }
         }
     }
 
@@ -175,4 +190,11 @@ public class MissionPlayerBattleState : MissionPlayerStateBase {
         _playerController.PlayerState.stamina -= minus;
         _playerController.UIController.SetStamina(_playerController.PlayerState.stamina, _playerController.InitPlayerState.stamina);
     }
+}
+
+public enum Weapon
+{
+    None,//初期化用
+    Blade,
+    Bow,
 }
