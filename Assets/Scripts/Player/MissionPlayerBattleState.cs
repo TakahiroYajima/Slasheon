@@ -39,10 +39,12 @@ public class MissionPlayerBattleState : MissionPlayerStateBase {
         _playerController.UIController.SetWeapon1PushCallback(() =>
         {
             currentWeaponMode = Weapon.Blade;
+            slashTouchID = -1;
         });
         _playerController.UIController.SetWeapon2PushCallback(() =>
         {
             currentWeaponMode = Weapon.Bow;
+            slashTouchID = -1;
         });
 
         //戦闘開始時のステートにする
@@ -94,6 +96,7 @@ public class MissionPlayerBattleState : MissionPlayerStateBase {
             }
             _playerController.SlashEffect.UpdateAction();
 
+            //斬撃の当たり判定を作る
             Vector2 touchPos = InputManager.Instance.GetTouchPosition(slashTouchID);
             Vector3 touchVertices = Camera.main.ScreenToWorldPoint(InputManager.Instance.GetTouchPosition(slashTouchID) + Camera.main.transform.forward * slashRayDistance);
             if (InputManager.Instance.IsTouchDown(slashTouchID))
@@ -133,10 +136,11 @@ public class MissionPlayerBattleState : MissionPlayerStateBase {
             }
         }
     }
-
+    /// <summary>
+    /// 弓矢モードのアクション
+    /// </summary>
     private void BowModeAction()
     {
-        Debug.Log("bow");
         int touchID = InputManager.Instance.GetAnyTouchBeginID();
         if (touchID != -1)
         {
@@ -144,21 +148,26 @@ public class MissionPlayerBattleState : MissionPlayerStateBase {
             {
                 slashTouchID = touchID;
             }
-            if (slashTouchID != -1)
+        }
+        if (slashTouchID != -1)
+        {
+            Vector2 touchPos = InputManager.Instance.GetTouchPosition(slashTouchID);
+            //タッチ中は力をためる
+            if (InputManager.Instance.IsTouchMove(slashTouchID) || InputManager.Instance.IsTouch(slashTouchID))
             {
-                Vector2 touchPos = InputManager.Instance.GetTouchPosition(slashTouchID);
-                //タッチ中は力をためる
-                if(InputManager.Instance.IsTouchMove(slashTouchID) || InputManager.Instance.IsTouch(slashTouchID))
-                {
-
-                }else if (InputManager.Instance.IsTouchEnd(slashTouchID))
-                {
-                    //矢を放つ
-                    Ray ray = Camera.main.ScreenPointToRay(InputManager.Instance.GetTouchPosition(slashTouchID));
-                    Vector3 dir = ray.direction;
-                    _playerController.ArrowObject.ShotArrow(100f, dir.normalized);
-                }
+                Debug.Log("touch");
             }
+            else if (InputManager.Instance.IsTouchEnd(slashTouchID))
+            {
+                Debug.Log("touchend");
+                slashTouchID = -1;
+                //矢を放つ
+                touchPos += new Vector2(0f, 50f);
+                Ray ray = Camera.main.ScreenPointToRay(touchPos);
+                Vector3 dir = ray.direction;
+                _playerController.BowAction.ShotArrow(10000f, dir);
+            }
+            Debug.Log("bowAction");
         }
     }
 

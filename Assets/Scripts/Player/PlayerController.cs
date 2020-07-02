@@ -31,8 +31,8 @@ public class PlayerController : MissionActor {
     [SerializeField] private ParticleSystem slashDamageParticle = null;
 
     //弓矢攻撃用のスクリプト
-    [SerializeField] private ArrowObject arrowObject = null;
-    public ArrowObject ArrowObject { get { return arrowObject; } }
+    [SerializeField] private BowAction bowAction = null;
+    public BowAction BowAction { get { return bowAction; } }
 
     //Stateパターン管理
     private Dictionary<string, MissionPlayerStateBase> playerStatus = null;
