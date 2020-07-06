@@ -22,7 +22,8 @@ GameObject:
   - component: {fileID: 54856656242155072}
   - component: {fileID: 114281908449227566}
   - component: {fileID: 96466563830534546}
-  m_Layer: 0
+  - component: {fileID: 135582474607509684}
+  m_Layer: 15
   m_Name: Arrow_Trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -162,3 +163,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   myRigidbody: {fileID: 54856656242155072}
+--- !u!135 &135582474607509684
+SphereCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1158691170994994}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 1
+  m_Center: {x: 0, y: 0, z: 0}

@@ -33,7 +33,10 @@ public class MissionPlayerBattleState : MissionPlayerStateBase {
             vertices.Clear();
             _playerController.SlashCollider.RemoveCollider();
         });
-        _playerController.SlashCollider.SetCollisionEnterCallback(ColliderEnterCallback);
+        _playerController.SlashCollider.SetCollisionEnterCallback(SlashColliderEnterCallback);
+
+        //矢が衝突した際のコールバック
+        _playerController.BowAction.SetArrowHitCallback(ArrowColliderEnterCallback);
 
         //各武器のボタンプッシュ時のコールバック
         _playerController.UIController.SetWeapon1PushCallback(() =>
@@ -102,8 +105,8 @@ public class MissionPlayerBattleState : MissionPlayerStateBase {
             if (InputManager.Instance.IsTouchDown(slashTouchID))
             {
                 vertices.Clear();
-                //vertices.Add(Camera.main.transform.position);
-                //vertices.Add(touchVertices);
+                vertices.Add(Camera.main.transform.position);
+                vertices.Add(touchVertices);
                 prevVerticesSlashPosition = touchVertices;
             }
             else if (InputManager.Instance.IsTouchEnd(slashTouchID))
@@ -113,9 +116,8 @@ public class MissionPlayerBattleState : MissionPlayerStateBase {
             }
             else
             {
-                if (vertices.Count < 3)
+                if (vertices.Count == 0)
                 {
-                    vertices.Clear();
                     vertices.Add(Camera.main.transform.position);
                     if (prevVerticesSlashPosition != Camera.main.transform.position)
                     {
@@ -126,12 +128,17 @@ public class MissionPlayerBattleState : MissionPlayerStateBase {
                         vertices.Add(touchVertices);
                     }
                 }
-                vertices.Add(touchVertices);
-                prevVerticesSlashPosition = touchVertices;
-                if (vertices[1] != vertices[2])
+                if (touchVertices != prevVerticesSlashPosition)
                 {
-                    _playerController.SlashCollider.SetPoint(vertices.ToArray());
-                    _playerController.SlashCollider.CreateCollider();
+                    vertices.Add(touchVertices);
+                    prevVerticesSlashPosition = touchVertices;
+                    //_playerController.SlashCollider.SetPoint(touchVertices);
+                }
+                if (vertices.Count >= 3)
+                {
+                    //_playerController.SlashCollider.SetPointsList(vertices);
+                    //_playerController.SlashCollider.MakeTriangles(vertices.Count);
+                    _playerController.SlashCollider.CreateCollider(vertices);
                 }
             }
         }
@@ -155,11 +162,10 @@ public class MissionPlayerBattleState : MissionPlayerStateBase {
             //タッチ中は力をためる
             if (InputManager.Instance.IsTouchMove(slashTouchID) || InputManager.Instance.IsTouch(slashTouchID))
             {
-                Debug.Log("touch");
+                
             }
             else if (InputManager.Instance.IsTouchEnd(slashTouchID))
             {
-                Debug.Log("touchend");
                 slashTouchID = -1;
                 //矢を放つ
                 touchPos += new Vector2(0f, 50f);
@@ -167,11 +173,10 @@ public class MissionPlayerBattleState : MissionPlayerStateBase {
                 Vector3 dir = ray.direction;
                 _playerController.BowAction.ShotArrow(10000f, dir);
             }
-            Debug.Log("bowAction");
         }
     }
 
-    public void ColliderEnterCallback(Collider collider)
+    public void SlashColliderEnterCallback(Collider collider)
     {
         if(_playerController.PlayerState.stamina < _playerController.PlayerState.consumptionStaminaSlashHit)
         {
@@ -191,6 +196,15 @@ public class MissionPlayerBattleState : MissionPlayerStateBase {
                 slashHitEnemyList.Add(hitActor);
                 UpdateStamina(_playerController.PlayerState.consumptionStaminaSlashHit);
             }
+        }
+    }
+
+    public void ArrowColliderEnterCallback(Collider collider)
+    {
+        if ((SlasheonUtility.IsLayerNameMatch(collider.gameObject, "Enemy")))
+        {
+            MissionActor hitActor = collider.gameObject.GetComponent<MissionActor>();
+            hitActor.Damage(_playerController.ActorState.attack);
         }
     }
 

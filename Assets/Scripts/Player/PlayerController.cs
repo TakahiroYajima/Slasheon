@@ -271,11 +271,15 @@ public class PlayerController : MissionActor {
         RectTransform rectTransform = slashDamageEffect.gameObject.GetComponent<RectTransform>();
         rectTransform.anchoredPosition = new Vector2(0f, 0f);
         Vector3 hitPoint = collider.ClosestPoint(collider.transform.position);
-        //Vector2 uiPos = Camera.main.WorldToScreenPoint(hitPoint);
-        //rectTransform.anchoredPosition = uiPos;
+
         Debug.Log("slashEffect :: " + rectTransform.localRotation);
         StartCoroutine(effect.StartAction(Quaternion.Euler(0f, 0f, slashEffect.GetCurrentSlashAngle())));
         slashDamageParticle.gameObject.transform.position = hitPoint;
         slashDamageParticle.Play();
+    }
+
+    public void InstanceArrowDamageEffect()
+    {
+
     }
 }

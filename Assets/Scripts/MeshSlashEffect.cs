@@ -108,6 +108,7 @@ public class MeshSlashEffect : MonoBehaviour {
         {
             float minusWidth = ((Time.deltaTime / laserMinusTime) * initLaserWidth);
             laserWidth -= minusWidth;
+            if(sections == null) { return; }
             for (int i = 0; i < sections.Length; i++)
             {
                 Vector3 leftLength = sections[i].left - points[i];
