@@ -100,14 +100,14 @@ public class SlashCollider : MonoBehaviour {
             return;
         }
         int[] trianglesArray = new int[pointsCount * 3 + 3];
-        Debug.Log("pointsCount : " + points.Count + " :: triangleCount : " + trianglesArray.Length);
+        //Debug.Log("pointsCount : " + points.Count + " :: triangleCount : " + trianglesArray.Length);
         for(int i = 0; i < pointsCount + 1; i++)
         {
-            Debug.Log("i : " + i);
+            //Debug.Log("i : " + i);
             trianglesArray[i * 3 + 0] = 0;
             trianglesArray[i * 3 + 1] = i + 1;
             trianglesArray[i * 3 + 2] = i + 2;
-            Debug.Log("point :: " + points[i] + " :: " + "triangle" + i + " :: " + trianglesArray[i * 3 + 0] + " : " + trianglesArray[i * 3 + 1] + " : " + trianglesArray[i * 3 + 2]);
+            //Debug.Log("point :: " + points[i] + " :: " + "triangle" + i + " :: " + trianglesArray[i * 3 + 0] + " : " + trianglesArray[i * 3 + 1] + " : " + trianglesArray[i * 3 + 2]);
         }
 
         mesh.Clear();
