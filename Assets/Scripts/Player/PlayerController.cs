@@ -123,6 +123,7 @@ public class PlayerController : MissionActor {
         if (actorState.hp > 0)
         {
             base.Damage(damage);
+            Debug.Log("ダメージ：残りHP : " + actorState.hp);
         }
     }
     public override void Death()
@@ -278,8 +279,9 @@ public class PlayerController : MissionActor {
         slashDamageParticle.Play();
     }
 
-    public void InstanceArrowDamageEffect()
+    public void InstanceArrowDamageEffect(Collider collider)
     {
-
+        slashDamageParticle.gameObject.transform.position = collider.transform.position;
+        slashDamageParticle.Play();
     }
 }

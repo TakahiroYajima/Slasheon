@@ -36,7 +36,7 @@ public class MissionEnemyExpeditionState : MissionEnemyStateBase {
         {
             Vector3 playerPos = MissionSceneManager.Instance.playerPosition;
             Vector3 targetPos = new Vector3(playerPos.x, enemyController.transform.position.y, playerPos.z);
-            if (Vector3.Distance(targetPos, enemyController.transform.position) > 5f)
+            if (Vector3.Distance(targetPos, enemyController.transform.position) > 10f)
             {
                 enemyController.transform.LookAt(targetPos);
                 enemyController.transform.Translate((enemyController.transform.position - targetPos).normalized * moveSpeed * Time.deltaTime);

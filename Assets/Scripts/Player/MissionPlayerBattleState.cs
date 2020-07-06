@@ -65,7 +65,7 @@ public class MissionPlayerBattleState : MissionPlayerStateBase {
     {
         _playerController.RecoverStamina();
         _playerController.RotationViewAction();
-
+        Debug.Log("PlayerBattle");
         switch (currentWeaponMode)
         {
             case Weapon.Blade:BladeModeAction();
@@ -205,6 +205,7 @@ public class MissionPlayerBattleState : MissionPlayerStateBase {
         {
             MissionActor hitActor = collider.gameObject.GetComponent<MissionActor>();
             hitActor.Damage(_playerController.ActorState.attack);
+            _playerController.InstanceArrowDamageEffect(collider);
         }
     }
 

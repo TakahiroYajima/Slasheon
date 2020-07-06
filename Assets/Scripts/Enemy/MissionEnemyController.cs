@@ -8,6 +8,9 @@ public class MissionEnemyController : MissionActor {
     private Dictionary<string, MissionEnemyStateBase> enemyStatus = null;
     private MissionEnemyStateBase nowActionState = null;
 
+    public delegate void EnemyDamageCallback();
+    private EnemyDamageCallback damageCallback;
+
 	// Use this for initialization
 	void Start () {
         enemyStatus = new Dictionary<string, MissionEnemyStateBase>
@@ -31,6 +34,10 @@ public class MissionEnemyController : MissionActor {
             nowActionState.StateUpdateAction();
         }
 	}
+    public void SetEnemyDamageCallback(EnemyDamageCallback callback)
+    {
+        damageCallback = callback;
+    }
 
     public void ChangeState(EnemyState state)
     {
@@ -44,9 +51,11 @@ public class MissionEnemyController : MissionActor {
 
     public override void Damage(int damage)
     {
-        if (nowActionState != enemyStatus[EnemyState.Death.ToString()])
+        if (nowActionState != enemyStatus[EnemyState.Death.ToString()] || 
+            nowActionState != enemyStatus[EnemyState.Expedition.ToString()])
         {
             base.Damage(damage);
+            damageCallback();
         }
     }
     public override void Death()
