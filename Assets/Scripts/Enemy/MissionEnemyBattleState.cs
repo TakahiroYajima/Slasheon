@@ -67,12 +67,16 @@ public class MissionEnemyBattleState : MissionEnemyStateBase
             Vector3 currentPos = enemyController.transform.position - direction * (Time.deltaTime / actionTime);
             enemyController.transform.position = currentPos;
             elapsedTime += Time.deltaTime;
+            if(elapsedTime >= actionTime)
+            {
+                if (!damageFlg)
+                {
+                    MissionSceneManager.Instance.Player.Damage(1);
+                }
+            }
             yield return null;
         }
-        if (!damageFlg)
-        {
-            MissionSceneManager.Instance.Player.Damage(1);
-        }
+        
         enemyController.StartCoroutine(MoveToInitPos());
     }
 
