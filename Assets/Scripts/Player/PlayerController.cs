@@ -124,6 +124,7 @@ public class PlayerController : MissionActor {
         {
             base.Damage(damage);
             Debug.Log("ダメージ：残りHP : " + actorState.hp);
+            uiController.SetHP(actorState.hp, initActorState.hp);
         }
     }
     public override void Death()
