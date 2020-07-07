@@ -29,7 +29,7 @@ public class MissionEnemyController : MissionActor {
 	
 	// Update is called once per frame
 	void Update () {
-        if (nowActionState != null)
+        if (nowActionState != null && MissionSceneManager.Instance.IsEnemyActionable)
         {
             nowActionState.StateUpdateAction();
         }

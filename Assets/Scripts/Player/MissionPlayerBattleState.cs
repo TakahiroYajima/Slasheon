@@ -192,7 +192,7 @@ public class MissionPlayerBattleState : MissionPlayerStateBase {
             if (hitedCount == 0)
             {
                 hitActor.Damage(_playerController.ActorState.attack);
-                _playerController.InstanceSlashDamageEffect(collider);
+                _playerController.InstanceSlashDamageEffect(collider, InputManager.Instance.GetTouchPosition(slashTouchID));
                 slashHitEnemyList.Add(hitActor);
                 UpdateStamina(_playerController.PlayerState.consumptionStaminaSlashHit);
             }

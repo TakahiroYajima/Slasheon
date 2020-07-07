@@ -22,6 +22,16 @@ public class MissionSceneManager : SingletonMonoBehaviour<MissionSceneManager> {
     [SerializeField] private MissionUIController missionUIController = null;
     public MissionUIController MissionUIController { get { return missionUIController; } }
 
+    public bool IsEnemyActionable {
+        get
+        {
+            return nowMissionState != MissionState.Initialize &&
+                    nowMissionState != MissionState.Start &&
+                    nowMissionState != MissionState.Result &&
+                    nowMissionState != MissionState.GameOver;
+        }
+    }
+
     //バトルに使用する変数
     private List<MissionEnemyController> encountEnemyList = new List<MissionEnemyController>();//エンカウントした敵
     private MissionEnemyController lastEnemy = null;//最後の敵の死亡アクション終了待ち用

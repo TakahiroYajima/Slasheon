@@ -80,6 +80,8 @@ public class PlayerController : MissionActor {
         isMoving = false;
 
         //デバッグ
+        initActorState.hp = 1;
+        actorState.hp = 1;
         initPlayerState.stamina = 30;
         playerState.stamina = 30;
 	}
@@ -122,6 +124,7 @@ public class PlayerController : MissionActor {
     {
         if (actorState.hp > 0)
         {
+            StartCoroutine(uiController.DamageUIAction());
             base.Damage(damage);
             Debug.Log("ダメージ：残りHP : " + actorState.hp);
             uiController.SetHP(actorState.hp, initActorState.hp);
@@ -267,16 +270,18 @@ public class PlayerController : MissionActor {
     /// 斬撃でダメージを与えた際のエフェクト再生
     /// </summary>
     /// <param name="collider"></param>
-    public void InstanceSlashDamageEffect(Collider collider)
+    public void InstanceSlashDamageEffect(Collider collider,Vector2 touchPos)
     {
         SlashDamageEffect effect = Instantiate(slashDamageEffect, effectParentTransform);
-        RectTransform rectTransform = slashDamageEffect.gameObject.GetComponent<RectTransform>();
-        rectTransform.anchoredPosition = new Vector2(0f, 0f);
-        Vector3 hitPoint = collider.ClosestPoint(collider.transform.position);
 
-        Debug.Log("slashEffect :: " + rectTransform.localRotation);
+        //Vector3 hitPoint = collider.ClosestPoint(collider.transform.position);
+        RectTransform rectTransform = slashDamageEffect.gameObject.GetComponent<RectTransform>();
+        rectTransform.anchoredPosition = touchPos;
+        Vector3 hitPoint = Camera.main.ScreenToViewportPoint(touchPos);
+        
+        Debug.Log("slashEffect :: " + Camera.main.ViewportToWorldPoint(hitPoint));
         StartCoroutine(effect.StartAction(Quaternion.Euler(0f, 0f, slashEffect.GetCurrentSlashAngle())));
-        slashDamageParticle.gameObject.transform.position = hitPoint;
+        slashDamageParticle.gameObject.transform.position = Camera.main.ViewportToWorldPoint(hitPoint);
         slashDamageParticle.Play();
     }
 

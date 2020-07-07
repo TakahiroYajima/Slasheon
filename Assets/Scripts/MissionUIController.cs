@@ -23,7 +23,18 @@ public class MissionUIController : MonoBehaviour {
     [SerializeField] private Button resultOKButton = null;
     [SerializeField] private GameObject resultBackground = null;
 
+    //ダメージUI
+    [SerializeField] private Image damageUI = null;
+
+    //ゲームオーバーUI
+    [SerializeField] private Image gameOverBackPanel = null;
+    [SerializeField] private Text gameOverText = null;
+    [SerializeField] private GameObject gameOverMenuUI = null;
+
     private MissionState nowMissionState = MissionState.Initialize;
+
+    //コルーチン
+    private IEnumerator damageUIActionCoroutine = null;
 
 	// Use this for initialization
 	void Start () {
@@ -42,7 +53,12 @@ public class MissionUIController : MonoBehaviour {
         {
             MissionSceneManager.Instance.ChangeMissionState(MissionState.Expedition);
         });
-	}
+
+        damageUI.gameObject.SetActive(false);
+        gameOverBackPanel.gameObject.SetActive(false);
+        gameOverText.gameObject.SetActive(false);
+        gameOverMenuUI.SetActive(false);
+    }
 
     /// <summary>
     /// ボタン1のコールバック登録
@@ -86,6 +102,7 @@ public class MissionUIController : MonoBehaviour {
                 StartCoroutine(ToResultAction());
                 break;
             case MissionState.GameOver:
+                StartCoroutine(GameOverUIAction());
                 break;
 
         }
@@ -109,18 +126,26 @@ public class MissionUIController : MonoBehaviour {
         float nowMoveDistance = 0f;
         while (nowMoveDistance < moveDistance)
         {
-            if (nowMoveDistance + Time.deltaTime * moveSpeed >= moveDistance)
+            if (nowMissionState == MissionState.Encount)
             {
-                weaponButtonBase.rectTransform.anchoredPosition = new Vector2(beginPosition.x + moveDistance, beginPosition.y);
+                nowMoveDistance = moveDistance;
             }
             else
             {
-                weaponButtonBase.rectTransform.anchoredPosition = new Vector2(beginPosition.x + nowMoveDistance, weaponButtonBase.rectTransform.anchoredPosition.y);
-                yield return null;
+                if (nowMoveDistance + Time.deltaTime * moveSpeed >= moveDistance)
+                {
+                    weaponButtonBase.rectTransform.anchoredPosition = new Vector2(beginPosition.x + moveDistance, beginPosition.y);
+                    weaponButtonBase.gameObject.SetActive(false);
+                }
+                else
+                {
+                    weaponButtonBase.rectTransform.anchoredPosition = new Vector2(beginPosition.x + nowMoveDistance, weaponButtonBase.rectTransform.anchoredPosition.y);
+                    yield return null;
+                }
+                nowMoveDistance += Time.deltaTime * moveSpeed;
             }
-            nowMoveDistance += Time.deltaTime * moveSpeed;
         }
-        weaponButtonBase.gameObject.SetActive(false);
+        //weaponButtonBase.gameObject.SetActive(false);
     }
 
     /// <summary>
@@ -129,6 +154,7 @@ public class MissionUIController : MonoBehaviour {
     /// <returns></returns>
 	public IEnumerator ToEncountAction()
     {
+        StopCoroutine(ToExpeditionAction());
         Vector2 beginPosition = weaponButtonBase.rectTransform.anchoredPosition;
         float moveDistance = Mathf.Abs(weaponFixedPosition.x - beginPosition.x);
         float moveSpeed = 2000f;
@@ -165,5 +191,100 @@ public class MissionUIController : MonoBehaviour {
     public void SetStamina(float stamina, float maxStamina)
     {
         staminaGaugeImage.fillAmount = stamina / maxStamina;
+    }
+
+    public IEnumerator DamageUIAction()
+    {
+        //if(damageUIActionCoroutine != null)
+        //{
+        //    StopCoroutine(damageUIActionCoroutine);
+        //    yield return null;
+        //}
+        //damageUIActionCoroutine = DamageUIAnimation();
+        //StartCoroutine(damageUIActionCoroutine);
+        StopCoroutine(DamageUIAnimation());
+        yield return null;
+        StartCoroutine(DamageUIAnimation());
+    }
+    private IEnumerator DamageUIAnimation(float animationTime = 0.2f)
+    {
+        Color color = new Color(damageUI.color.r, damageUI.color.g, damageUI.color.b, 0f);
+        damageUI.color = color;
+        animationTime = animationTime / 2f;
+        damageUI.gameObject.SetActive(true);
+
+        float elapsedTime = 0f;
+        while (elapsedTime < animationTime)
+        {
+            if(elapsedTime + Time.deltaTime >= animationTime)
+            {
+                elapsedTime = animationTime;
+            }
+            float alpha = elapsedTime / animationTime;
+            color.a = alpha;
+            damageUI.color = color;
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        elapsedTime = 0f;
+        while (elapsedTime < animationTime)
+        {
+            if (elapsedTime + Time.deltaTime >= animationTime)
+            {
+                elapsedTime = animationTime;
+            }
+            float alpha = 1f - elapsedTime / animationTime;
+            color.a = alpha;
+            damageUI.color = color;
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        damageUI.gameObject.SetActive(false);
+    }
+
+    public IEnumerator GameOverUIAction()
+    {
+        Color color = new Color(gameOverBackPanel.color.r, gameOverBackPanel.color.g, gameOverBackPanel.color.b, 0f);
+        gameOverBackPanel.color = color;
+        float animationTime = 1f;
+        gameOverBackPanel.gameObject.SetActive(true);
+
+        float elapsedTime = 0f;
+        while (elapsedTime < animationTime)
+        {
+            if (elapsedTime + Time.deltaTime >= animationTime)
+            {
+                elapsedTime = animationTime;
+            }
+            float alpha = elapsedTime / animationTime;
+            color.a = alpha;
+            gameOverBackPanel.color = color;
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        color = new Color(gameOverText.color.r, gameOverText.color.g, gameOverText.color.b, 0f);
+        gameOverText.color = color;
+        animationTime = 2f;
+        gameOverText.gameObject.SetActive(true);
+        elapsedTime = 0f;
+        while (elapsedTime < animationTime)
+        {
+            if (elapsedTime + Time.deltaTime >= animationTime)
+            {
+                elapsedTime = animationTime;
+            }
+            float alpha = elapsedTime / animationTime;
+            color.a = alpha;
+            gameOverText.color = color;
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        yield return new WaitForSeconds(0.5f);
+        gameOverMenuUI.SetActive(true);
     }
 }
