@@ -100,8 +100,9 @@ public class MissionPlayerBattleState : MissionPlayerStateBase {
             _playerController.SlashEffect.UpdateAction();
 
             //斬撃の当たり判定を作る
-            Vector2 touchPos = InputManager.Instance.GetTouchPosition(slashTouchID);
-            Vector3 touchVertices = Camera.main.ScreenToWorldPoint(InputManager.Instance.GetTouchPosition(slashTouchID) + Camera.main.transform.forward * slashRayDistance);
+            Vector3 touchPos = InputManager.Instance.GetTouchPosition(slashTouchID);
+            touchPos.z = slashRayDistance;
+            Vector3 touchVertices = Camera.main.ScreenToWorldPoint(touchPos);
             if (InputManager.Instance.IsTouchDown(slashTouchID))
             {
                 vertices.Clear();
