@@ -33,7 +33,7 @@ public class MissionSceneManager : SingletonMonoBehaviour<MissionSceneManager> {
     }
 
     //バトルに使用する変数
-    private List<MissionEnemyController> encountEnemyList = new List<MissionEnemyController>();//エンカウントした敵
+    public List<MissionEnemyController> encountEnemyList { get; private set; }//エンカウントした敵
     private MissionEnemyController lastEnemy = null;//最後の敵の死亡アクション終了待ち用
     public MissionEnemyController LastEnemy { get { return lastEnemy; } }
 
@@ -43,6 +43,7 @@ public class MissionSceneManager : SingletonMonoBehaviour<MissionSceneManager> {
 
     // Use this for initialization
     void Start () {
+        encountEnemyList = new List<MissionEnemyController>();
 #if Develop
         Instantiate(gameManager);
         if (!GameManager.Instance.IsBootInitialized)
