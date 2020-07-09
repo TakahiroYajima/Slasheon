@@ -63,7 +63,10 @@ public class MissionPlayerBattleState : MissionPlayerStateBase {
 
     public override void StateActionUpdate()
     {
-        _playerController.RecoverStamina();
+        if (slashTouchID == -1)
+        {
+            _playerController.RecoverStamina();
+        }
         _playerController.RotationViewAction();
         Debug.Log("PlayerBattle");
         switch (currentWeaponMode)
@@ -160,12 +163,27 @@ public class MissionPlayerBattleState : MissionPlayerStateBase {
         if (slashTouchID != -1)
         {
             Vector2 touchPos = InputManager.Instance.GetTouchPosition(slashTouchID);
+            bool isShotFlg = false;
             //タッチ中は力をためる
             if (InputManager.Instance.IsTouchMove(slashTouchID) || InputManager.Instance.IsTouch(slashTouchID))
             {
-                
+                float minusStamina = _playerController.PlayerState.consumptionStaminaPullArrowOnSecond * Time.deltaTime;
+                if (_playerController.PlayerState.stamina - minusStamina <= 0f)
+                {
+                    UpdateStamina(_playerController.PlayerState.stamina);
+                    isShotFlg = true;
+                }
+                else
+                {
+                    UpdateStamina(_playerController.PlayerState.consumptionStaminaPullArrowOnSecond * Time.deltaTime);
+                }
             }
             else if (InputManager.Instance.IsTouchEnd(slashTouchID))
+            {
+                isShotFlg = true;
+            }
+
+            if (isShotFlg)
             {
                 slashTouchID = -1;
                 //矢を放つ
