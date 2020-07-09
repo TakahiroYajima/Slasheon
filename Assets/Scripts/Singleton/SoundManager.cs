@@ -103,6 +103,10 @@ public class SoundManager : SingletonMonoBehaviour<SoundManager> {
                     }
                 }
             }
+            else
+            {
+                Debug.Log(soundName + "の音声が存在しません");
+            }
         }
         else
         {

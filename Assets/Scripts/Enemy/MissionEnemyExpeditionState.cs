@@ -42,13 +42,13 @@ public class MissionEnemyExpeditionState : MissionEnemyStateBase {
                 foreach(var enemy in MissionSceneManager.Instance.encountEnemyList)
                 {
                     float distance = Vector3.Distance(enemy.transform.position, enemyController.transform.position);
-                    if(distance < 10f)
+                    if(distance < enemy.AllowableApproachDistance)
                     {
                         moveDirection = Quaternion.Euler(0f, -120f, 0f) * (enemyController.transform.position - enemy.transform.position).normalized;
                     }
                 }
             }
-            if (Vector3.Distance(targetPos, enemyController.transform.position) > 10f)
+            if (Vector3.Distance(targetPos, enemyController.transform.position) > enemyController.EncountPlayerDistance)
             {
                 enemyController.transform.LookAt(enemyController.transform.position - moveDirection);
                 enemyController.transform.Translate(moveDirection * moveSpeed * Time.deltaTime);

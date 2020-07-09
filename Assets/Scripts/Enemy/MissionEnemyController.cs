@@ -5,6 +5,11 @@ using UnityEngine;
 public class MissionEnemyController : MissionActor {
 
     //protected EnemyState nowEnemyState = EnemyState.Expedition;
+    [SerializeField] protected float allowableApproachDistance = 5f;
+    public float AllowableApproachDistance { get { return allowableApproachDistance; } }
+    [SerializeField] private float encountPlayerDistance = 10f;//エンカウント判定するプレイヤーとの距離
+    public float EncountPlayerDistance { get { return encountPlayerDistance; } }
+
     private Dictionary<string, MissionEnemyStateBase> enemyStatus = null;
     private MissionEnemyStateBase nowActionState = null;
 
