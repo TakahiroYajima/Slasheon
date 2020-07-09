@@ -27,5 +27,6 @@ public class BowAction : MonoBehaviour {
         arrow.InitCallbackSetting(arrowHitCallback);
         arrow.transform.LookAt(direction);
         arrow.ShotArrow(power, direction);
+        SoundManager.Instance.PlaySE("Arrow");
     }
 }

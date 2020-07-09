@@ -32,3 +32,6 @@ MonoBehaviour:
   - name: SlashHit
     audio: {fileID: 8300000, guid: 8d968f05cc7a48343974e8de59dd84f2, type: 3}
     isPlayOneShot: 1
+  - name: Arrow
+    audio: {fileID: 8300000, guid: 11bdd6b7fdc5d724fac6edd78e924bf5, type: 3}
+    isPlayOneShot: 1

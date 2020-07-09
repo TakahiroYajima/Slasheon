@@ -40,8 +40,6 @@ public class MeshSlashEffect : MonoBehaviour {
     //[SerializeField] MeshCollider mc = null;
     private bool isLaserEndAction = false;
 
-    [SerializeField] private AudioSource slashAudio = null;
-    [SerializeField] private AudioClip slashClip = null;
     [SerializeField] private Camera cameraObj = null;
 
     public delegate void SlashEndCallback();
@@ -131,7 +129,7 @@ public class MeshSlashEffect : MonoBehaviour {
                 mesh.triangles = null;
                 points.Clear();
                 InitSlashBeginAngle();
-                //slashEndCallback();
+                slashEndCallback();
             }
         }
     }
@@ -235,7 +233,7 @@ public class MeshSlashEffect : MonoBehaviour {
         if (IsSlashBegin())
         {
             slashEndCallback();
-            slashAudio.PlayOneShot(slashClip);
+            SoundManager.Instance.PlaySE("Slash");
             if (slashBeginCallback != null)
             {
                 slashBeginCallback();
