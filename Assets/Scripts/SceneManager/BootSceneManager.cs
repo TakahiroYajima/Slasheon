@@ -15,7 +15,7 @@ public class BootSceneManager : SingletonMonoBehaviour<BootSceneManager> {
         //Developモードの時、ブートシーン以外のシーンから開始した際はGameSceneではなく、開始したシーンへ遷移する
         if (!SceneControllManager.Instance.IsDebugSceneLoadInitializeAction)
         {
-            SceneControllManager.Instance.ChangeSceneAsync("GameScene", true, false, true);
+            SceneControllManager.Instance.ChangeSceneAsync("TitleScene", true, false, true);
         }
     }
 #if Develop

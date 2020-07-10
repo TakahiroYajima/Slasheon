@@ -99,23 +99,27 @@ public class SceneControllManager : SingletonMonoBehaviour<SceneControllManager>
         }
         else
         {
-            fadeTime = normalFadeTime;
+            fadeTime = exceptionFadeTime;
         }
         if(mode == FadeMode.In)
         {
             fadePanelImage.color = new Color(0f, 0f, 0f, 1f);
+            fadePanelImage.gameObject.SetActive(true);
             color = fadePanelImage.color;
             while (color.a > 0f)
             {
                 color.a = 1f - time / fadeTime;
                 fadePanelImage.color = color;
                 time += Time.deltaTime;
+
                 yield return null;
             }
+            fadePanelImage.gameObject.SetActive(false);
         }
         else
         {
             fadePanelImage.color = new Color(0f, 0f, 0f, 0f);
+            fadePanelImage.gameObject.SetActive(true);
             color = fadePanelImage.color;
             while (color.a < 1f)
             {
