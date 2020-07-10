@@ -22,6 +22,11 @@ public class MissionSceneManager : SingletonMonoBehaviour<MissionSceneManager> {
     [SerializeField] private MissionUIController missionUIController = null;
     public MissionUIController MissionUIController { get { return missionUIController; } }
 
+    [SerializeField] private Camera uiCamera = null;
+    public Camera UICamera { get { return uiCamera; } }
+    [SerializeField] private Camera effectCamera = null;
+    public Camera EffectCamera { get { return effectCamera; } }
+
     public bool IsEnemyActionable {
         get
         {

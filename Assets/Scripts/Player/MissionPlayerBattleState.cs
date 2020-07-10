@@ -199,7 +199,11 @@ public class MissionPlayerBattleState : MissionPlayerStateBase {
                 touchPos += new Vector2(0f, 50f);
                 Ray ray = Camera.main.ScreenPointToRay(touchPos);
                 Vector3 dir = ray.direction;
-                _playerController.BowAction.ShotArrow(currentArrowForce, dir);
+                float min = _playerController.PlayerState.arrowMinAttack;
+                float max = _playerController.PlayerState.arrowMaxAttack;
+                float arrowPower = min + (max - min) * (currentArrowForce / arrowMaxForce);//ダメージ計算。弓を引いたパワーが影響する
+                Debug.Log("arrowPower : " + arrowPower);
+                _playerController.BowAction.ShotArrow(currentArrowForce, dir, arrowPower);
                 currentArrowForce = 0f;
             }
         }
@@ -228,12 +232,12 @@ public class MissionPlayerBattleState : MissionPlayerStateBase {
         }
     }
 
-    public void ArrowColliderEnterCallback(Collider collider)
+    public void ArrowColliderEnterCallback(Collider collider, float attackPower)
     {
         if ((SlasheonUtility.IsLayerNameMatch(collider.gameObject, "Enemy")))
         {
             MissionActor hitActor = collider.gameObject.GetComponent<MissionActor>();
-            hitActor.Damage(_playerController.ActorState.attack);
+            hitActor.Damage(attackPower);
             _playerController.InstanceArrowDamageEffect(collider);
         }
     }

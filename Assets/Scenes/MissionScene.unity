@@ -346,6 +346,7 @@ MonoBehaviour:
     type: 2}
   player: {fileID: 1341573034}
   missionUIController: {fileID: 1867130169}
+  uiCamera: {fileID: 1912107035}
 --- !u!4 &123467924
 Transform:
   m_ObjectHideFlags: 0

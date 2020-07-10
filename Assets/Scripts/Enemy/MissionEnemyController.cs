@@ -54,7 +54,7 @@ public class MissionEnemyController : MissionActor {
         nowActionState.StateBeginAction();
     }
 
-    public override void Damage(int damage)
+    public override void Damage(float damage)
     {
         if (nowActionState != enemyStatus[EnemyState.Death.ToString()] || 
             nowActionState != enemyStatus[EnemyState.Expedition.ToString()])

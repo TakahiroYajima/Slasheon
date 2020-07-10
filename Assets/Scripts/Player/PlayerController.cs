@@ -123,7 +123,7 @@ public class PlayerController : MissionActor {
         nowPlayerState.StateBeginAction();//現在のステートの開始処理
     }
 
-    public override void Damage(int damage)
+    public override void Damage(float damage)
     {
         if (actorState.hp > 0)
         {
@@ -279,12 +279,19 @@ public class PlayerController : MissionActor {
 
         //Vector3 hitPoint = collider.ClosestPoint(collider.transform.position);
         RectTransform rectTransform = effect.gameObject.GetComponent<RectTransform>();
+        //rectTransform.anchoredPosition = touchPos;
+        float screenWidth = Screen.width;
+        float screenHeight = Screen.height;
+        touchPos = new Vector2(touchPos.x - screenWidth / 2f, touchPos.y - screenHeight / 2);
         rectTransform.anchoredPosition = touchPos;
-        Vector3 hitPoint = Camera.main.ScreenToViewportPoint(touchPos);
-        
-        Debug.Log("slashEffect :: " + Camera.main.ViewportToWorldPoint(hitPoint));
+        Vector2 hitPoint = MissionSceneManager.Instance.EffectCamera.ScreenToWorldPoint(touchPos);
+        //Debug.Log("pos :: " + touchPos + " : " + hitPoint + " : " + MissionSceneManager.Instance.EffectCamera.WorldToViewportPoint(hitPoint));
+        //rectTransform.anchoredPosition = MissionSceneManager.Instance.EffectCamera.WorldToViewportPoint(hitPoint);
+        //rectTransform.localPosition = new Vector3(rectTransform.localPosition.x, rectTransform.localPosition.y, 0f);
+
+        Debug.Log("slashEffect :: " + hitPoint);
         StartCoroutine(effect.StartAction(Quaternion.Euler(0f, 0f, slashEffect.GetCurrentSlashAngle())));
-        slashDamageParticle.gameObject.transform.position = Camera.main.ViewportToWorldPoint(hitPoint);
+        slashDamageParticle.gameObject.transform.position = MissionSceneManager.Instance.UICamera.ViewportToWorldPoint(hitPoint);
         slashDamageParticle.Play();
     }
 

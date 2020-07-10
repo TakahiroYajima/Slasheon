@@ -17,12 +17,12 @@ public abstract class MissionActor : MonoBehaviour {
         initActorState.defence = 0;
     }
 
-    public virtual void Damage(int damage)
+    public virtual void Damage(float damage)
     {
-        int finalDamage = damage - actorState.defence;
+        float finalDamage = damage - actorState.defence;
         if(finalDamage <= 0)
         {
-            finalDamage = 1;
+            finalDamage = 0;
         }
         actorState.hp -= finalDamage;
         //Debug.Log("damage :: " + finalDamage + " : hp :: " + actorState.hp);
@@ -38,7 +38,7 @@ public abstract class MissionActor : MonoBehaviour {
 
 public struct ActorState
 {
-    public int hp;
-    public int attack;
-    public int defence;
+    public float hp;
+    public float attack;
+    public float defence;
 }

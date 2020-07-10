@@ -11,6 +11,8 @@ public class SlashDamageEffect : MonoBehaviour {
     private float maxScale = 5f;
 	// Use this for initialization
 	public IEnumerator StartAction (Quaternion rotation) {
+        //animationImage.rectTransform.anchoredPosition = position;
+        animationImage.rectTransform.localPosition = new Vector3(animationImage.rectTransform.localPosition.x, animationImage.rectTransform.localPosition.y, 0f);
         animationImage.rectTransform.localRotation = rotation;
         SoundManager.Instance.PlaySE("SlashHit");
         float elapsedTime = 0f;

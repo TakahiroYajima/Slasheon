@@ -19,14 +19,14 @@ public class BowAction : MonoBehaviour {
         arrowHitCallback = callback;
     }
 
-    public void ShotArrow(float power, Vector3 direction)
+    public void ShotArrow(float power, Vector3 direction, float arrowAttackPower)
     {
         direction = direction.normalized;
         //direction = (direction + (mainCameraObj.transform.position - arrowShotPositionObj.transform.position)).normalized;
         ArrowObject arrow = Instantiate(arrowPref, arrowShotPositionObj.transform.position, arrowShotPositionObj.transform.rotation);
         arrow.InitCallbackSetting(arrowHitCallback);
         arrow.transform.LookAt(direction);
-        arrow.ShotArrow(power, direction);
+        arrow.ShotArrow(power, direction,arrowAttackPower);
         SoundManager.Instance.PlaySE("Arrow");
     }
 }
