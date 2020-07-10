@@ -27,4 +27,14 @@ public class HomeSceneManager : SingletonMonoBehaviour<HomeSceneManager>
     void Update () {
 		
 	}
+
+    public void PushStageStartButton()
+    {
+        SceneControllManager.Instance.ChangeSceneAsync("MissionScene", true, true, true);
+    }
+
+    public void PushBackToTitleButton()
+    {
+        SceneControllManager.Instance.ChangeSceneAsync("TitleScene", true, true, true);
+    }
 }

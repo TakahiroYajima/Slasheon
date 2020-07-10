@@ -180,7 +180,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Start
+  m_Text: "\u30B9\u30C6\u30FC\u30B8\u30B9\u30BF\u30FC\u30C8"
 --- !u!222 &123539884
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -465,7 +465,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Select
+  m_Text: Home
 --- !u!222 &756164964
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -676,7 +676,7 @@ GameObject:
   - component: {fileID: 1633578820}
   - component: {fileID: 1633578819}
   m_Layer: 5
-  m_Name: ExitButton
+  m_Name: BackToTitleButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -739,7 +739,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1633578820}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2017656994}
+        m_MethodName: PushBackToTitleButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1633578820
@@ -842,7 +853,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Exit
+  m_Text: "\u30BF\u30A4\u30C8\u30EB\u3078"
 --- !u!222 &1709466245
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1001,7 +1012,7 @@ GameObject:
   - component: {fileID: 2031280228}
   - component: {fileID: 2031280227}
   m_Layer: 5
-  m_Name: StartButton
+  m_Name: MissionStartButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1064,7 +1075,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2031280228}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2017656994}
+        m_MethodName: PushStageStartButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &2031280228
