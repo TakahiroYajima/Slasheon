@@ -9,6 +9,9 @@ public class PlayerState
     public float consumptionStaminaSlash = 1f;//剣を振った時の消費スタミナ
     public float consumptionStaminaSlashHit = 1f;//剣でダメージを与えた時の消費スタミナ
     public float consumptionStaminaPullArrowOnSecond = 3f;//弓を引いている時の消費スタミナ（秒）
+    public float arrowMinAttack = 0.1f;
+    public float arrowMaxAttack = 3f;
+    public float arrowForceCollectTime = 1.2f;//矢のパワーが最大まで溜まる時間
 }
 
 public class PlayerController : MissionActor {
@@ -80,8 +83,8 @@ public class PlayerController : MissionActor {
         isMoving = false;
 
         //デバッグ
-        initActorState.hp = 1;
-        actorState.hp = 1;
+        //initActorState.hp = 1;
+        //actorState.hp = 1;
         initPlayerState.stamina = 30;
         playerState.stamina = 30;
 	}
@@ -275,7 +278,7 @@ public class PlayerController : MissionActor {
         SlashDamageEffect effect = Instantiate(slashDamageEffect, effectParentTransform);
 
         //Vector3 hitPoint = collider.ClosestPoint(collider.transform.position);
-        RectTransform rectTransform = slashDamageEffect.gameObject.GetComponent<RectTransform>();
+        RectTransform rectTransform = effect.gameObject.GetComponent<RectTransform>();
         rectTransform.anchoredPosition = touchPos;
         Vector3 hitPoint = Camera.main.ScreenToViewportPoint(touchPos);
         

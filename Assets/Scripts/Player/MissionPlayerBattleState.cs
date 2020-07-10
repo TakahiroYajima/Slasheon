@@ -14,6 +14,9 @@ public class MissionPlayerBattleState : MissionPlayerStateBase {
 
     public Weapon currentWeaponMode { get; private set; }
 
+    private const float arrowMaxForce = 10000f;
+    private float currentArrowForce = 0f;
+
     public override void StateBeginAction()
     {
         prevVerticesSlashPosition = Camera.main.transform.position;
@@ -47,6 +50,7 @@ public class MissionPlayerBattleState : MissionPlayerStateBase {
         _playerController.UIController.SetWeapon2PushCallback(() =>
         {
             currentWeaponMode = Weapon.Bow;
+            currentArrowForce = 0f;
             slashTouchID = -1;
         });
 
@@ -175,6 +179,11 @@ public class MissionPlayerBattleState : MissionPlayerStateBase {
                 }
                 else
                 {
+                    currentArrowForce += arrowMaxForce * (Time.deltaTime / _playerController.PlayerState.arrowForceCollectTime);
+                    if(currentArrowForce > arrowMaxForce)
+                    {
+                        currentArrowForce = arrowMaxForce;
+                    }
                     UpdateStamina(_playerController.PlayerState.consumptionStaminaPullArrowOnSecond * Time.deltaTime);
                 }
             }
@@ -190,7 +199,8 @@ public class MissionPlayerBattleState : MissionPlayerStateBase {
                 touchPos += new Vector2(0f, 50f);
                 Ray ray = Camera.main.ScreenPointToRay(touchPos);
                 Vector3 dir = ray.direction;
-                _playerController.BowAction.ShotArrow(10000f, dir);
+                _playerController.BowAction.ShotArrow(currentArrowForce, dir);
+                currentArrowForce = 0f;
             }
         }
     }
