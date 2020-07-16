@@ -55,10 +55,10 @@ public class UserStatusManager : SingletonMonoBehaviour<UserStatusManager> {
             if (oneStaminaRecoverTimeElapsed < nextRecoverTime)
             {
                 oneStaminaRecoverTimeElapsed = Time.realtimeSinceStartup - prevRealTime;
-                Debug.Log(oneStaminaRecoverTimeElapsed);
+                //Debug.Log(oneStaminaRecoverTimeElapsed);
                 if(Mathf.Floor(oneStaminaRecoverTimeElapsed) - prevElapsedTimeSecond >= 1f)
                 {
-                    Debug.Log("updateTime : " + oneStaminaRecoverTimeElapsed);
+                    //Debug.Log("updateTime : " + oneStaminaRecoverTimeElapsed);
                     prevElapsedTimeSecond = Mathf.Floor(oneStaminaRecoverTimeElapsed);
                     updateTimeCallback(nextRecoverTime - prevElapsedTimeSecond);
                 }
@@ -90,6 +90,7 @@ public class UserStatusManager : SingletonMonoBehaviour<UserStatusManager> {
     {
         if (pause)
         {
+            Debug.Log("ポーズ");
             //ポーズ
             SaveDataUserStatus userStatus = new SaveDataUserStatus();
             userStatus.playerLevel = 1;
@@ -97,10 +98,14 @@ public class UserStatusManager : SingletonMonoBehaviour<UserStatusManager> {
             {
                 //スタミナ全回復までの時間を計算
                 DateTime nowDateTime = DateTime.Now;
-                double plusSecond = (double)((maxStamina - currentStamina) * oneStaminaRecoverTimeElapsed);
-                nowDateTime.AddSeconds(plusSecond);
+                Debug.Log("現在 : " + nowDateTime.ToString());
+                int plusSecond = Mathf.FloorToInt(((maxStamina - currentStamina) * oneStaminaRecoverTimeElapsed));
+                TimeSpan timeSpan = new TimeSpan(0, 0, 0, plusSecond);
+                Debug.Log("追加秒数 : " + plusSecond.ToString());
+                //nowDateTime.AddSeconds(plusSecond);
+                nowDateTime += timeSpan;
                 userStatus.staminaMaxRecoverDateTime = nowDateTime.ToString();
-                Debug.Log(nowDateTime.ToString());
+                Debug.Log("セーブ : " + userStatus.staminaMaxRecoverDateTime);
             }
             else
             {
@@ -146,6 +151,9 @@ public class UserStatusManager : SingletonMonoBehaviour<UserStatusManager> {
         {
             //再生停止したらデータセーブさせてみる
             //AppQuitAction();
+        }else if (EditorApplication.isPaused)
+        {
+            PauseAction(true);
         }
     }
 }
