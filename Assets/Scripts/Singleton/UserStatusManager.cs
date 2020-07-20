@@ -34,8 +34,6 @@ public class UserStatusManager : SingletonMonoBehaviour<UserStatusManager> {
         oneStaminaRecoverTimeElapsed = 0f;
         nextRecoverTime = 10f;//とりあえず10秒
 
-        RecoverStaminaSaveData();
-
         EditorApplication.playmodeStateChanged += UnityEditor_PlayStateChangeAction;
 	}
 
@@ -62,7 +60,7 @@ public class UserStatusManager : SingletonMonoBehaviour<UserStatusManager> {
         else
         {
             currentStamina -= minus;
-            Debug.Log("正常にスタミナ消費 : " + currentStamina);
+            Debug.Log("正常にスタミナ消費 残りスタミナ : " + currentStamina);
             intendedCallback();
         }
     }
@@ -96,7 +94,7 @@ public class UserStatusManager : SingletonMonoBehaviour<UserStatusManager> {
         }
     }
 
-    public void RecoverStaminaSaveData()
+    public void RecoverStaminaSaveData(UnityAction<float,float>updateUICallback)
     {
         //セーブデータを取り出してスタミナ回復判定
         if (PlayerPrefs.HasKey(SaveKeys.UserStatusKey))
@@ -108,7 +106,13 @@ public class UserStatusManager : SingletonMonoBehaviour<UserStatusManager> {
                 Debug.Log("recoverDate : " + recoverDate);
                 DateTime nowDate = DateTime.Now;
                 TimeSpan timeSpan = nowDate - recoverDate;
-                Debug.Log("timespan : " + timeSpan);
+                double totalSecond = timeSpan.TotalSeconds;
+                Debug.Log("timespan : " + timeSpan + "total : " + totalSecond);
+                int totalFloor = Mathf.FloorToInt((float)totalSecond);
+                float recoverStamina = totalFloor / nextRecoverTime;
+                Debug.Log("recoverStamina : " + recoverStamina);
+
+                updateUICallback(maxStamina, currentStamina);
             }
         }
     }

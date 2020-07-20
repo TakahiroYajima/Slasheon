@@ -15,6 +15,7 @@ public class MissionStaminaManager : MonoBehaviour {
         UserStatusManager.Instance.SetStaminaRecoverCallback(UpdateStamina);
 
         yield return null;
+        UserStatusManager.Instance.RecoverStaminaSaveData(UpdateStamina);
         UpdateTime(UserStatusManager.Instance.nextRecoverTime);
         UpdateStamina(UserStatusManager.Instance.maxStamina, UserStatusManager.Instance.currentStamina);
 	}

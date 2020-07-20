@@ -21,7 +21,7 @@ public class HomeSceneManager : SingletonMonoBehaviour<HomeSceneManager>
         }
 #endif
 
-        UserStatusManager.Instance.RecoverStaminaSaveData();
+        
     }
 
     // Update is called once per frame
