@@ -21,6 +21,7 @@ public class HomeSceneManager : SingletonMonoBehaviour<HomeSceneManager>
         }
 #endif
 
+        UserStatusManager.Instance.RecoverStaminaSaveData();
     }
 
     // Update is called once per frame
@@ -30,7 +31,10 @@ public class HomeSceneManager : SingletonMonoBehaviour<HomeSceneManager>
 
     public void PushStageStartButton()
     {
-        SceneControllManager.Instance.ChangeSceneAsync("MissionScene", true, true, true);
+        UserStatusManager.Instance.ConsumptionStaminaOrError(10f, () =>
+        {
+            SceneControllManager.Instance.ChangeSceneAsync("MissionScene", true, true, true);
+        });
     }
 
     public void PushBackToTitleButton()

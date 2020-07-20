@@ -10,10 +10,11 @@ public class MissionStaminaManager : MonoBehaviour {
     [SerializeField] private Text remainingTimeText = null;
 
 	// Use this for initialization
-	void Start () {
+	IEnumerator Start () {
         UserStatusManager.Instance.SetUpdateTimeCallback(UpdateTime);
         UserStatusManager.Instance.SetStaminaRecoverCallback(UpdateStamina);
 
+        yield return null;
         UpdateTime(UserStatusManager.Instance.nextRecoverTime);
         UpdateStamina(UserStatusManager.Instance.maxStamina, UserStatusManager.Instance.currentStamina);
 	}

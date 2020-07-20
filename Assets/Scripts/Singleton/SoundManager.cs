@@ -67,6 +67,13 @@ public class SoundManager : SingletonMonoBehaviour<SoundManager> {
             Debug.Log("初期化が完了していません");
         }
     }
+    public void StopBGM()
+    {
+        if (isInitialized)
+        {
+            bgmAudioSourceList[0].Stop();
+        }
+    }
 
     public IEnumerator PlayBGMFade(AudioSource playAudio,AudioSource backAudio, AudioClip clip,float fadeTime = 1f)
     {

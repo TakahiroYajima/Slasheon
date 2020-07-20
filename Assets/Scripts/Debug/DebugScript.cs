@@ -31,6 +31,11 @@ public class DebugScript : SingletonMonoBehaviour<DebugScript> {
         //{
         //    Debug.Log("mousePos :: " + Input.mousePosition + " : angle :: " + (Mathf.Atan2(Input.mousePosition.x - (Screen.width / 2), Input.mousePosition.y - (Screen.height / 2)) * Mathf.Rad2Deg));
         //}
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            SoundManager.Instance.StopBGM();
+            SceneControllManager.Instance.ChangeSceneAsync("HomeScene");
+        }
 	}
 
     private void DisplayFPS()

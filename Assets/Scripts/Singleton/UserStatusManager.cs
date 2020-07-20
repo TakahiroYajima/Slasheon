@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEditor;
 
 public class UserStatusManager : SingletonMonoBehaviour<UserStatusManager> {
@@ -28,12 +29,12 @@ public class UserStatusManager : SingletonMonoBehaviour<UserStatusManager> {
 
     // Use this for initialization
     void Start () {
-        currentStamina = 0f;
-        maxStamina = 10f;
+        currentStamina = 10f;
+        maxStamina = 20f;
         oneStaminaRecoverTimeElapsed = 0f;
         nextRecoverTime = 10f;//とりあえず10秒
 
-        BeginAction();
+        RecoverStaminaSaveData();
 
         EditorApplication.playmodeStateChanged += UnityEditor_PlayStateChangeAction;
 	}
@@ -48,6 +49,27 @@ public class UserStatusManager : SingletonMonoBehaviour<UserStatusManager> {
         updateTimeCallback = callback;
     }
 
+    /// <summary>
+    /// スタミナ消費
+    /// </summary>
+    /// <param name="minus"></param>
+    public void ConsumptionStaminaOrError(float minus, UnityAction intendedCallback)
+    {
+        if(currentStamina - minus < 0)
+        {
+            Debug.Log("マイナス値に入っています");
+        }
+        else
+        {
+            currentStamina -= minus;
+            Debug.Log("正常にスタミナ消費 : " + currentStamina);
+            intendedCallback();
+        }
+    }
+
+    /// <summary>
+    /// 毎フレーム更新(スタミナ回復)
+    /// </summary>
     public void UpdateAction()
     {
         if(currentStamina < maxStamina)
@@ -74,15 +96,20 @@ public class UserStatusManager : SingletonMonoBehaviour<UserStatusManager> {
         }
     }
 
-    public void BeginAction()
+    public void RecoverStaminaSaveData()
     {
         //セーブデータを取り出してスタミナ回復判定
-        if (PlayerPrefs.HasKey("PlayerStatus"))
+        if (PlayerPrefs.HasKey(SaveKeys.UserStatusKey))
         {
             SaveDataUserStatus userStatus = SaveManager.Instance.ReadSaveData<SaveDataUserStatus>(SaveKeys.UserStatusKey);
-            DateTime recoverDate = DateTime.Parse(userStatus.staminaMaxRecoverDateTime);
-            Debug.Log("recoverDate : " + recoverDate);
-            //
+            if (!string.IsNullOrEmpty(userStatus.staminaMaxRecoverDateTime))
+            {
+                DateTime recoverDate = DateTime.Parse(userStatus.staminaMaxRecoverDateTime);
+                Debug.Log("recoverDate : " + recoverDate);
+                DateTime nowDate = DateTime.Now;
+                TimeSpan timeSpan = nowDate - recoverDate;
+                Debug.Log("timespan : " + timeSpan);
+            }
         }
     }
 
