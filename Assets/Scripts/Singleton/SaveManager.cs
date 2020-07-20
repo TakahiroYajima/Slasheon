@@ -12,15 +12,15 @@ public class SaveManager : SingletonMonoBehaviour<SaveManager> {
         base.Awake();
     }
 
-    public void SaveUserStatus(SaveDataUserStatus saveData)
+    public void DataSave<Types>(Types saveClass, string key)
     {
-        string json = JsonUtility.ToJson(saveData);
-        Save("PlayerStatus", json);
+        string json = JsonUtility.ToJson(saveClass);
+        Save(key, json);
     }
-    public SaveDataUserStatus ReadUserStatus()
+    public Types ReadSaveData<Types>(string key)
     {
-        string json = Read("PlayerStatus");
-        return JsonUtility.FromJson<SaveDataUserStatus>(json);
+        string json = Read(key);
+        return JsonUtility.FromJson<Types>(json);
     }
 
     public void Save(string key, string json)
@@ -39,4 +39,9 @@ public class SaveDataUserStatus
 {
     public int playerLevel;
     public string staminaMaxRecoverDateTime;//スタミナが最大まで回復する日付(yyyy/MM/dd/hh/mm/ss)
+}
+
+public class SaveKeys
+{
+    public const string UserStatusKey = "PlayerStatus";
 }

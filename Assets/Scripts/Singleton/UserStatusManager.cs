@@ -79,48 +79,14 @@ public class UserStatusManager : SingletonMonoBehaviour<UserStatusManager> {
         //セーブデータを取り出してスタミナ回復判定
         if (PlayerPrefs.HasKey("PlayerStatus"))
         {
-            SaveDataUserStatus userStatus = SaveManager.Instance.ReadUserStatus();
+            SaveDataUserStatus userStatus = SaveManager.Instance.ReadSaveData<SaveDataUserStatus>(SaveKeys.UserStatusKey);
             DateTime recoverDate = DateTime.Parse(userStatus.staminaMaxRecoverDateTime);
             Debug.Log("recoverDate : " + recoverDate);
             //
         }
     }
 
-    public void PauseAction(bool pause)
-    {
-        if (pause)
-        {
-            Debug.Log("ポーズ");
-            //ポーズ
-            SaveDataUserStatus userStatus = new SaveDataUserStatus();
-            userStatus.playerLevel = 1;
-            if (currentStamina < maxStamina)
-            {
-                //スタミナ全回復までの時間を計算
-                DateTime nowDateTime = DateTime.Now;
-                Debug.Log("現在 : " + nowDateTime.ToString());
-                int plusSecond = Mathf.FloorToInt(((maxStamina - currentStamina) * oneStaminaRecoverTimeElapsed));
-                TimeSpan timeSpan = new TimeSpan(0, 0, 0, plusSecond);
-                Debug.Log("追加秒数 : " + plusSecond.ToString());
-                //nowDateTime.AddSeconds(plusSecond);
-                nowDateTime += timeSpan;
-                userStatus.staminaMaxRecoverDateTime = nowDateTime.ToString();
-                Debug.Log("セーブ : " + userStatus.staminaMaxRecoverDateTime);
-            }
-            else
-            {
-                userStatus.staminaMaxRecoverDateTime = "";
-            }
-            SaveManager.Instance.SaveUserStatus(userStatus);
-        }
-        else
-        {
-            //復帰
-
-        }
-    }
-
-    public void AppQuitAction()
+    public void SaveUserStatusData()
     {
         SaveDataUserStatus userStatus = new SaveDataUserStatus();
         userStatus.playerLevel = 1;
@@ -128,16 +94,38 @@ public class UserStatusManager : SingletonMonoBehaviour<UserStatusManager> {
         {
             //スタミナ全回復までの時間を計算
             DateTime nowDateTime = DateTime.Now;
-            double plusSecond = (double)((maxStamina - currentStamina) * oneStaminaRecoverTimeElapsed);
-            nowDateTime.AddSeconds(plusSecond);
+            Debug.Log("現在 : " + nowDateTime.ToString());
+            int plusSecond = Mathf.FloorToInt(((maxStamina - currentStamina) * oneStaminaRecoverTimeElapsed));
+            TimeSpan timeSpan = new TimeSpan(0, 0, 0, plusSecond);
+            Debug.Log("追加秒数 : " + plusSecond.ToString());
+            nowDateTime += timeSpan;
             userStatus.staminaMaxRecoverDateTime = nowDateTime.ToString();
-            Debug.Log(nowDateTime.ToString());
+            Debug.Log("セーブ : " + userStatus.staminaMaxRecoverDateTime);
         }
         else
         {
             userStatus.staminaMaxRecoverDateTime = "";
         }
-        SaveManager.Instance.SaveUserStatus(userStatus);
+        SaveManager.Instance.DataSave<SaveDataUserStatus>(userStatus, SaveKeys.UserStatusKey);
+    }
+
+    public void PauseAction(bool pause)
+    {
+        if (pause)
+        {
+            //Debug.Log("ポーズ");
+        }
+        else
+        {
+
+            //復帰
+
+        }
+    }
+
+    public void AppQuitAction()
+    {
+
     }
 
     private void OnApplicationPause(bool pause)
@@ -149,11 +137,16 @@ public class UserStatusManager : SingletonMonoBehaviour<UserStatusManager> {
     {
         if (!EditorApplication.isPlaying)
         {
-            //再生停止したらデータセーブさせてみる
-            //AppQuitAction();
-        }else if (EditorApplication.isPaused)
+
+        }
+        else if (EditorApplication.isPaused)
         {
             PauseAction(true);
+        }
+        else if (!EditorApplication.isPaused)
+        {
+            PauseAction(false);
+
         }
     }
 }
