@@ -62,6 +62,7 @@ public class UserStatusManager : SingletonMonoBehaviour<UserStatusManager> {
             currentStamina -= minus;
             Debug.Log("正常にスタミナ消費 残りスタミナ : " + currentStamina);
             intendedCallback();
+            SaveUserStatusData();
         }
     }
 
@@ -105,13 +106,18 @@ public class UserStatusManager : SingletonMonoBehaviour<UserStatusManager> {
                 DateTime recoverDate = DateTime.Parse(userStatus.staminaMaxRecoverDateTime);
                 Debug.Log("recoverDate : " + recoverDate);
                 DateTime nowDate = DateTime.Now;
-                TimeSpan timeSpan = nowDate - recoverDate;
+                TimeSpan timeSpan = recoverDate - nowDate;
                 double totalSecond = timeSpan.TotalSeconds;
                 Debug.Log("timespan : " + timeSpan + "total : " + totalSecond);
-                int totalFloor = Mathf.FloorToInt((float)totalSecond);
+                int totalFloor = Mathf.Abs(Mathf.FloorToInt((float)totalSecond));
                 float recoverStamina = totalFloor / nextRecoverTime;
                 Debug.Log("recoverStamina : " + recoverStamina);
 
+                currentStamina += Mathf.Floor(recoverStamina);
+                if(currentStamina > maxStamina)
+                {
+                    currentStamina = maxStamina;
+                }
                 updateUICallback(maxStamina, currentStamina);
             }
         }
