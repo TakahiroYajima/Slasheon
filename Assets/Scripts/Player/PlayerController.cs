@@ -129,7 +129,7 @@ public class PlayerController : MissionActor {
         {
             StartCoroutine(uiController.DamageUIAction());
             base.Damage(damage);
-            Debug.Log("ダメージ：残りHP : " + actorState.hp);
+            //Debug.Log("ダメージ：残りHP : " + actorState.hp);
             uiController.SetHP(actorState.hp, initActorState.hp);
         }
     }
@@ -301,7 +301,7 @@ public class PlayerController : MissionActor {
         // Z座標をリセット
         rectTransform.transform.localPosition = new Vector3(rectTransform.transform.localPosition.x, rectTransform.transform.localPosition.y, 0);
 
-        Debug.Log("slashEffect :: " + worldPoint + " : " + collider.transform.position);
+        //Debug.Log("slashEffect :: " + worldPoint + " : " + collider.transform.position);
         StartCoroutine(effect.StartAction(Quaternion.Euler(0f, 0f, slashEffect.GetCurrentSlashAngle())));
         slashDamageParticle.gameObject.transform.position = worldPoint;
         slashDamageParticle.Play();

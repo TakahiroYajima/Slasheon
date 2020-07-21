@@ -49,7 +49,7 @@ public class MissionEnemyBattleState : MissionEnemyStateBase
 
     public IEnumerator AttackToPlayerAction()
     {
-        Debug.Log("EnemyAttack");
+        //Debug.Log("EnemyAttack");
         Vector3 initPos = enemyController.transform.position;
         Vector3 playerPos = MissionSceneManager.Instance.playerPosition;
         playerPos -= (initPos - playerPos).normalized * 1.2f;

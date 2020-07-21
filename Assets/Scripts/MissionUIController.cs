@@ -45,7 +45,7 @@ public class MissionUIController : MonoBehaviour {
 
         weaponButtonBase.rectTransform.anchoredPosition = new Vector2(weaponFixedPosition.x + weaponButtonBase.rectTransform.sizeDelta.x, weaponFixedPosition.y);
         //weaponButtonBase.gameObject.SetActive(false);
-        Debug.Log("size : " + weaponButtonBase.rectTransform.sizeDelta.x);
+        //Debug.Log("size : " + weaponButtonBase.rectTransform.sizeDelta.x);
 
         //リザルトのOKボタンタップ時のアクション
         resultOKButton.onClick.RemoveAllListeners();
