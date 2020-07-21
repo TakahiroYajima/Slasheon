@@ -156,12 +156,15 @@ public class MissionPlayerBattleState : MissionPlayerStateBase {
     /// </summary>
     private void BowModeAction()
     {
-        int touchID = InputManager.Instance.GetAnyTouchBeginID();
-        if (touchID != -1)
+        if (slashTouchID == -1)
         {
-            if (!InputManager.Instance.IsUITouch(touchID))
+            int touchID = InputManager.Instance.GetAnyTouchBeginID();
+            if (touchID != -1)
             {
-                slashTouchID = touchID;
+                if (!InputManager.Instance.IsUITouch(touchID))
+                {
+                    slashTouchID = touchID;
+                }
             }
         }
         if (slashTouchID != -1)
@@ -202,7 +205,7 @@ public class MissionPlayerBattleState : MissionPlayerStateBase {
                 float min = _playerController.PlayerState.arrowMinAttack;
                 float max = _playerController.PlayerState.arrowMaxAttack;
                 float arrowPower = min + (max - min) * (currentArrowForce / arrowMaxForce);//ダメージ計算。弓を引いたパワーが影響する
-                Debug.Log("arrowPower : " + arrowPower);
+                //Debug.Log("arrowPower : " + arrowPower);
                 _playerController.BowAction.ShotArrow(currentArrowForce, dir, arrowPower);
                 currentArrowForce = 0f;
             }
