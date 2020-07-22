@@ -72,7 +72,7 @@ public class MissionPlayerBattleState : MissionPlayerStateBase {
             _playerController.RecoverStamina();
         }
         _playerController.RotationViewAction();
-        Debug.Log("PlayerBattle");
+        //Debug.Log("PlayerBattle");
         switch (currentWeaponMode)
         {
             case Weapon.Blade:BladeModeAction();
@@ -85,22 +85,27 @@ public class MissionPlayerBattleState : MissionPlayerStateBase {
 
     private void BladeModeAction()
     {
-        int touchID = InputManager.Instance.GetAnyTouchBeginID();
-        if (touchID != -1)
+        //Debug.Log("BladeMode : " + slashTouchID);
+        if (slashTouchID == -1)
         {
-            if (!InputManager.Instance.IsUITouch(touchID))
+            int touchID = InputManager.Instance.GetAnyTouchBeginID();
+            if (touchID != -1)
             {
-                slashTouchID = touchID;
+                if (!InputManager.Instance.IsUITouch(touchID))
+                {
+                    slashTouchID = touchID;
+                    _playerController.SlashEffect.currentSlashTouchID = slashTouchID;
+                }
             }
         }
         _playerController.SlashCollider.RemoveCollider();
         if (slashTouchID != -1)
         {
-            //_playerController.SlashCollider.RemoveCollider();
             //スタミナが足りなかったら攻撃できない
             if (_playerController.PlayerState.stamina < _playerController.PlayerState.consumptionStaminaSlash + _playerController.PlayerState.consumptionStaminaSlashHit)
             {
                 slashTouchID = -1;
+                _playerController.SlashEffect.currentSlashTouchID = slashTouchID;
                 _playerController.SlashEffect.EndSlashEffect();
                 return;
             }
@@ -120,6 +125,7 @@ public class MissionPlayerBattleState : MissionPlayerStateBase {
             else if (InputManager.Instance.IsTouchEnd(slashTouchID))
             {
                 slashTouchID = -1;
+                _playerController.SlashEffect.currentSlashTouchID = slashTouchID;
                 vertices.Clear();
             }
             else
@@ -140,12 +146,9 @@ public class MissionPlayerBattleState : MissionPlayerStateBase {
                 {
                     vertices.Add(touchVertices);
                     prevVerticesSlashPosition = touchVertices;
-                    //_playerController.SlashCollider.SetPoint(touchVertices);
                 }
                 if (vertices.Count >= 3)
                 {
-                    //_playerController.SlashCollider.SetPointsList(vertices);
-                    //_playerController.SlashCollider.MakeTriangles(vertices.Count);
                     _playerController.SlashCollider.CreateCollider(vertices);
                 }
             }
@@ -164,6 +167,7 @@ public class MissionPlayerBattleState : MissionPlayerStateBase {
                 if (!InputManager.Instance.IsUITouch(touchID))
                 {
                     slashTouchID = touchID;
+                    _playerController.SlashEffect.currentSlashTouchID = slashTouchID;
                 }
             }
         }
@@ -198,6 +202,7 @@ public class MissionPlayerBattleState : MissionPlayerStateBase {
             if (isShotFlg)
             {
                 slashTouchID = -1;
+                _playerController.SlashEffect.currentSlashTouchID = slashTouchID;
                 //矢を放つ
                 touchPos += new Vector2(0f, 50f);
                 Ray ray = Camera.main.ScreenPointToRay(touchPos);

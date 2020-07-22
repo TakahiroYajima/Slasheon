@@ -20,7 +20,7 @@ public class ArrowObject : MonoBehaviour {
     }
     public void ShotArrow(float power, Vector3 direction, float arrowAttackPower)
     {
-        Debug.Log("shotArrow");
+        //Debug.Log("shotArrow");
         attackPower = arrowAttackPower;
         forwardDirection = new Vector3(direction.x, 0f, direction.z);
 

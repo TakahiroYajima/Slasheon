@@ -93,7 +93,7 @@ public class PlayerController : MissionActor {
     /// MissionSceneManagerより毎フレーム更新処理として呼び出される
     /// </summary>
     public void playerUpdate () {
-        Debug.Log(nowPlayerState);
+        //Debug.Log(nowPlayerState);
         //現在のステートの更新処理
         nowPlayerState.StateActionUpdate();
 

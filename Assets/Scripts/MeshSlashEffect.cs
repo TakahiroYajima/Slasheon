@@ -42,13 +42,15 @@ public class MeshSlashEffect : MonoBehaviour {
 
     [SerializeField] private Camera cameraObj = null;
 
+    //コールバック
     public delegate void SlashEndCallback();
     private SlashEndCallback slashEndCallback;
     public delegate void SlashBeginCallback();
     private SlashBeginCallback slashBeginCallback;
 
     private float currentSlashAngle = 0f;
-    //public float CurrentSlashAngle { get { return currentSlashAngle; } }
+
+    public int currentSlashTouchID = -1;//タッチID取得用。このクラスを操作しているクラスから格納される
 
     void Awake()
     {
@@ -71,31 +73,38 @@ public class MeshSlashEffect : MonoBehaviour {
 	
 	// Update is called once per frame
 	public void UpdateAction () {
-        Debug.Log("slash");
-        if (InputManager.Instance.IsTouchMove(0))
-        {
-            isPrevActionTouchMoving = true;
-        }
-        if (InputManager.Instance.IsTouchMove(0) || InputManager.Instance.IsTouchDown(0))
-        {
-            setPoints();
-            setVectors();
-            createMesh();
-        }
-        else if (InputManager.Instance.IsTouchEnd(0) && points.Count >= 1)
+        //Debug.Log("slash currentTouchID : " + currentSlashTouchID);
+        if (currentSlashTouchID == -1)
         {
             isLaserEndAction = true;
+            isPrevActionTouchMoving = false;
         }
-        //ドラッグした後に止まった時はTouchEndと同じ処理をする
-        else if (!InputManager.Instance.IsTouchMove(0))
+        else
         {
-            if (isPrevActionTouchMoving && sections != null && points.Count >= reverceJudgeCount)
+            if (InputManager.Instance.IsTouchMove(currentSlashTouchID))
+            {
+                isPrevActionTouchMoving = true;
+            }
+            if (InputManager.Instance.IsTouchMove(currentSlashTouchID) || InputManager.Instance.IsTouchDown(currentSlashTouchID))
+            {
+                setPoints();
+                setVectors();
+                createMesh();
+            }
+            else if (InputManager.Instance.IsTouchEnd(currentSlashTouchID) && points.Count >= 1)
             {
                 isLaserEndAction = true;
-                isPrevActionTouchMoving = false;
+            }
+            //ドラッグした後に止まった時はTouchEndと同じ処理をする
+            else if (!InputManager.Instance.IsTouchMove(currentSlashTouchID))
+            {
+                if (isPrevActionTouchMoving && sections != null && points.Count >= reverceJudgeCount)
+                {
+                    isLaserEndAction = true;
+                    isPrevActionTouchMoving = false;
+                }
             }
         }
-        
     }
 
     private void Update()
@@ -169,7 +178,7 @@ public class MeshSlashEffect : MonoBehaviour {
     void setPoints()
     {
         // マウス押下中のみ処理を行う.
-        if (!InputManager.Instance.IsTouchMove(0) && points.Count >= reverceJudgeCount)
+        if (!InputManager.Instance.IsTouchMove(currentSlashTouchID) && points.Count >= reverceJudgeCount)
         {
             points.Clear();
             InitSlashBeginAngle();
@@ -201,7 +210,7 @@ public class MeshSlashEffect : MonoBehaviour {
 
         // マウスの位置をスクリーン座標からワールド座標に変換.
         //var screenMousePos = Input.mousePosition;
-        var screenMousePos = InputManager.Instance.GetTouchPosition(0);
+        var screenMousePos = InputManager.Instance.GetTouchPosition(currentSlashTouchID);
         //screenMousePos.z = -Camera.main.transform.position.z;
         screenMousePos.z = 3f;
         var curPoint = cameraObj.ScreenToWorldPoint(screenMousePos);

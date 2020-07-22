@@ -36,7 +36,17 @@ public class InputManager : SingletonMonoBehaviour<InputManager> {
         {
             touchPhases[i] = Input.touches[i].phase;
         }
-
+#if UNITY_IOS || UNITY_ANDROID
+        //if (movePosResetTimeProgress >= prevMovePosResetTime)
+        //{
+        //    prevFrameMousePos = Input.mousePosition;
+        //    movePosResetTimeProgress = 0f;
+        //}
+        //else
+        //{
+        //    movePosResetTimeProgress += Time.deltaTime;
+        //}
+#elif UNITY_EDITOR
         if (movePosResetTimeProgress >= prevMovePosResetTime)
         {
             prevFrameMousePos = Input.mousePosition;
@@ -46,20 +56,29 @@ public class InputManager : SingletonMonoBehaviour<InputManager> {
         {
             movePosResetTimeProgress += Time.deltaTime;
         }
+#endif
         //全てのタッチ情報を更新
-        for (int i = 0; i < touchPhases.Length; i++)
+        if (touchPhases != null)
         {
-            touchPhases[i] = Input.touches[i].phase;
+            for (int i = 0; i < touchPhases.Length; i++)
+            {
+                touchPhases[i] = Input.touches[i].phase;
+            }
         }
     }
 
     public int GetAnyTouchBeginID()
     {
 #if UNITY_IOS || UNITY_ANDROID
-        Debug.Log("GetAnyTouchBeginID : touchLength :: " + touchPhases.Length);
+        //Debug.Log("GetAnyTouchBeginID : touchLength :: " + touchPhases.Length);
         for (int i = 0; i < touchPhases.Length; i++)
         {
-            if(touchPhases[i] != Input.touches[i].phase && touchPhases[i] == TouchPhase.Began)
+            //if(touchPhases[i] != Input.touches[i].phase && touchPhases[i] == TouchPhase.Began)
+            //{
+            //    return Input.touches[i].fingerId;
+            //}
+
+            if (touchPhases[i] == TouchPhase.Began)
             {
                 return Input.touches[i].fingerId;
             }
@@ -82,7 +101,7 @@ public class InputManager : SingletonMonoBehaviour<InputManager> {
     public bool IsTouchDown(int touchID = -1)
     {
 #if UNITY_IOS || UNITY_ANDROID
-        Debug.Log("isTouchDown :: id : " + touchID);
+        //Debug.Log("isTouchDown :: id : " + touchID);
         if(touchID == -1){ return false;}
 
         bool isTouchDown = false;
@@ -109,7 +128,7 @@ public class InputManager : SingletonMonoBehaviour<InputManager> {
     public bool IsTouch(int touchID = -1)
     {
 #if UNITY_IOS || UNITY_ANDROID
-        Debug.Log("isTouch :: id : " + touchID);
+        
         if (touchID == -1){ return false;}
 
         bool isTouch = false;
@@ -121,6 +140,7 @@ public class InputManager : SingletonMonoBehaviour<InputManager> {
                 break;
             }
         }
+        //Debug.Log("isTouch :: id : " + touchID + " : " + isTouch.ToString());
         return isTouch;
 #elif UNITY_EDITOR
         return Input.GetMouseButton(0);
@@ -131,7 +151,6 @@ public class InputManager : SingletonMonoBehaviour<InputManager> {
     public bool IsTouchMove(int touchID = -1)
     {
 #if UNITY_IOS || UNITY_ANDROID
-        Debug.Log("isTouchMove :: id : " + touchID);
         if (touchID == -1) { return false; }
 
         bool isTouch = false;
@@ -143,6 +162,7 @@ public class InputManager : SingletonMonoBehaviour<InputManager> {
                 break;
             }
         }
+        //Debug.Log("isTouchMove :: id : " + touchID + " :: " + isTouch.ToString());
         return isTouch;
 #elif UNITY_EDITOR
         return Input.GetMouseButton(0) && Vector2.Distance(Input.mousePosition, prevFrameMousePos) >= 0.03f;
@@ -156,7 +176,7 @@ public class InputManager : SingletonMonoBehaviour<InputManager> {
     public bool IsTouchEnd(int touchID = -1)
     {
 #if UNITY_IOS || UNITY_ANDROID
-        Debug.Log("isTouchEnd :: id : " + touchID);
+        //Debug.Log("isTouchEnd :: id : " + touchID);
         if (touchID == -1){ return false;}
 
         bool isEnd = false;
@@ -164,7 +184,7 @@ public class InputManager : SingletonMonoBehaviour<InputManager> {
         {
             if(Input.touches[i].fingerId == touchID)
             {
-                isEnd = Input.touches[i].phase == TouchPhase.Moved || Input.touches[i].phase == TouchPhase.Ended;
+                isEnd = Input.touches[i].phase == TouchPhase.Ended;
                 break;
             }
         }
@@ -182,7 +202,7 @@ public class InputManager : SingletonMonoBehaviour<InputManager> {
         get
         {
 #if UNITY_IOS || UNITY_ANDROID
-            Debug.Log("touchCount : " + Input.touchCount);
+            //Debug.Log("touchCount : " + Input.touchCount);
             return Input.touchCount;
 #elif UNITY_EDITOR
             return Input.GetMouseButtonDown(0) || Input.GetMouseButton(0) ? 1 : 0;
@@ -218,7 +238,7 @@ public class InputManager : SingletonMonoBehaviour<InputManager> {
     {
         PointerEventData pointer = new PointerEventData(EventSystem.current);
 #if UNITY_IOS || UNITY_ANDROID
-        Debug.Log("IsUITouch :: id : " + touchID);
+        
         Touch touch = new Touch();
         for (int i = 0; i < Input.touches.Length; i++)
         {
@@ -234,12 +254,13 @@ public class InputManager : SingletonMonoBehaviour<InputManager> {
                 {
                     if (SlasheonUtility.IsAnyLayerNameMatch(result[i].gameObject, SlasheonUtility.UILayer))
                     {
-                        Debug.Log("UITouch:True  id : " + touchID);
+                        //Debug.Log("UITouch:True  id : " + touchID);
                         return true;
                     }
                 }
             }
         }
+        //Debug.Log("IsUITouch:False :: id : " + touchID);
         return false;
 #else
         pointer.position = Input.mousePosition;
