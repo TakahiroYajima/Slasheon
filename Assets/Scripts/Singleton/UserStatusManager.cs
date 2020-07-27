@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using UnityEngine.Events;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
+using Slasheon.Notification;
 
 public class UserStatusManager : SingletonMonoBehaviour<UserStatusManager> {
 
@@ -33,9 +36,10 @@ public class UserStatusManager : SingletonMonoBehaviour<UserStatusManager> {
         maxStamina = 20f;
         oneStaminaRecoverTimeElapsed = 0f;
         nextRecoverTime = 10f;//とりあえず10秒
-
+#if UNITY_EDITOR
         EditorApplication.playmodeStateChanged += UnityEditor_PlayStateChangeAction;
-	}
+#endif
+    }
 
     public void SetStaminaRecoverCallback(StaminaRecoverCallback callback)
     {
@@ -138,6 +142,8 @@ public class UserStatusManager : SingletonMonoBehaviour<UserStatusManager> {
             nowDateTime += timeSpan;
             userStatus.staminaMaxRecoverDateTime = nowDateTime.ToString();
             Debug.Log("セーブ : " + userStatus.staminaMaxRecoverDateTime);
+
+            MobileNotificationManager.Instance.SetNotification("タイトル", "スタミナ回復通知","","", DateTime.Now);
         }
         else
         {
@@ -169,7 +175,7 @@ public class UserStatusManager : SingletonMonoBehaviour<UserStatusManager> {
     {
         PauseAction(pause);
     }
-
+#if UNITY_EDITOR
     public void UnityEditor_PlayStateChangeAction()
     {
         if (!EditorApplication.isPlaying)
@@ -186,4 +192,5 @@ public class UserStatusManager : SingletonMonoBehaviour<UserStatusManager> {
 
         }
     }
+#endif
 }
