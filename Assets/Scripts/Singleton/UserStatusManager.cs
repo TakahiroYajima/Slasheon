@@ -6,7 +6,6 @@ using UnityEngine.Events;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
-using Slasheon.Notification;
 
 public class UserStatusManager : SingletonMonoBehaviour<UserStatusManager> {
 
@@ -64,7 +63,7 @@ public class UserStatusManager : SingletonMonoBehaviour<UserStatusManager> {
         else
         {
             currentStamina -= minus;
-            Debug.Log("正常にスタミナ消費 残りスタミナ : " + currentStamina);
+            Debug.Log("正常にスタミナ消費 残りスタミナ : " + currentStamina + " : max : " + maxStamina);
             intendedCallback();
             SaveUserStatusData();
         }
@@ -143,7 +142,7 @@ public class UserStatusManager : SingletonMonoBehaviour<UserStatusManager> {
             userStatus.staminaMaxRecoverDateTime = nowDateTime.ToString();
             Debug.Log("セーブ : " + userStatus.staminaMaxRecoverDateTime);
 
-            MobileNotificationManager.Instance.SetNotification("タイトル", "スタミナ回復通知","","", DateTime.Now);
+            //MobileNotificationManager.Instance.SetNotification("タイトル", "スタミナ回復通知", "", "", DateTime.Now);
         }
         else
         {

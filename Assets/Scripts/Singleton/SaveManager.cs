@@ -14,11 +14,13 @@ public class SaveManager : SingletonMonoBehaviour<SaveManager> {
 
     public void DataSave<Types>(Types saveClass, string key)
     {
+        Debug.Log("Save : " + key);
         string json = JsonUtility.ToJson(saveClass);
         Save(key, json);
     }
     public Types ReadSaveData<Types>(string key)
     {
+        Debug.Log("Read : " + key);
         string json = Read(key);
         return JsonUtility.FromJson<Types>(json);
     }

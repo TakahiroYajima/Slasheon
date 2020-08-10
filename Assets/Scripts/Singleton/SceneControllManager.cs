@@ -55,6 +55,7 @@ public class SceneControllManager : SingletonMonoBehaviour<SceneControllManager>
         AsyncOperation loadAsync = SceneManager.LoadSceneAsync(sceneName);
         while (!loadAsync.isDone)
         {
+            Debug.Log("loading");
             if (isActiveLoadUI)
             {
                 //Loadingの右の「...」の文字数が増えていくアニメーション
