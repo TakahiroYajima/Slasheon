@@ -7,6 +7,7 @@ public class StageExitCollider : MonoBehaviour {
     [SerializeField] private StageExitType stageExitType = StageExitType.ExitMission;
     public StageExitType StageExitType { get { return stageExitType; } }
 
+    [SerializeField] private string nextStageKey = "";//遷移先のステージデータのキー
 	// Use this for initialization
 	void Start ()
     {
