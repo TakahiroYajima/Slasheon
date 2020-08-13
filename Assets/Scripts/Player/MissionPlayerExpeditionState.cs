@@ -27,6 +27,9 @@ public class MissionPlayerExpeditionState : MissionPlayerStateBase {
         Vector3 targetPos = TouchActionOnField();
         if (targetPos != Vector3.zero)
         {
+            var cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            cube.GetComponent<BoxCollider>().enabled = false;
+            cube.transform.position = targetPos;
             _playerController.moveTargetPos = targetPos;
         }
         if (_playerController.isMoving)

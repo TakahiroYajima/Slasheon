@@ -35,6 +35,7 @@ public class MissionEnemyBattleState : MissionEnemyStateBase
     /// </summary>
     public override void StateUpdateAction()
     {
+        enemyController.BattleAction();
         if(elapsedToAttackTime >= attackBeginTime)
         {
             battleState = EnemyBattleState.Attack;
@@ -71,6 +72,7 @@ public class MissionEnemyBattleState : MissionEnemyStateBase
             {
                 if (!damageFlg)
                 {
+                    enemyController.AttackAction();
                     MissionSceneManager.Instance.Player.Damage(1);
                 }
             }

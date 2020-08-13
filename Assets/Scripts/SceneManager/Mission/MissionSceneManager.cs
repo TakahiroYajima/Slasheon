@@ -27,6 +27,12 @@ public class MissionSceneManager : SingletonMonoBehaviour<MissionSceneManager> {
     [SerializeField] private Camera effectCamera = null;
     public Camera EffectCamera { get { return effectCamera; } }
 
+    //ステージのScriptableObject
+    private StageScriptable stageScriptable = null;
+    private StageManager instancedStage = null;
+    public string currentStageID { get; private set; }
+    public string prevStageID { get; private set; }
+
     public bool IsEnemyActionable {
         get
         {
@@ -71,7 +77,18 @@ public class MissionSceneManager : SingletonMonoBehaviour<MissionSceneManager> {
         {
             state.Value.Initialize();
         }
-        ChangeMissionState(MissionState.Start);
+        currentStageID = SceneControllManager.Instance.loadStageID;
+        StartCoroutine(ReadAsset(() =>
+        {
+            Debug.Log("ステージScriptable : " + stageScriptable);
+            Debug.Log("ステージ数 : " + stageScriptable.stageDatas.Count);
+            foreach(var stage in stageScriptable.stageDatas)
+            {
+                Debug.Log("stage : " + stage.key);
+            }
+            LoadStage(currentStageID);
+            ChangeMissionState(MissionState.Start);
+        }));
     }
 	
 	// Update is called once per frame
@@ -101,6 +118,63 @@ public class MissionSceneManager : SingletonMonoBehaviour<MissionSceneManager> {
     public void SetStateChangeCallback(StateChangeCallback action)
     {
         stateChangeCallback += action;
+    }
+
+    public IEnumerator ReadAsset(UnityAction callback)
+    {
+        ResourceRequest request = Resources.LoadAsync<StageScriptable>("StageData");
+        while (!request.isDone)
+        {
+            yield return null;
+        }
+        if (request.asset != null)
+        {
+            stageScriptable = request.asset as StageScriptable;
+        }
+        if (stageScriptable == null)
+        {
+            Debug.Log("読み直し");
+            yield return StartCoroutine(ReadAsset(callback));
+        }
+        else
+        {
+            callback();
+        }
+    }
+
+    /// <summary>
+    /// ステージを生成
+    /// </summary>
+    /// <param name="stageID"></param>
+    public void LoadStage(string stageID)
+    {
+        StageData find = stageScriptable.Find(stageID);
+        if (find != null)
+        {
+            //ステージ生成
+            SceneControllManager.Instance.loadStageID = "";
+
+            var obj = Instantiate(find.prefab) as GameObject;
+            instancedStage = obj.GetComponent<StageManager>();
+            instancedStage.Initialize();
+            Debug.Log("ステージ生成成功 : " + stageID);
+        }
+        else
+        {
+            Debug.LogError("ステージがありません : " + stageID);
+        }
+    }
+    /// <summary>
+    /// ステージ切り替え
+    /// </summary>
+    /// <param name="stageID"></param>
+    /// <returns></returns>
+    public IEnumerator ChangeStage(string stageID)
+    {
+        yield return SceneControllManager.Instance.FadeImage(FadeMode.Out);
+        Destroy(instancedStage.gameObject);
+        LoadStage(stageID);
+        yield return SceneControllManager.Instance.FadeImage(FadeMode.In);
     }
 
     public void PlayerUpdate()

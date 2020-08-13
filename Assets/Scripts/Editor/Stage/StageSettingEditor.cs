@@ -10,7 +10,7 @@ public class StageSettingEditor : EditorWindow
     private const string ASSET_PATH = "Assets/Resources/StageData.asset";
     private StageScriptable stageScriptable = null;
 
-    public List<StageSettingEdit> stageList = new List<StageSettingEdit>();
+    public List<StageData> stageList = new List<StageData>();
     public List<bool> stageActiveList = new List<bool>();
 
     public Color defaultColor { get; private set; }
@@ -115,8 +115,8 @@ public class StageSettingEditor : EditorWindow
                                 {
                                     EditorGUILayout.BeginVertical(GUI.skin.box);
                                     {
-                                        stageList[findID].stageKey = EditorGUILayout.TextField("Key", stageList[findID].stageKey);
-                                        stageList[findID].stagePref = EditorGUILayout.ObjectField("ステージプレハブ", stageList[findID].stagePref, typeof(GameObject), false) as GameObject;
+                                        stageList[findID].key = EditorGUILayout.TextField("Key", stageList[findID].key);
+                                        stageList[findID].prefab = EditorGUILayout.ObjectField("ステージプレハブ", stageList[findID].prefab, typeof(GameObject), false) as GameObject;
                                         GUILayout.Space(30);
                                         if (GUILayout.Button("削除", GUILayout.Width(120)))
                                         {
@@ -142,7 +142,7 @@ public class StageSettingEditor : EditorWindow
 
     private void AddStage()
     {
-        stageList.Add(new StageSettingEdit("",null));
+        stageList.Add(new StageData());
         stageActiveList.Add(false);
     }
     private void DeleteStage(int findID)
@@ -170,9 +170,8 @@ public class StageSettingEditor : EditorWindow
         stageList.Clear();
         stageActiveList.Clear();
         foreach(var stage in stageScriptable.stageDatas)
-        for (int i = 0; i < stageScriptable.stageDatas.Count; i++)
         {
-            stageList.Add(new StageSettingEdit(stage.Key,stage.Value));
+            stageList.Add(new StageData());
             stageActiveList.Add(false);
         }
     }
@@ -235,12 +234,7 @@ public class StageSettingEditor : EditorWindow
 
     private void SetScriptable()
     {
-        Dictionary<string, GameObject> setData = new Dictionary<string, GameObject>();
-        for(int i = 0; i < stageList.Count; i++)
-        {
-            setData.Add(stageList[i].stageKey, stageList[i].stagePref);
-        }
-        stageScriptable.SetStageDatas(setData);
+        stageScriptable.SetStageDatas(stageList);
     }
 
     /// <summary>
@@ -258,19 +252,6 @@ public class StageSettingEditor : EditorWindow
     {
         // インスペクターから設定させる
         stageScriptable.hideFlags = HideFlags.None;
-    }
-}
-
-[System.Serializable]
-public class StageSettingEdit
-{
-    public string stageKey;
-    public GameObject stagePref;
-
-    public StageSettingEdit(string key, GameObject pref)
-    {
-        stageKey = key;
-        stagePref = pref;
     }
 }
 #endif

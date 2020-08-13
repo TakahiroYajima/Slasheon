@@ -20,6 +20,8 @@ public class SceneControllManager : SingletonMonoBehaviour<SceneControllManager>
     private bool isLoading = false;
     public bool IsLoading { get { return isLoading; } }
 
+    public string loadStageID = "";
+
     protected override void Awake()
     {
         DontDestroyOnLoad(this);
@@ -89,7 +91,7 @@ public class SceneControllManager : SingletonMonoBehaviour<SceneControllManager>
         isLoading = false;
     }
 
-    private IEnumerator FadeImage(FadeMode mode, float exceptionFadeTime = -1f)
+    public IEnumerator FadeImage(FadeMode mode, float exceptionFadeTime = -1f)
     {
         Color color = new Color();
         float time = 0f;
@@ -152,7 +154,7 @@ public class SceneControllManager : SingletonMonoBehaviour<SceneControllManager>
 #endif
 }
 
-enum FadeMode
+public enum FadeMode
 {
     In,
     Out,

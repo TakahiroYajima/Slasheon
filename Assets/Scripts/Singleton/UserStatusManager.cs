@@ -25,16 +25,17 @@ public class UserStatusManager : SingletonMonoBehaviour<UserStatusManager> {
 
     protected override void Awake()
     {
+        currentStamina = 10f;
+        maxStamina = 20f;
+        oneStaminaRecoverTimeElapsed = 0f;
+        nextRecoverTime = 10f;//とりあえず10秒
         DontDestroyOnLoad(this.gameObject);
         base.Awake();
     }
 
     // Use this for initialization
     void Start () {
-        currentStamina = 10f;
-        maxStamina = 20f;
-        oneStaminaRecoverTimeElapsed = 0f;
-        nextRecoverTime = 10f;//とりあえず10秒
+        
 #if UNITY_EDITOR
         EditorApplication.playmodeStateChanged += UnityEditor_PlayStateChangeAction;
 #endif

@@ -29,8 +29,16 @@ public class MissionEnemyController : MissionActor {
         {
             state.Value.Initialize(this);
         }
+        InitializePrivateSetting();
         ChangeState(EnemyState.Expedition);
 	}
+    /// <summary>
+    /// 内部の初期化
+    /// </summary>
+    protected virtual void InitializePrivateSetting()
+    {
+
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -59,12 +67,14 @@ public class MissionEnemyController : MissionActor {
         if (nowActionState != enemyStatus[EnemyState.Death.ToString()] || 
             nowActionState != enemyStatus[EnemyState.Expedition.ToString()])
         {
+            DamageAction();
             base.Damage(damage);
             damageCallback();
         }
     }
     public override void Death()
     {
+        DeathAction();
         ChangeState(EnemyState.Death);
     }
     public void DestroyEnemy()
@@ -77,7 +87,15 @@ public class MissionEnemyController : MissionActor {
     {
 
     }
-    public void DeathAction()
+    public virtual void AttackAction()
+    {
+
+    }
+    public virtual void DamageAction()
+    {
+
+    }
+    public virtual void DeathAction()
     {
 
     }

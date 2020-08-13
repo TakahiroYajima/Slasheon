@@ -8,30 +8,32 @@ public class StageExitCollider : MonoBehaviour {
     public StageExitType StageExitType { get { return stageExitType; } }
 
     [SerializeField] private string nextStageKey = "";//遷移先のステージデータのキー
+    public string TargetKey { get { return nextStageKey; } }
+
+    [SerializeField] private Transform startPlayerPosition = null;
+
+    public delegate void TriggerEnterCallback(Collider collider, StageExitCollider script);
+    public TriggerEnterCallback triggerEnterCallback;
+
 	// Use this for initialization
 	void Start ()
     {
 
     }
 
+    public void Initialize()
+    {
+        
+    }
+
+    public Transform GetInitPlayerTransform()
+    {
+        return startPlayerPosition;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
-        if (SlasheonUtility.IsLayerNameMatch(other.gameObject, "Player"))
-        {
-            switch (stageExitType)
-            {
-                case StageExitType.FieldChange:
-
-                    break;
-                case StageExitType.ToHome:
-                    SceneControllManager.Instance.ChangeSceneAsync("HomeScene", true, true, true);
-                    break;
-                case StageExitType.ExitMission:
-                    SceneControllManager.Instance.ChangeSceneAsync("HomeScene", true, true, true);
-                    break;
-                default: break;
-            }
-        }
+        triggerEnterCallback(other, this);
     }
 }
 

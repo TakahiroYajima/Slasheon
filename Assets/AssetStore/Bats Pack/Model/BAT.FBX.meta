@@ -1,0 +1,793 @@
+fileFormatVersion: 2
+guid: 0adbace1cbc6086438c703dffb539ee6
+ModelImporter:
+  serializedVersion: 18
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: bat
+    100004: head
+    100006: leg_L
+    100008: leg_R
+    100010: root
+    100012: spine
+    100014: tail
+    100016: wing_01_L
+    100018: wing_01_R
+    100020: wing_02_L
+    100022: wing_02_R
+    100024: wing_03_L
+    100026: wing_03_R
+    100028: wing_04_L
+    100030: wing_04_R
+    100032: wing_05_L
+    100034: wing_05_R
+    100036: wing_06_L
+    100038: wing_06_R
+    100040: wing_07_L
+    100042: wing_07_R
+    100044: wing_08_L
+    100046: wing_08_R
+    400000: //RootNode
+    400002: bat
+    400004: head
+    400006: leg_L
+    400008: leg_R
+    400010: root
+    400012: spine
+    400014: tail
+    400016: wing_01_L
+    400018: wing_01_R
+    400020: wing_02_L
+    400022: wing_02_R
+    400024: wing_03_L
+    400026: wing_03_R
+    400028: wing_04_L
+    400030: wing_04_R
+    400032: wing_05_L
+    400034: wing_05_R
+    400036: wing_06_L
+    400038: wing_06_R
+    400040: wing_07_L
+    400042: wing_07_R
+    400044: wing_08_L
+    400046: wing_08_R
+    4300000: bat
+    7400000: Take 001
+    7400002: IDLE
+    7400004: FLY
+    7400006: ATTACK
+    7400008: HIT01
+    7400010: HIT02
+    7400012: DEATH
+    7400014: SLEEP
+    7400016: TAKE OFF
+    9500000: //RootNode
+    13700000: bat
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Take 001
+      takeName: Take 001
+      firstFrame: 0
+      lastFrame: 245
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: bat
+        weight: 1
+      - path: root
+        weight: 1
+      - path: root/leg_L
+        weight: 1
+      - path: root/leg_R
+        weight: 1
+      - path: root/spine
+        weight: 1
+      - path: root/spine/head
+        weight: 1
+      - path: root/spine/wing_01_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L/wing_03_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L/wing_03_L/wing_04_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L/wing_03_L/wing_04_L/wing_05_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L/wing_06_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L/wing_06_L/wing_07_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L/wing_06_L/wing_07_L/wing_08_L
+        weight: 1
+      - path: root/spine/wing_01_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R/wing_03_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R/wing_03_R/wing_04_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R/wing_03_R/wing_04_R/wing_05_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R/wing_06_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R/wing_06_R/wing_07_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R/wing_06_R/wing_07_R/wing_08_R
+        weight: 1
+      - path: root/tail
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: IDLE
+      takeName: Take 001
+      firstFrame: 0
+      lastFrame: 23
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 1
+      loopBlend: 1
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: bat
+        weight: 1
+      - path: root
+        weight: 1
+      - path: root/leg_L
+        weight: 1
+      - path: root/leg_R
+        weight: 1
+      - path: root/spine
+        weight: 1
+      - path: root/spine/head
+        weight: 1
+      - path: root/spine/wing_01_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L/wing_03_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L/wing_03_L/wing_04_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L/wing_03_L/wing_04_L/wing_05_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L/wing_06_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L/wing_06_L/wing_07_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L/wing_06_L/wing_07_L/wing_08_L
+        weight: 1
+      - path: root/spine/wing_01_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R/wing_03_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R/wing_03_R/wing_04_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R/wing_03_R/wing_04_R/wing_05_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R/wing_06_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R/wing_06_R/wing_07_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R/wing_06_R/wing_07_R/wing_08_R
+        weight: 1
+      - path: root/tail
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: FLY
+      takeName: Take 001
+      firstFrame: 25
+      lastFrame: 44
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 1
+      loopBlend: 1
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: bat
+        weight: 1
+      - path: root
+        weight: 1
+      - path: root/leg_L
+        weight: 1
+      - path: root/leg_R
+        weight: 1
+      - path: root/spine
+        weight: 1
+      - path: root/spine/head
+        weight: 1
+      - path: root/spine/wing_01_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L/wing_03_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L/wing_03_L/wing_04_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L/wing_03_L/wing_04_L/wing_05_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L/wing_06_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L/wing_06_L/wing_07_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L/wing_06_L/wing_07_L/wing_08_L
+        weight: 1
+      - path: root/spine/wing_01_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R/wing_03_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R/wing_03_R/wing_04_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R/wing_03_R/wing_04_R/wing_05_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R/wing_06_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R/wing_06_R/wing_07_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R/wing_06_R/wing_07_R/wing_08_R
+        weight: 1
+      - path: root/tail
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: ATTACK
+      takeName: Take 001
+      firstFrame: 46
+      lastFrame: 73
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: bat
+        weight: 1
+      - path: root
+        weight: 1
+      - path: root/leg_L
+        weight: 1
+      - path: root/leg_R
+        weight: 1
+      - path: root/spine
+        weight: 1
+      - path: root/spine/head
+        weight: 1
+      - path: root/spine/wing_01_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L/wing_03_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L/wing_03_L/wing_04_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L/wing_03_L/wing_04_L/wing_05_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L/wing_06_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L/wing_06_L/wing_07_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L/wing_06_L/wing_07_L/wing_08_L
+        weight: 1
+      - path: root/spine/wing_01_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R/wing_03_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R/wing_03_R/wing_04_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R/wing_03_R/wing_04_R/wing_05_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R/wing_06_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R/wing_06_R/wing_07_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R/wing_06_R/wing_07_R/wing_08_R
+        weight: 1
+      - path: root/tail
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: HIT01
+      takeName: Take 001
+      firstFrame: 74
+      lastFrame: 98
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: bat
+        weight: 1
+      - path: root
+        weight: 1
+      - path: root/leg_L
+        weight: 1
+      - path: root/leg_R
+        weight: 1
+      - path: root/spine
+        weight: 1
+      - path: root/spine/head
+        weight: 1
+      - path: root/spine/wing_01_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L/wing_03_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L/wing_03_L/wing_04_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L/wing_03_L/wing_04_L/wing_05_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L/wing_06_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L/wing_06_L/wing_07_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L/wing_06_L/wing_07_L/wing_08_L
+        weight: 1
+      - path: root/spine/wing_01_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R/wing_03_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R/wing_03_R/wing_04_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R/wing_03_R/wing_04_R/wing_05_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R/wing_06_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R/wing_06_R/wing_07_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R/wing_06_R/wing_07_R/wing_08_R
+        weight: 1
+      - path: root/tail
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: HIT02
+      takeName: Take 001
+      firstFrame: 99
+      lastFrame: 123
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: bat
+        weight: 1
+      - path: root
+        weight: 1
+      - path: root/leg_L
+        weight: 1
+      - path: root/leg_R
+        weight: 1
+      - path: root/spine
+        weight: 1
+      - path: root/spine/head
+        weight: 1
+      - path: root/spine/wing_01_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L/wing_03_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L/wing_03_L/wing_04_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L/wing_03_L/wing_04_L/wing_05_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L/wing_06_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L/wing_06_L/wing_07_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L/wing_06_L/wing_07_L/wing_08_L
+        weight: 1
+      - path: root/spine/wing_01_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R/wing_03_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R/wing_03_R/wing_04_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R/wing_03_R/wing_04_R/wing_05_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R/wing_06_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R/wing_06_R/wing_07_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R/wing_06_R/wing_07_R/wing_08_R
+        weight: 1
+      - path: root/tail
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: DEATH
+      takeName: Take 001
+      firstFrame: 124
+      lastFrame: 158
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: bat
+        weight: 1
+      - path: root
+        weight: 1
+      - path: root/leg_L
+        weight: 1
+      - path: root/leg_R
+        weight: 1
+      - path: root/spine
+        weight: 1
+      - path: root/spine/head
+        weight: 1
+      - path: root/spine/wing_01_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L/wing_03_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L/wing_03_L/wing_04_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L/wing_03_L/wing_04_L/wing_05_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L/wing_06_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L/wing_06_L/wing_07_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L/wing_06_L/wing_07_L/wing_08_L
+        weight: 1
+      - path: root/spine/wing_01_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R/wing_03_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R/wing_03_R/wing_04_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R/wing_03_R/wing_04_R/wing_05_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R/wing_06_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R/wing_06_R/wing_07_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R/wing_06_R/wing_07_R/wing_08_R
+        weight: 1
+      - path: root/tail
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: SLEEP
+      takeName: Take 001
+      firstFrame: 161
+      lastFrame: 199
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 1
+      loopBlend: 1
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: bat
+        weight: 1
+      - path: root
+        weight: 1
+      - path: root/leg_L
+        weight: 1
+      - path: root/leg_R
+        weight: 1
+      - path: root/spine
+        weight: 1
+      - path: root/spine/head
+        weight: 1
+      - path: root/spine/wing_01_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L/wing_03_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L/wing_03_L/wing_04_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L/wing_03_L/wing_04_L/wing_05_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L/wing_06_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L/wing_06_L/wing_07_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L/wing_06_L/wing_07_L/wing_08_L
+        weight: 1
+      - path: root/spine/wing_01_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R/wing_03_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R/wing_03_R/wing_04_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R/wing_03_R/wing_04_R/wing_05_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R/wing_06_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R/wing_06_R/wing_07_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R/wing_06_R/wing_07_R/wing_08_R
+        weight: 1
+      - path: root/tail
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: TAKE OFF
+      takeName: Take 001
+      firstFrame: 200
+      lastFrame: 245
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: bat
+        weight: 1
+      - path: root
+        weight: 1
+      - path: root/leg_L
+        weight: 1
+      - path: root/leg_R
+        weight: 1
+      - path: root/spine
+        weight: 1
+      - path: root/spine/head
+        weight: 1
+      - path: root/spine/wing_01_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L/wing_03_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L/wing_03_L/wing_04_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L/wing_03_L/wing_04_L/wing_05_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L/wing_06_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L/wing_06_L/wing_07_L
+        weight: 1
+      - path: root/spine/wing_01_L/wing_02_L/wing_06_L/wing_07_L/wing_08_L
+        weight: 1
+      - path: root/spine/wing_01_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R/wing_03_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R/wing_03_R/wing_04_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R/wing_03_R/wing_04_R/wing_05_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R/wing_06_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R/wing_06_R/wing_07_R
+        weight: 1
+      - path: root/spine/wing_01_R/wing_02_R/wing_06_R/wing_07_R/wing_08_R
+        weight: 1
+      - path: root/tail
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: .0299999993
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

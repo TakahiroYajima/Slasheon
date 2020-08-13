@@ -33,6 +33,7 @@ public class HomeSceneManager : SingletonMonoBehaviour<HomeSceneManager>
     {
         UserStatusManager.Instance.ConsumptionStaminaOrError(10f, () =>
         {
+            SceneControllManager.Instance.loadStageID = "Stage1-1";//仮で最初のステージから
             SceneControllManager.Instance.ChangeSceneAsync("MissionScene", true, true, true);
         });
     }
