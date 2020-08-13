@@ -86,7 +86,7 @@ GameObject:
   - component: {fileID: 4096688966667558}
   - component: {fileID: 218148811604059070}
   - component: {fileID: 154110696263040238}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Stage1-2_WallTerrain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
