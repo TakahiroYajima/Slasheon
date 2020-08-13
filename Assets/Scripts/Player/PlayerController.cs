@@ -61,8 +61,6 @@ public class PlayerController : MissionActor {
     void Start () {
         PlayerRotation = GetComponent<PlayerRotation>();
 
-        MissionSceneManager.Instance.SetStateChangeCallback(ChangeMissionState);
-
         playerStatus = new Dictionary<string, MissionPlayerStateBase>
         {
             {"Expedition", new MissionPlayerExpeditionState() },
@@ -76,6 +74,11 @@ public class PlayerController : MissionActor {
         {
             state.Value.Initialize(this);
         }
+    }
+
+    public void Initialize()
+    {
+        MissionSceneManager.Instance.SetStateChangeCallback(ChangeMissionState);
         ChangeMissionState(MissionState.Expedition);
 
         moveBeginPosition = transform.position;
@@ -87,7 +90,7 @@ public class PlayerController : MissionActor {
         //actorState.hp = 1;
         initPlayerState.stamina = 30;
         playerState.stamina = 30;
-	}
+    }
 
     /// <summary>
     /// MissionSceneManagerより毎フレーム更新処理として呼び出される
@@ -95,8 +98,10 @@ public class PlayerController : MissionActor {
     public void playerUpdate () {
         //Debug.Log(nowPlayerState);
         //現在のステートの更新処理
-        nowPlayerState.StateActionUpdate();
-
+        if (nowPlayerState != null)
+        {
+            nowPlayerState.StateActionUpdate();
+        }
 	}
 
     /// <summary>
@@ -311,5 +316,10 @@ public class PlayerController : MissionActor {
     {
         slashDamageParticle.gameObject.transform.position = collider.transform.position;
         slashDamageParticle.Play();
+    }
+
+    public void SetPosition(Vector3 pos)
+    {
+        transform.position = pos;
     }
 }

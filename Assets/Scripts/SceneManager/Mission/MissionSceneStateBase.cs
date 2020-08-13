@@ -2,34 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MissionSceneStateBase {
+public abstract class MissionSceneStateBase {
 
-    public virtual void Initialize()
-    {
-        
-    }
+    public abstract void Initialize();
 
     /// <summary>
     /// このステートになった瞬間のアクション
     /// </summary>
-    public virtual void StateBeginAction()
-    {
-
-    }
+    public abstract void StateBeginAction();
 
     /// <summary>
     /// ステート切り替え時、切り替わる前のステートの終了アクション
     /// </summary>
-	public virtual void StateEndAction()
-    {
-
-    }
+	public abstract void StateEndAction();
 
     /// <summary>
     /// このステートでの毎フレーム更新処理
     /// </summary>
-    public virtual void StateUpdateAction()
-    {
-
-    }
+    public abstract void StateUpdateAction();
 }

@@ -78,17 +78,16 @@ public class MissionSceneManager : SingletonMonoBehaviour<MissionSceneManager> {
             state.Value.Initialize();
         }
         currentStageID = SceneControllManager.Instance.loadStageID;
-        StartCoroutine(ReadAsset(() =>
+        ReadAsset(() =>
         {
-            Debug.Log("ステージScriptable : " + stageScriptable);
-            Debug.Log("ステージ数 : " + stageScriptable.stageDatas.Count);
             foreach(var stage in stageScriptable.stageDatas)
             {
                 Debug.Log("stage : " + stage.key);
             }
             LoadStage(currentStageID);
             ChangeMissionState(MissionState.Start);
-        }));
+            player.Initialize();
+        });
     }
 	
 	// Update is called once per frame
@@ -120,26 +119,13 @@ public class MissionSceneManager : SingletonMonoBehaviour<MissionSceneManager> {
         stateChangeCallback += action;
     }
 
-    public IEnumerator ReadAsset(UnityAction callback)
+    public void ReadAsset(UnityAction callback)
     {
-        ResourceRequest request = Resources.LoadAsync<StageScriptable>("StageData");
-        while (!request.isDone)
-        {
-            yield return null;
-        }
-        if (request.asset != null)
-        {
-            stageScriptable = request.asset as StageScriptable;
-        }
-        if (stageScriptable == null)
-        {
-            Debug.Log("読み直し");
-            yield return StartCoroutine(ReadAsset(callback));
-        }
-        else
-        {
-            callback();
-        }
+        StartCoroutine(ResourceManager.Instance.LoadScriptableObject("StageData", (sObj) =>
+         {
+             stageScriptable = sObj.asset as StageScriptable;
+             callback();
+         }));
     }
 
     /// <summary>

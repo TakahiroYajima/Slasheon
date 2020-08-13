@@ -37,7 +37,7 @@ public class StageManager : MonoBehaviour {
         {
             playerPositionTrans = defaultPlayerInitPositionTransform;
         }
-        MissionSceneManager.Instance.Player.transform.position = playerPositionTrans.position;
+        MissionSceneManager.Instance.Player.SetPosition(playerPositionTrans.position);
     }
 
     public void ExitColliderEnterEvent(Collider other, StageExitCollider script)

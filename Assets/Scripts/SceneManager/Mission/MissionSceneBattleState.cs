@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class MissionSceneBattleState : MissionSceneStateBase
 {
+    public override void Initialize()
+    {
+        
+    }
 
     /// <summary>
     /// このステートになった瞬間のアクション

@@ -5,6 +5,11 @@ using UnityEngine;
 public class MissionSceneExpeditionState : MissionSceneStateBase
 {
 
+    public override void Initialize()
+    {
+
+    }
+
     /// <summary>
     /// このステートになった瞬間のアクション
     /// </summary>
