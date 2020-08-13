@@ -56,11 +56,14 @@ public class MissionPlayerExpeditionState : MissionPlayerStateBase {
         {
             if (InputManager.Instance.IsTouchEnd(moveTouchID))
             {
-                moveTouchID = -1;
-                Ray ray = Camera.main.ScreenPointToRay(InputManager.Instance.GetTouchPosition(moveTouchID));
+                
+                Vector3 touchPosition = InputManager.Instance.GetTouchPosition(moveTouchID);
+                Ray ray = Camera.main.ScreenPointToRay(touchPosition);
                 RaycastHit hit = new RaycastHit();
+                Debug.DrawRay(ray.origin, ray.direction * raycastDistance, Color.red, 0.7f, false);
                 if (Physics.Raycast(ray, out hit, raycastDistance))
                 {
+                    Debug.Log("hit : " + LayerMask.LayerToName(hit.collider.gameObject.layer));
                     if (SlasheonUtility.IsLayerNameMatch(hit.collider.gameObject, "Field"))
                     {
                         _playerController.moveBeginPosition = _playerController.transform.position;
@@ -68,6 +71,7 @@ public class MissionPlayerExpeditionState : MissionPlayerStateBase {
                         return hit.point;
                     }
                 }
+                moveTouchID = -1;
             }
         }
         return Vector3.zero;
