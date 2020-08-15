@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e00e8a08a6692e40b1da83d849d8c7d, type: 3}
+  m_Name: Stage1-2
+  m_EditorClassIdentifier: 
+  stageData:
+    prefab: {fileID: 1256132884716762, guid: 4368a929c25811546b3fa58b05d92510, type: 2}
+    enemys: []

@@ -47,7 +47,7 @@ public class StageManager : MonoBehaviour {
             switch (script.StageExitType)
             {
                 case StageExitType.FieldChange:
-                    StartCoroutine(MissionSceneManager.Instance.ChangeStage(script.TargetKey));
+                    MissionSceneManager.Instance.ChangeStage(script.TargetKey);
                     break;
                 case StageExitType.ToHome:
                     SceneControllManager.Instance.ChangeSceneAsync("HomeScene", true, true, true);

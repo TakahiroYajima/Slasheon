@@ -11,11 +11,10 @@ public class ResourceManager : SingletonMonoBehaviour<ResourceManager> {
         base.Awake();
     }
 
-    public IEnumerator LoadScriptableObject(string assetName, UnityAction<ResourceRequest> callback)
+    public IEnumerator LoadScriptableObject(string assetPath, UnityAction<ResourceRequest> callback)
     {
-        ResourceRequest request = Resources.LoadAsync<StageScriptable>(assetName);
+        ResourceRequest request = Resources.LoadAsync<StageScriptable>(assetPath);
         yield return new WaitUntil(() => request.isDone);
-        ScriptableObject scriptableObject = null;
         if (request.asset != null)
         {
             callback(request);

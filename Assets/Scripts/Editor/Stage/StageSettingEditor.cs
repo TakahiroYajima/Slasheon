@@ -7,11 +7,12 @@ using UnityEditor;
 public class StageSettingEditor : EditorWindow
 {
     public static StageSettingEditor instance { get; private set; }
-    private const string ASSET_PATH = "Assets/Resources/StageData.asset";
+    private const string ASSET_PATH = "Assets/Resources/ScriptableObject/StageDatas/";
+    private string exportName = "";
     private StageScriptable stageScriptable = null;
 
-    public List<StageData> stageList = new List<StageData>();
-    public List<bool> stageActiveList = new List<bool>();
+    public StageData stageData = null;
+    //public List<bool> stageActiveList = new List<bool>();
 
     public Color defaultColor { get; private set; }
     private Vector2 scrollPosition = Vector2.zero;
@@ -32,17 +33,8 @@ public class StageSettingEditor : EditorWindow
 
     public void Init()
     {
-        stageScriptable = AssetDatabase.LoadAssetAtPath<StageScriptable>(ASSET_PATH);
         defaultColor = GUI.backgroundColor;
-        stageActiveList.Clear();
-        for (int i = 0; i < stageList.Count; i++)
-        {
-            stageActiveList.Add(false);
-        }
-        if (stageScriptable == null)
-        {
-            Import();
-        }
+
         EditorStartUp();
     }
     private void OnDestroy()
@@ -62,102 +54,68 @@ public class StageSettingEditor : EditorWindow
 
     private void Layout()
     {
-        if (stageScriptable == null)
-        {
-            Import();
-        }
-
         using (new GUILayout.VerticalScope(EditorStyles.helpBox))
         {
+            EditorGUILayout.BeginVertical(GUI.skin.box);
+            {
+                exportName = EditorGUILayout.TextField("読み込むステージ名", exportName);
+            }
+            EditorGUILayout.EndVertical();
             using (new GUILayout.HorizontalScope(GUI.skin.box))
             {
-                if (GUILayout.Button("読み込み"))
+                if (GUILayout.Button("新規作成"))
                 {
-                    Import();
+                    NewCreate();
                 }
-                if (GUILayout.Button("書き込み"))
+                if (!string.IsNullOrEmpty(exportName))
                 {
-                    Export();
+                    if (GUILayout.Button("読み込み"))
+                    {
+                        Import(exportName);
+                    }
+
+                    if (GUILayout.Button("書き込み"))
+                    {
+                        Export(exportName);
+                    }
                 }
             }
             GUILayout.Space(30);
-            scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition, GUI.skin.box);
+            if (stageData != null)
             {
-                EditorGUILayout.LabelField("ステージ設定");
-                GUILayout.Space(10);
-                EditorGUILayout.BeginVertical(GUI.skin.box);
+                scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition, GUI.skin.box);
                 {
-                    using (new GUILayout.HorizontalScope(GUI.skin.box))
+                    EditorGUILayout.LabelField("ステージ設定");
+                    GUILayout.Space(10);
+                    EditorGUILayout.BeginVertical(GUI.skin.box);
                     {
-                        if (GUILayout.Button("追加", GUILayout.Width(120)))
+                        EditorGUILayout.BeginHorizontal();
                         {
-                            AddStage();
-                        }
-                    }
-
-                    for (int findID = 0; findID < stageList.Count; findID++)
-                    {
-                        using (new GUILayout.HorizontalScope(EditorStyles.toolbar))
-                        {
-                            GUILayout.Label((findID + 1).ToString());
-                        }
-                        EditorGUILayout.BeginVertical(GUI.skin.box);
-                        {
-                            EditorGUILayout.BeginHorizontal();
+                            EditorGUILayout.BeginVertical(GUI.skin.box);
                             {
-                                string s = stageActiveList[findID] ? "-" : "+";
-                                if (GUILayout.Button(s, GUILayout.Width(20)))
-                                {
-                                    stageActiveList[findID] = !stageActiveList[findID];
-                                }
-
-                                if (stageActiveList[findID])
-                                {
-                                    EditorGUILayout.BeginVertical(GUI.skin.box);
-                                    {
-                                        stageList[findID].key = EditorGUILayout.TextField("Key", stageList[findID].key);
-                                        stageList[findID].prefab = EditorGUILayout.ObjectField("ステージプレハブ", stageList[findID].prefab, typeof(GameObject), false) as GameObject;
-                                        GUILayout.Space(30);
-                                        if (GUILayout.Button("削除", GUILayout.Width(120)))
-                                        {
-                                            DeleteStage(findID);
-                                        }
-                                        GUILayout.Space(30);
-                                    }
-                                    EditorGUILayout.EndVertical();
-                                }
+                                exportName = EditorGUILayout.TextField("ファイル名", exportName);
+                                stageData.prefab = EditorGUILayout.ObjectField("ステージプレハブ", stageData.prefab, typeof(GameObject), false) as GameObject;
+                                GUILayout.Space(30);
                             }
-                            EditorGUILayout.EndHorizontal();
+                            EditorGUILayout.EndVertical();
                         }
-                        EditorGUILayout.EndVertical();
+                        EditorGUILayout.EndHorizontal();
                     }
+                    EditorGUILayout.EndVertical();
 
                 }
-                EditorGUILayout.EndVertical();
-
+                EditorGUILayout.EndScrollView();
             }
-            EditorGUILayout.EndScrollView();
         }
     }
 
-    private void AddStage()
-    {
-        stageList.Add(new StageData());
-        stageActiveList.Add(false);
-    }
-    private void DeleteStage(int findID)
-    {
-        stageList.RemoveAt(findID);
-        stageActiveList.RemoveAt(findID);
-    }
-
-    private void Import()
+    private void Import(string loadName)
     {
         if (stageScriptable == null)
         {
             stageScriptable = ScriptableObject.CreateInstance<StageScriptable>();
         }
-        StageScriptable scriptable = AssetDatabase.LoadAssetAtPath<StageScriptable>(ASSET_PATH);
+        StageScriptable scriptable = AssetDatabase.LoadAssetAtPath<StageScriptable>(ASSET_PATH + loadName + ".asset");
 
         if (scriptable == null)
         {
@@ -167,17 +125,17 @@ public class StageSettingEditor : EditorWindow
         stageScriptable.Copy(scriptable);
         stageScriptable = scriptable;
 
-        stageList.Clear();
-        stageActiveList.Clear();
-        foreach(var stage in stageScriptable.stageDatas)
-        {
-            stageList.Add(new StageData());
-            stageActiveList.Add(false);
-        }
+        stageData = stageScriptable.stageData;
     }
-    private void Export()
+    private void NewCreate()
     {
-        stageScriptable = AssetDatabase.LoadAssetAtPath<StageScriptable>(ASSET_PATH);
+        stageScriptable = ScriptableObject.CreateInstance<StageScriptable>();
+        stageData = new StageData();
+    }
+    private void Export(string exportName)
+    {
+        string exportFilePath = ASSET_PATH + exportName + ".asset";
+        //stageScriptable = AssetDatabase.LoadAssetAtPath<StageScriptable>(ASSET_PATH + exportName + ".asset");
         if (stageScriptable == null)
         {
             stageScriptable = ScriptableObject.CreateInstance<StageScriptable>();
@@ -185,13 +143,13 @@ public class StageSettingEditor : EditorWindow
         // 新規の場合はディレクトリ作成
         if (!AssetDatabase.Contains(stageScriptable as UnityEngine.Object))
         {
-            string directory = System.IO.Path.GetDirectoryName(ASSET_PATH);
+            string directory = System.IO.Path.GetDirectoryName(exportFilePath);
             if (!System.IO.Directory.Exists(directory))
             {
                 System.IO.Directory.CreateDirectory(directory);
             }
             // アセット作成
-            AssetDatabase.CreateAsset(stageScriptable, ASSET_PATH);
+            AssetDatabase.CreateAsset(stageScriptable, exportFilePath);
             stageScriptable.Copy(stageScriptable);
             //ScriptableObjectを設定
             SetScriptable();
@@ -234,7 +192,7 @@ public class StageSettingEditor : EditorWindow
 
     private void SetScriptable()
     {
-        stageScriptable.SetStageDatas(stageList);
+        stageScriptable.SetStageDatas(stageData);
     }
 
     /// <summary>
@@ -243,7 +201,7 @@ public class StageSettingEditor : EditorWindow
     private void EditorStartUp()
     {
         // インスペクターから設定できないようにする
-        stageScriptable.hideFlags = HideFlags.NotEditable;
+        //stageScriptable.hideFlags = HideFlags.NotEditable;
     }
     /// <summary>
     /// エディタ非表示中
@@ -251,7 +209,7 @@ public class StageSettingEditor : EditorWindow
     private void EditorOFF()
     {
         // インスペクターから設定させる
-        stageScriptable.hideFlags = HideFlags.None;
+        //stageScriptable.hideFlags = HideFlags.None;
     }
 }
 #endif

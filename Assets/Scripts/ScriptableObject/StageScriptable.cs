@@ -5,20 +5,7 @@ using UnityEngine;
 
 public class StageScriptable : ScriptableObject
 {
-    [SerializeField] public List<StageData> stageDatas = new List<StageData>();
-
-    public StageData Find(string targetKey)
-    {
-        var find = stageDatas.Where(x => x.key == targetKey).ToList();
-        if(find.Count > 0)
-        {
-            return find[0];
-        }
-        else
-        {
-            return null;
-        }
-    }
+    [SerializeField] public StageData stageData = null;
 
     private int intValue = 0;
     public int IntValue
@@ -29,13 +16,9 @@ public class StageScriptable : ScriptableObject
 #endif
     }
 #if UNITY_EDITOR
-    public void SetStageDatas(List<StageData> setStageData)
+    public void SetStageDatas(StageData setStageData)
     {
-        stageDatas.Clear();
-        foreach (var stage in setStageData)
-        {
-            stageDatas.Add(stage);
-        }
+        stageData = setStageData;
     }
     public void Copy(StageScriptable data)
     {
@@ -47,7 +30,7 @@ public class StageScriptable : ScriptableObject
 [System.Serializable]
 public class StageData
 {
-    public string key;
+    //public string key;
     public GameObject prefab;
     public List<OnStageEnemy> enemys;
 }

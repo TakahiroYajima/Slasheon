@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class SceneControllManager : SingletonMonoBehaviour<SceneControllManager> {
 
@@ -21,6 +22,8 @@ public class SceneControllManager : SingletonMonoBehaviour<SceneControllManager>
     public bool IsLoading { get { return isLoading; } }
 
     public string loadStageID = "";
+
+    private Coroutine fadeCoroutine = null;
 
     protected override void Awake()
     {
@@ -46,7 +49,7 @@ public class SceneControllManager : SingletonMonoBehaviour<SceneControllManager>
 
         float elapsedTime = 0f;//ロード中の経過時間
 
-        darkScreenCanvas.gameObject.SetActive(isActiveLoadUI || isFadeIn || isFadeOut);
+        //darkScreenCanvas.gameObject.SetActive(isActiveLoadUI || isFadeIn || isFadeOut);
         
         if (isFadeOut)
         {
@@ -87,12 +90,26 @@ public class SceneControllManager : SingletonMonoBehaviour<SceneControllManager>
         {
             yield return StartCoroutine(FadeImage(FadeMode.In));
         }
-        darkScreenCanvas.SetActive(false);
         isLoading = false;
     }
 
-    public IEnumerator FadeImage(FadeMode mode, float exceptionFadeTime = -1f)
+    /// <summary>
+    /// 画面の暗転・明転フェード
+    /// </summary>
+    /// <param name="mode"></param>
+    /// <param name="exceptionFadeTime"></param>
+    public void FadePanel(FadeMode mode, float exceptionFadeTime = -1f, UnityAction callback = null)
     {
+        if (fadeCoroutine != null)
+        {
+            StopCoroutine(fadeCoroutine);
+        }
+        fadeCoroutine = StartCoroutine(FadeImage(mode, exceptionFadeTime, callback));
+    }
+
+    private IEnumerator FadeImage(FadeMode mode, float exceptionFadeTime = -1f, UnityAction callback = null)
+    {
+        
         Color color = new Color();
         float time = 0f;
         float fadeTime = 0f;
@@ -106,6 +123,7 @@ public class SceneControllManager : SingletonMonoBehaviour<SceneControllManager>
         }
         if(mode == FadeMode.In)
         {
+            darkScreenCanvas.gameObject.SetActive(true);
             fadePanelImage.color = new Color(0f, 0f, 0f, 1f);
             fadePanelImage.gameObject.SetActive(true);
             color = fadePanelImage.color;
@@ -118,9 +136,11 @@ public class SceneControllManager : SingletonMonoBehaviour<SceneControllManager>
                 yield return null;
             }
             fadePanelImage.gameObject.SetActive(false);
+            darkScreenCanvas.gameObject.SetActive(false);
         }
         else
         {
+            darkScreenCanvas.gameObject.SetActive(true);
             fadePanelImage.color = new Color(0f, 0f, 0f, 0f);
             fadePanelImage.gameObject.SetActive(true);
             color = fadePanelImage.color;
@@ -131,6 +151,11 @@ public class SceneControllManager : SingletonMonoBehaviour<SceneControllManager>
                 time += Time.deltaTime;
                 yield return null;
             }
+        }
+        fadeCoroutine = null;
+        if(callback != null)
+        {
+            callback();
         }
     }
 

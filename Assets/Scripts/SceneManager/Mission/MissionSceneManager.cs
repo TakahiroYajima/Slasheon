@@ -78,16 +78,12 @@ public class MissionSceneManager : SingletonMonoBehaviour<MissionSceneManager> {
             state.Value.Initialize();
         }
         currentStageID = SceneControllManager.Instance.loadStageID;
-        ReadAsset(() =>
-        {
-            foreach(var stage in stageScriptable.stageDatas)
-            {
-                Debug.Log("stage : " + stage.key);
-            }
-            LoadStage(currentStageID);
-            ChangeMissionState(MissionState.Start);
-            player.Initialize();
-        });
+        LoadStage(currentStageID, () =>
+         {
+             ChangeMissionState(MissionState.Start);
+             player.Initialize();
+             SceneControllManager.Instance.FadePanel(FadeMode.In);
+         });
     }
 	
 	// Update is called once per frame
@@ -119,9 +115,9 @@ public class MissionSceneManager : SingletonMonoBehaviour<MissionSceneManager> {
         stateChangeCallback += action;
     }
 
-    public void ReadAsset(UnityAction callback)
+    public void ReadAsset(string stageID, UnityAction callback)
     {
-        StartCoroutine(ResourceManager.Instance.LoadScriptableObject("StageData", (sObj) =>
+        StartCoroutine(ResourceManager.Instance.LoadScriptableObject("ScriptableObject/StageDatas/" + stageID, (sObj) =>
          {
              stageScriptable = sObj.asset as StageScriptable;
              callback();
@@ -132,35 +128,42 @@ public class MissionSceneManager : SingletonMonoBehaviour<MissionSceneManager> {
     /// ステージを生成
     /// </summary>
     /// <param name="stageID"></param>
-    public void LoadStage(string stageID)
+    public void LoadStage(string stageID, UnityAction callback)
     {
-        StageData find = stageScriptable.Find(stageID);
-        if (find != null)
-        {
-            //ステージ生成
-            SceneControllManager.Instance.loadStageID = "";
+        StageData find = null;
+        ReadAsset(stageID, () =>
+         {
+             find = stageScriptable.stageData;
+             if (find != null)
+             {
+                //ステージ生成
+                SceneControllManager.Instance.loadStageID = "";
 
-            var obj = Instantiate(find.prefab) as GameObject;
-            instancedStage = obj.GetComponent<StageManager>();
-            instancedStage.Initialize();
-            Debug.Log("ステージ生成成功 : " + stageID);
-        }
-        else
-        {
-            Debug.LogError("ステージがありません : " + stageID);
-        }
+                 var obj = Instantiate(find.prefab) as GameObject;
+                 instancedStage = obj.GetComponent<StageManager>();
+                 instancedStage.Initialize();
+                 Debug.Log("ステージ生成成功 : " + stageID);
+             }
+             else
+             {
+                 Debug.LogError("ステージがありません : " + stageID);
+             }
+             callback();
+         });
     }
     /// <summary>
     /// ステージ切り替え
     /// </summary>
     /// <param name="stageID"></param>
     /// <returns></returns>
-    public IEnumerator ChangeStage(string stageID)
+    public void ChangeStage(string stageID)
     {
-        yield return SceneControllManager.Instance.FadeImage(FadeMode.Out);
-        Destroy(instancedStage.gameObject);
-        LoadStage(stageID);
-        yield return SceneControllManager.Instance.FadeImage(FadeMode.In);
+        SceneControllManager.Instance.FadePanel(FadeMode.Out, -1, () =>
+        {
+            Destroy(instancedStage.gameObject);
+            LoadStage(stageID, null);
+            SceneControllManager.Instance.FadePanel(FadeMode.In);
+        });
     }
 
     public void PlayerUpdate()
