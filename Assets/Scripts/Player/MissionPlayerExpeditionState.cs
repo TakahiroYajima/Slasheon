@@ -54,24 +54,27 @@ public class MissionPlayerExpeditionState : MissionPlayerStateBase {
         }
         if (moveTouchID != -1)
         {
-            if (InputManager.Instance.IsTouchEnd(moveTouchID))
+            if (!_playerController.PlayerRotation.isRotationMoving)
             {
-                
-                Vector3 touchPosition = InputManager.Instance.GetTouchPosition(moveTouchID);
-                Ray ray = Camera.main.ScreenPointToRay(touchPosition);
-                RaycastHit hit = new RaycastHit();
-                Debug.DrawRay(ray.origin, ray.direction * raycastDistance, Color.red, 0.7f, false);
-                if (Physics.Raycast(ray, out hit, raycastDistance))
+                if (InputManager.Instance.IsTouchEnd(moveTouchID))
                 {
-                    Debug.Log("hit : " + LayerMask.LayerToName(hit.collider.gameObject.layer));
-                    if (SlasheonUtility.IsLayerNameMatch(hit.collider.gameObject, "Field"))
+
+                    Vector3 touchPosition = InputManager.Instance.GetTouchPosition(moveTouchID);
+                    Ray ray = Camera.main.ScreenPointToRay(touchPosition);
+                    RaycastHit hit = new RaycastHit();
+                    Debug.DrawRay(ray.origin, ray.direction * raycastDistance, Color.red, 0.7f, false);
+                    if (Physics.Raycast(ray, out hit, raycastDistance))
                     {
-                        _playerController.moveBeginPosition = _playerController.transform.position;
-                        _playerController.isMoving = true;
-                        return hit.point;
+                        Debug.Log("hit : " + LayerMask.LayerToName(hit.collider.gameObject.layer));
+                        if (SlasheonUtility.IsLayerNameMatch(hit.collider.gameObject, "Field"))
+                        {
+                            _playerController.moveBeginPosition = _playerController.transform.position;
+                            _playerController.isMoving = true;
+                            return hit.point;
+                        }
                     }
+                    moveTouchID = -1;
                 }
-                moveTouchID = -1;
             }
         }
         return Vector3.zero;

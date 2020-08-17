@@ -232,20 +232,7 @@ public class PlayerController : MissionActor {
     /// </summary>
     public void RotationViewAction()
     {
-        int touchID = InputManager.Instance.GetAnyTouchBeginID();
-        if (InputManager.Instance.IsTouchDown(touchID))
-        {
-            if (InputManager.Instance.IsUITouch(touchID))
-            {
-                if (!PlayerRotation.isRotationMoving)
-                {
-                    if (LayerMask.LayerToName(InputManager.Instance.GetRaycastResult(touchID).gameObject.layer) == "CameraRotationUI")
-                    {
-                        PlayerRotation.OnPointerDown(touchID);
-                    }
-                }
-            }
-        }
+        
         if (PlayerRotation.isRotationMoving)
         {
             if (InputManager.Instance.IsTouchEnd(PlayerRotation.touchID))
@@ -255,6 +242,23 @@ public class PlayerController : MissionActor {
             else
             {
                 PlayerRotation.OnPointerMove();
+            }
+        }
+        else
+        {
+            int touchID = InputManager.Instance.GetAnyTouchBeginID();
+            if (touchID != -1)
+            {
+                if (InputManager.Instance.IsUITouch(touchID))
+                {
+                    if (!PlayerRotation.isRotationMoving)
+                    {
+                        if (LayerMask.LayerToName(InputManager.Instance.GetRaycastResult(touchID).gameObject.layer) == "CameraRotationUI")
+                        {
+                            PlayerRotation.OnPointerDown(touchID);
+                        }
+                    }
+                }
             }
         }
     }
