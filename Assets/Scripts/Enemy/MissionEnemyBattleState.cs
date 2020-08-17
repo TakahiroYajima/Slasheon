@@ -39,13 +39,18 @@ public class MissionEnemyBattleState : MissionEnemyStateBase
         if(elapsedToAttackTime >= attackBeginTime)
         {
             battleState = EnemyBattleState.Attack;
-            enemyController.StartCoroutine(AttackToPlayerAction());
+            AttackAction();
             elapsedToAttackTime = 0f;
         }
         if (battleState == EnemyBattleState.Waiting)
         {
             elapsedToAttackTime += Time.deltaTime;
         }
+    }
+
+    public virtual void AttackAction()
+    {
+        enemyController.StartCoroutine(AttackToPlayerAction());
     }
 
     public IEnumerator AttackToPlayerAction()

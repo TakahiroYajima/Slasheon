@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations;
 
+/// <summary>
+/// コウモリ型の敵のコントローラー
+/// </summary>
 public class Enemy_Bat : MissionEnemyController {
 
     [SerializeField] private Animator myAnimator = null;
@@ -11,7 +14,18 @@ public class Enemy_Bat : MissionEnemyController {
 
     protected override void InitializePrivateSetting()
     {
-        
+        enemyStatus = new Dictionary<string, MissionEnemyStateBase>
+        {
+            {EnemyState.Expedition.ToString(),new MissionEnemyExpeditionState() },
+            {EnemyState.Encount.ToString(),new MissionEnemyEncountState() },
+            {EnemyState.Battle.ToString(),new Enemy_Bat_BattleState() },
+            {EnemyState.Death.ToString(),new MissionEnemyDeathState() },
+        };
+        foreach (var state in enemyStatus)
+        {
+            state.Value.Initialize(this);
+        }
+        ChangeState(EnemyState.Expedition);
     }
 
     public override void BattleAction()
