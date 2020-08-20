@@ -148,7 +148,10 @@ public class MissionSceneManager : SingletonMonoBehaviour<MissionSceneManager> {
              {
                  Debug.LogError("ステージがありません : " + stageID);
              }
-             callback();
+             if (callback != null)
+             {
+                 callback();
+             }
          });
     }
     /// <summary>
