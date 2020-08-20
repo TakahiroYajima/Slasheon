@@ -67,12 +67,11 @@ public class SlashCollider : MonoBehaviour {
 
     public void CreateCollider()
     {
-        //Mesh mesh = new Mesh();
-        if(vertices.Count <= 2 || triangles.Count < 3)
-        {
-            Debug.Log("ret:: " + vertices.Count + " :: " + triangles.Count);
-            return;
-        }
+        //if(vertices.Count <= 2 || triangles.Count < 3)
+        //{
+        //    Debug.Log("ret:: " + vertices.Count + " :: " + triangles.Count);
+        //    return;
+        //}
         Debug.Log("col:: " + vertices.Count + " :: " + triangles.Count);
 
         mesh.Clear();
@@ -91,7 +90,7 @@ public class SlashCollider : MonoBehaviour {
     public void CreateCollider(List<Vector3> points)
     {
         int pointsCount = points.Count;
-        if(pointsCount >= 3)
+        if(pointsCount > 3)//>=にすると2点タップで斬撃判定ができてしまう
         {
             pointsCount -= 3;
         }
