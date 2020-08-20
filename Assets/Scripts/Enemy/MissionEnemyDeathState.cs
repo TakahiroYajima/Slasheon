@@ -10,6 +10,11 @@ public class MissionEnemyDeathState : MissionEnemyStateBase
     /// </summary>
     public override void StateBeginAction()
     {
+        Collider collider = enemyController.GetComponent<Collider>();
+        if(collider != null)
+        {
+            collider.enabled = false;
+        }
         enemyController.StartCoroutine(DeathAction());
     }
 
@@ -31,12 +36,7 @@ public class MissionEnemyDeathState : MissionEnemyStateBase
 
     private IEnumerator DeathAction()
     {
-        float elapsedTime = 0f;
-        while (elapsedTime < 1f)
-        {
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
+        yield return new WaitForSeconds(1.2f);
         enemyController.DestroyEnemy();
     }
 }

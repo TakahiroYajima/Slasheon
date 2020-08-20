@@ -11,7 +11,7 @@ public class MissionEnemyController : MissionActor {
     public float EncountPlayerDistance { get { return encountPlayerDistance; } }
 
     protected Dictionary<string, MissionEnemyStateBase> enemyStatus = null;
-    private MissionEnemyStateBase nowActionState = null;
+    protected MissionEnemyStateBase nowActionState = null;
 
     public delegate void EnemyDamageCallback();
     private EnemyDamageCallback damageCallback;

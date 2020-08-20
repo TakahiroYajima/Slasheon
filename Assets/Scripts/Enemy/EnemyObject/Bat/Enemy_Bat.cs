@@ -14,6 +14,8 @@ public class Enemy_Bat : MissionEnemyController {
 
     protected override void InitializePrivateSetting()
     {
+        actorState.hp =10;
+        initActorState.hp = 10;
         enemyStatus = new Dictionary<string, MissionEnemyStateBase>
         {
             {EnemyState.Expedition.ToString(),new MissionEnemyExpeditionState() },
@@ -30,10 +32,19 @@ public class Enemy_Bat : MissionEnemyController {
 
     public override void BattleAction()
     {
-        //if(myAnimator.GetInteger(animationID) == 4)
-        //{
-        //    myAnimator.SetInteger(animationID, 0);
-        //}
+        if (nowActionState == enemyStatus[EnemyState.Death.ToString()])
+        {
+            return;
+        }
+        //アニメーションの情報取得
+        AnimatorClipInfo[] clipInfo = myAnimator.GetCurrentAnimatorClipInfo(0);
+
+        // 再生中のクリップ名
+        string clipName = clipInfo[0].clip.name;
+        if (clipName == "HIT01" || clipName == "HIT02")
+        {
+            myAnimator.SetInteger(animationID, 0);
+        }
     }
     public override void AttackAction()
     {
@@ -41,7 +52,9 @@ public class Enemy_Bat : MissionEnemyController {
     }
     public override void DamageAction()
     {
-        //myAnimator.SetInteger(animationID, 4);
+        int rand = Random.Range(4, 6);
+
+        myAnimator.SetInteger(animationID, rand);
     }
     public override void DeathAction()
     {
