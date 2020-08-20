@@ -27,9 +27,9 @@ public class MissionPlayerExpeditionState : MissionPlayerStateBase {
         Vector3 targetPos = TouchActionOnField();
         if (targetPos != Vector3.zero)
         {
-            var cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            cube.GetComponent<BoxCollider>().enabled = false;
-            cube.transform.position = targetPos;
+            //var cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            //cube.GetComponent<BoxCollider>().enabled = false;
+            //cube.transform.position = targetPos;
             _playerController.moveTargetPos = targetPos;
         }
         if (_playerController.isMoving)
@@ -62,10 +62,10 @@ public class MissionPlayerExpeditionState : MissionPlayerStateBase {
                     Vector3 touchPosition = InputManager.Instance.GetTouchPosition(moveTouchID);
                     Ray ray = Camera.main.ScreenPointToRay(touchPosition);
                     RaycastHit hit = new RaycastHit();
-                    Debug.DrawRay(ray.origin, ray.direction * raycastDistance, Color.red, 0.7f, false);
+                    //Debug.DrawRay(ray.origin, ray.direction * raycastDistance, Color.red, 0.7f, false);
                     if (Physics.Raycast(ray, out hit, raycastDistance))
                     {
-                        Debug.Log("hit : " + LayerMask.LayerToName(hit.collider.gameObject.layer));
+                        //Debug.Log("hit : " + LayerMask.LayerToName(hit.collider.gameObject.layer));
                         if (SlasheonUtility.IsLayerNameMatch(hit.collider.gameObject, "Field"))
                         {
                             _playerController.moveBeginPosition = _playerController.transform.position;
