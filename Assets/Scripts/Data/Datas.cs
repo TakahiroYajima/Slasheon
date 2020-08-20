@@ -12,5 +12,5 @@ public class Datas {
 public enum EnemyType
 {
     Bat,//コウモリ型
-
+    Turtle,//カメ型
 }
