@@ -49,6 +49,7 @@ public class SoundManager : SingletonMonoBehaviour<SoundManager> {
             var findData = soundScriptable.bgmDatas.Find(x => x.name == soundName);
             if(findData != null)
             {
+                bgmAudioSourceList[0].loop = findData.isLoop;
                 bgmAudioSourceList[0].clip = findData.audio;
                 bgmAudioSourceList[0].Play();
                 //for(int i = 0; i < bgmAudioSourceList.Count; i++)
