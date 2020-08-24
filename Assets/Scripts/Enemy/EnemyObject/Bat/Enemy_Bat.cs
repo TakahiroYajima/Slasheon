@@ -8,14 +8,15 @@ using UnityEngine.Animations;
 /// </summary>
 public class Enemy_Bat : MissionEnemyController {
 
-    [SerializeField] private Animator myAnimator = null;
+    
     private const EnemyType myEnemyType = EnemyType.Bat;
-    private string animationID = "AnimationID";
 
     protected override void InitializePrivateSetting()
     {
         actorState.hp =10;
         initActorState.hp = 10;
+
+        animationID = "AnimationID";
         enemyStatus = new Dictionary<string, MissionEnemyStateBase>
         {
             {EnemyState.Expedition.ToString(),new MissionEnemyExpeditionState() },

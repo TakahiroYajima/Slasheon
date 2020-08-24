@@ -21,6 +21,12 @@ public class Enemy_Turtle_BattleState : MissionEnemyBattleState {
     /// </summary>
     public override void AttackAction()
     {
-        base.enemyController.StartCoroutine(AttackToPlayerAction());
+        base.enemyController.StartCoroutine(AttackToPlayerAction(2f,()=>
+        {
+            //myAnimator.SetInteger(animationID, 20);
+        },
+        ()=> {
+
+        }));
     }
 }

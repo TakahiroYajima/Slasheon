@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class MissionEnemyExpeditionState : MissionEnemyStateBase {
 
-    private float moveSpeed = 10f;
-
     /// <summary>
     /// このステートになった瞬間のアクション
     /// </summary>
@@ -44,14 +42,16 @@ public class MissionEnemyExpeditionState : MissionEnemyStateBase {
                     float distance = Vector3.Distance(enemy.transform.position, enemyController.transform.position);
                     if(distance < enemy.AllowableApproachDistance)
                     {
-                        moveDirection = Quaternion.Euler(0f, -120f, 0f) * (enemyController.transform.position - enemy.transform.position).normalized;
+                        Vector3 controllerPos = new Vector3(enemyController.transform.position.x, 0f, enemyController.transform.position.z);
+                        Vector3 otherEnemyPos = new Vector3(enemy.transform.position.x,0f, enemy.transform.position.z);
+                        moveDirection = Quaternion.Euler(0f, -120f, 0f) * (controllerPos - otherEnemyPos).normalized;
                     }
                 }
             }
             if (Vector3.Distance(targetPos, enemyController.transform.position) > enemyController.EncountPlayerDistance)
             {
                 enemyController.transform.LookAt(enemyController.transform.position - moveDirection);
-                enemyController.transform.Translate(moveDirection * moveSpeed * Time.deltaTime);
+                enemyController.transform.Translate(moveDirection * enemyController.MoveSpeed * Time.deltaTime);
             }
             else
             {

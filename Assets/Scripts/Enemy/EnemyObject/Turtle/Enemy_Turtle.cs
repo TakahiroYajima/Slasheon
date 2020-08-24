@@ -4,12 +4,11 @@ using UnityEngine;
 
 public class Enemy_Turtle : MissionEnemyController {
 
-    [SerializeField] private Animator myAnimator = null;
     private const EnemyType myEnemyType = EnemyType.Turtle;
-    private string animationID = "AnimationID";
 
     protected override void InitializePrivateSetting()
     {
+        animationID = "AnimationID";
         enemyStatus = new Dictionary<string, MissionEnemyStateBase>
         {
             {EnemyState.Expedition.ToString(),new MissionEnemyExpeditionState() },
@@ -22,5 +21,36 @@ public class Enemy_Turtle : MissionEnemyController {
             state.Value.Initialize(this);
         }
         ChangeState(EnemyState.Expedition);
+    }
+
+    public override void BattleAction()
+    {
+        if (nowActionState == enemyStatus[EnemyState.Death.ToString()])
+        {
+            return;
+        }
+        //アニメーションの情報取得
+        AnimatorClipInfo[] clipInfo = myAnimator.GetCurrentAnimatorClipInfo(0);
+
+        // 再生中のクリップ名
+        string clipName = clipInfo[0].clip.name;
+        if (clipName == "Armature|hit1" || clipName == "Armature|hit2")
+        {
+            myAnimator.SetInteger(animationID, 0);
+        }
+    }
+    public override void AttackAction()
+    {
+        
+    }
+    public override void DamageAction()
+    {
+        int rand = Random.Range(14, 16);
+
+        myAnimator.SetInteger(animationID, rand);
+    }
+    public override void DeathAction()
+    {
+        myAnimator.SetInteger(animationID, 20);
     }
 }

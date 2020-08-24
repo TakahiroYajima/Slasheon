@@ -5,6 +5,11 @@ using UnityEngine;
 public class MissionEnemyController : MissionActor {
 
     //protected EnemyState nowEnemyState = EnemyState.Expedition;
+    [SerializeField] protected Animator myAnimator = null;
+    public Animator MyAnimator { get { return myAnimator; } }
+    [SerializeField] protected string animationID = "AnimationID";
+    public string AnimationID { get { return animationID; } }
+
     [SerializeField] protected float allowableApproachDistance = 5f;
     public float AllowableApproachDistance { get { return allowableApproachDistance; } }
     [SerializeField] private float encountPlayerDistance = 10f;//エンカウント判定するプレイヤーとの距離
@@ -16,6 +21,10 @@ public class MissionEnemyController : MissionActor {
     public delegate void EnemyDamageCallback();
     private EnemyDamageCallback damageCallback;
 
+    //ステータス
+    [SerializeField] protected float moveSpeed = 10f;
+    public float MoveSpeed { get { return moveSpeed; } }
+    
     protected bool damageFlg = false;//攻撃中にダメージを受けた際のフラグ
 
     // Use this for initialization
